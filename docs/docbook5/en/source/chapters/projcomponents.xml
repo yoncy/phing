@@ -306,7 +306,7 @@
 
 &lt;filterreader classname="phing.filters.ReplaceTokens">
   &lt;param type="token" name="BC_PATH" value="${top.builddir}/"/>
-  &lt;param type="token" name="BC_PATH" 
+  &lt;param type="token" name="BC_PATH"
   value="${top.builddir}/testsite/user/${lang}/"/>
 &lt;/filterreader></programlisting>
             <para> As the pipe concept in Unix, the filter concept is quite complex but powerful. To
@@ -444,6 +444,16 @@
                 </listitem>
             </itemizedlist>
 
+            <para>Note: machines running OSX match on the <literal>mac</literal> and <literal>unix</literal> families!
+                To test for Macs that don't run a Unix-like OS, use the following code:</para>
+            <programlisting language="xml">&lt;condition property="isMacOsButNotMacOsX"&gt;
+    &lt;and&gt;
+        &lt;os family="mac"/&gt;
+        &lt;not&gt;
+            &lt;os family="unix"/&gt;
+        &lt;/not&gt;
+    &lt;/and&gt;
+&lt;/condition&gt;</programlisting>
         </sect2>
         <sect2 xml:id="conditions.equals">
             <title><literal>equals</literal></title>
@@ -488,12 +498,12 @@
             </table>
 
         </sect2>
-        
+
         <sect2 xml:id="conditions.versioncompare">
-            <title><literal>version-compare</literal></title>
+            <title><literal>versioncompare</literal></title>
             <para>Compares two given versions</para>
             <table>
-                <title>version-compare Attributes</title>
+                <title>versioncompare Attributes</title>
                 <tgroup cols="3">
                     <colspec colname="attribute" colnum="1" colwidth="1*"/>
                     <colspec colname="description" colnum="2" colwidth="2*"/>
@@ -530,8 +540,8 @@
                     </tbody>
                 </tgroup>
             </table>
-            <programlisting language="xml">&lt;version-compare version="${aProperty}" desiredVersion="1.3" operator="gt" /&gt;</programlisting>
-            <para>This condition internally uses PHP version_compare(). Operators and behavior are the same.</para> 
+            <programlisting language="xml">&lt;versioncompare version="${aProperty}" desiredVersion="1.3" operator="gt" /&gt;</programlisting>
+            <para>This condition internally uses PHP version_compare(). Operators and behavior are the same.</para>
         </sect2>
         <sect2 xml:id="conditions.http">
             <title><literal>http</literal></title>
@@ -540,6 +550,7 @@
             <itemizedlist>
                 <listitem>url - the URL of the request.</listitem>
                 <listitem>errorsBeginAt - number at which errors begin at.</listitem>
+                <listitem>quiet - Set quiet mode, which suppresses warnings and errors.</listitem>
             </itemizedlist>
             <table>
                 <title>http Attributes</title>
@@ -549,15 +560,25 @@
                     <colspec colname="required" colnum="3" colwidth="1*"/>
                     <thead>
                         <row>
-                            <entry><literal>url</literal></entry>
-                            <entry>The URL of the request.</entry>
-                            <entry>Yes</entry>
+                            <entry>Attribute</entry>
+                            <entry>Description</entry>
+                            <entry>Required</entry>
                         </row>
                     </thead>
                     <tbody>
                         <row>
+                            <entry><literal>url</literal></entry>
+                            <entry>The URL of the request.</entry>
+                            <entry>Yes</entry>
+                        </row>
+                        <row>
                             <entry><literal>errorsBeginAt</literal></entry>
                             <entry>Number at which errors begin at. - Default: 400</entry>
+                            <entry>No</entry>
+                        </row>
+                        <row>
+                            <entry><literal>quiet</literal></entry>
+                            <entry>Set quiet mode, which suppresses warnings and errors. Default is false</entry>
                             <entry>No</entry>
                         </row>
                     </tbody>
@@ -577,12 +598,17 @@
                     <colspec colname="required" colnum="3" colwidth="1*"/>
                     <thead>
                         <row>
+                            <entry>Attribute</entry>
+                            <entry>Description</entry>
+                            <entry>Required</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
                             <entry><literal>server</literal></entry>
                             <entry>The hostname or ip address of the server.</entry>
                             <entry>Yes</entry>
                         </row>
-                    </thead>
-                    <tbody>
                         <row>
                             <entry><literal>port</literal></entry>
                             <entry>The port number of the server.</entry>
@@ -752,6 +778,64 @@
 &lt;isfalse value="false"/></programlisting>
 
         </sect2>
+        <sect2 xml:id="conditions.ispropertytrue">
+            <title><literal>ispropertytrue</literal></title>
+            <para>Tests whether a property evaluates to true.</para>
+
+            <table>
+                <title>ispropertytrue Attributes</title>
+                <tgroup cols="3">
+                    <colspec colname="attribute" colnum="1" colwidth="1*"/>
+                    <colspec colname="description" colnum="2" colwidth="2*"/>
+                    <colspec colname="required" colnum="3" colwidth="1*"/>
+                    <thead>
+                        <row>
+                            <entry>Attribute</entry>
+                            <entry>Description</entry>
+                            <entry>Required</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry><literal>property</literal></entry>
+                            <entry>property to test</entry>
+                            <entry>Yes</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <programlisting language="xml">&lt;ispropertytrue name=&quot;someproperty&quot;/&gt;</programlisting>
+
+        </sect2>
+        <sect2 xml:id="conditions.ispropertyfalse">
+            <title><literal>ispropertyfalse</literal></title>
+            <para>Tests whether a property evaluates to not true, the negation of
+                <literal>&lt;ispropertytrue></literal></para>
+            <table>
+                <title>ispropertyfalse Attributes</title>
+                <tgroup cols="3">
+                    <colspec colname="attribute" colnum="1" colwidth="1*"/>
+                    <colspec colname="description" colnum="2" colwidth="2*"/>
+                    <colspec colname="required" colnum="3" colwidth="1*"/>
+                    <thead>
+                        <row>
+                            <entry>Attribute</entry>
+                            <entry>Description</entry>
+                            <entry>Required</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry><literal>property</literal></entry>
+                            <entry>property name to test</entry>
+                            <entry>Yes</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <programlisting language="xml">&lt;ispropertyfalse name="someproperty"/></programlisting>
+
+        </sect2>
         <sect2 xml:id="conditions.referenceexists">
             <title><literal>referenceexists</literal></title>
             <para>Tests whether a specified reference exists.</para>
@@ -824,6 +908,42 @@
             <programlisting language="xml">&lt;filesmatch file1="${file1}" file2="${file2}"/></programlisting>
 
         </sect2>
+        <sect2 xml:id="conditions.isfileselected">
+            <title><literal>isfileselected</literal></title>
+            <para>Test whether a file passes an embedded selector. </para>
+            <table>
+                <title>isfileselected Attributes</title>
+                <tgroup cols="3">
+                    <colspec colname="attribute" colnum="1" colwidth="1*"/>
+                    <colspec colname="description" colnum="2" colwidth="2*"/>
+                    <colspec colname="required" colnum="3" colwidth="1*"/>
+                    <thead>
+                        <row>
+                            <entry>Attribute</entry>
+                            <entry>Description</entry>
+                            <entry>Required</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry><literal>file</literal></entry>
+                            <entry>The file to check if is passes the embedded selector.</entry>
+                            <entry>Yes</entry>
+                        </row>
+                        <row>
+                            <entry><literal>basedir</literal></entry>
+                            <entry>The base directory to use for name based selectors.
+                                It this is not set, the project's basedirectory will be used.</entry>
+                            <entry>No</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <programlisting language="xml">&lt;isfileselected file="a.xml">
+  &lt;date datetime="06/28/2000 2:02 pm" when="equal"/>
+&lt;/isfileselected></programlisting>
+
+        </sect2>
         <sect2 xml:id="conditions.isfailure">
             <title><literal>isfailure</literal></title>
             <para>Test the return code of an executable for failure. </para>
@@ -854,6 +974,52 @@
     &lt;isfailure code="${return.code}"/>
     &lt;then>&lt;echo msg="${return.code}"/>&lt;/then>
 &lt;/if></programlisting>
+        </sect2>
+        <sect2 xml:id="conditions.matches">
+            <title><literal>matches</literal></title>
+            <para>Test if the specified string matches the specified regular expression pattern. </para>
+            <table>
+                <title>matches Attributes</title>
+                <tgroup cols="3">
+                    <colspec colname="attribute" colnum="1" colwidth="1*"/>
+                    <colspec colname="description" colnum="2" colwidth="2*"/>
+                    <colspec colname="required" colnum="3" colwidth="1*"/>
+                    <thead>
+                        <row>
+                            <entry>Attribute</entry>
+                            <entry>Description</entry>
+                            <entry>Required</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry><literal>string</literal></entry>
+                            <entry>The string to test.</entry>
+                            <entry>Yes</entry>
+                        </row>
+                        <row>
+                            <entry><literal>pattern</literal></entry>
+                            <entry>The regular expression pattern used to test.</entry>
+                            <entry>Yes</entry>
+                        </row>
+                        <row>
+                            <entry><literal>casesensitive</literal></entry>
+                            <entry>Perform a case sensitive match. Default is true.</entry>
+                            <entry>No</entry>
+                        </row>
+                        <row>
+                            <entry><literal>multiline</literal></entry>
+                            <entry>Perform a multi line match. Default is false.</entry>
+                            <entry>No</entry>
+                        </row>
+                        <row>
+                            <entry><literal>modifiers</literal></entry>
+                            <entry>The regular expression modifiers used to test.</entry>
+                            <entry>No</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
         </sect2>
     </sect1>
 

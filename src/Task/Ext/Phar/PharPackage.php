@@ -92,7 +92,7 @@ class PharPackage extends AbstractMatching
     /**
      * @var FileSet[]
      */
-    private $filesets = array();
+    private $filesets = [];
 
     /**
      * @var Metadata
@@ -328,7 +328,6 @@ class PharPackage extends AbstractMatching
                 // alongside the phar.
                 $details = openssl_pkey_get_details($private);
                 file_put_contents($this->destinationFile . '.pubkey', $details['key']);
-
             } else {
                 $phar->setSignatureAlgorithm($this->signatureAlgorithm);
             }
@@ -371,7 +370,6 @@ class PharPackage extends AbstractMatching
             }
         }
         if ($this->signatureAlgorithm == Phar::OPENSSL) {
-
             if (!extension_loaded('openssl')) {
                 throw new BuildException(
                     "PHP OpenSSL extension is required for OpenSSL signing of Phars!", $this->getLocation()

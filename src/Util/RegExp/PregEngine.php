@@ -189,7 +189,7 @@ class PregEngine implements RegExpEngine
      */
     public function match($pattern, $source, &$matches)
     {
-        return preg_match($this->preparePattern($pattern), $source, $matches);
+        return preg_match($this->preparePattern($pattern), $source, $matches) > 0;
     }
 
     /**
@@ -201,7 +201,7 @@ class PregEngine implements RegExpEngine
      */
     public function matchAll($pattern, $source, &$matches)
     {
-        return preg_match_all($this->preparePattern($pattern), $source, $matches);
+        return preg_match_all($this->preparePattern($pattern), $source, $matches) > 0;
     }
 
     /**
@@ -221,5 +221,4 @@ class PregEngine implements RegExpEngine
 
         return preg_replace($this->preparePattern($pattern), $replace, $source, $this->limit);
     }
-
 }

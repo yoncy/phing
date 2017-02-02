@@ -49,5 +49,4 @@ interface SelectorScannerInterface
      * Files which were selected out of a scan.
      */
     public function getDeselectedFiles();
-
 }

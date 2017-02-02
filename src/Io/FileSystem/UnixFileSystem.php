@@ -87,7 +87,7 @@ class UnixFileSystem extends AbstractFileSystem
     public function normalize($strPathname)
     {
         if (!strlen($strPathname)) {
-            return;
+            return '';
         }
 
         // Start normalising after any scheme that is present.
@@ -197,7 +197,6 @@ class UnixFileSystem extends AbstractFileSystem
      */
     public function resolve($parent, $child)
     {
-
         if ($child === "") {
             return $parent;
         }
@@ -265,7 +264,7 @@ class UnixFileSystem extends AbstractFileSystem
         $name = $f->getName();
         $hidden = (strlen($name) > 0) && ($name{0} == '.');
 
-        return ($hidden ? FileSystem::BA_HIDDEN : 0);
+        return ($hidden ? AbstractFileSystem::BA_HIDDEN : 0);
     }
 
     /**
@@ -280,7 +279,7 @@ class UnixFileSystem extends AbstractFileSystem
             $strPath = (string) $f->getPath();
             $perms = (int) (@fileperms($strPath) & 0444);
 
-            return FileSystem::getFileSystem()->chmod($strPath, $perms);
+            FileSystemFactory::getFileSystem()->chmod($strPath, $perms);
         } else {
             throw new Exception("IllegalArgumentType: Argument is not File");
         }
@@ -290,7 +289,7 @@ class UnixFileSystem extends AbstractFileSystem
      * compares file paths lexicographically
      * @param File $f1
      * @param File $f2
-     * @return int|void
+     * @return int
      */
     public function compare(File $f1, File $f2)
     {
@@ -314,7 +313,8 @@ class UnixFileSystem extends AbstractFileSystem
         global $php_errormsg;
 
         if (!$src->isLink()) {
-            return parent::copy($src, $dest);
+            parent::copy($src, $dest);
+            return;
         }
 
         $srcPath = $src->getAbsolutePath();
@@ -335,25 +335,25 @@ class UnixFileSystem extends AbstractFileSystem
     public function listRoots()
     {
         if (!$this->checkAccess('/', false)) {
-            die ("Can not access root");
+            die("Can not access root");
         }
 
-        return array(new File("/"));
+        return [new File("/")];
     }
 
     /**
      * returns the contents of a directory in an array
-     * @param $f
+     * @param File $f
      * @throws Exception
-     * @return array
+     * @return string[]
      */
-    public function lister($f)
+    public function listContents(File $f)
     {
         $dir = @opendir($f->getAbsolutePath());
         if (!$dir) {
             throw new Exception("Can't open directory " . $f->__toString());
         }
-        $vv = array();
+        $vv = [];
         while (($file = @readdir($dir)) !== false) {
             if ($file == "." || $file == "..") {
                 continue;
@@ -375,7 +375,6 @@ class UnixFileSystem extends AbstractFileSystem
 
             // "/foo/" --> "/foo", but "/" --> "/"
             $p = substr($p, 0, strlen($p) - 1);
-
         }
 
         return $p;
@@ -393,5 +392,4 @@ class UnixFileSystem extends AbstractFileSystem
 
         return (bool)@is_writable($dir);
     }
-
 }

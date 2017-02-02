@@ -99,7 +99,6 @@ class Basename extends Task
                 $pos--;
             }
             $value = StringHelper::substring($value, 0, $pos);
-
         }
         $this->getProject()->setNewProperty($this->property, $value);
     }

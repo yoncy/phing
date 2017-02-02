@@ -94,7 +94,6 @@ class PlainResultFormatter extends AbstractResultFormatter
      */
     public function processRow($row)
     {
-
         if (!$this->colsprinted && $this->showheaders) {
             $first = true;
             foreach ($row as $fieldName => $ignore) {
@@ -115,7 +114,6 @@ class PlainResultFormatter extends AbstractResultFormatter
 
         $first = true;
         foreach ($row as $columnValue) {
-
             if ($columnValue != null) {
                 $columnValue = trim($columnValue);
             }
@@ -130,7 +128,6 @@ class PlainResultFormatter extends AbstractResultFormatter
 
         $this->out->write($line);
         $this->out->write($this->rowdelimiter);
-
     }
 
     /**
@@ -140,5 +137,4 @@ class PlainResultFormatter extends AbstractResultFormatter
     {
         return new File('results.txt');
     }
-
 }

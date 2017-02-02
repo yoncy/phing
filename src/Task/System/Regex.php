@@ -175,7 +175,6 @@ class Regex extends AbstractPropertySetter
      */
     public function setCaseSensitive($caseSensitive)
     {
-
         $this->log("Set case-sensitive to $caseSensitive", Project::MSG_DEBUG);
 
         $this->caseSensitive = $caseSensitive;

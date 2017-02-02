@@ -58,14 +58,14 @@ abstract class AbstractHttp extends Task
      *
      * @var Parameter[]
      */
-    protected $headers = array();
+    protected $headers = [];
 
     /**
      * Holds additional config data for HTTP_Request2
      *
      * @var Parameter[]
      */
-    protected $configData = array();
+    protected $configData = [];
 
     /**
      * Holds the authentication user name
@@ -137,7 +137,6 @@ abstract class AbstractHttp extends Task
     {
         if (!$this->requestPrototype) {
             $request = new HTTP_Request2($this->url);
-
         } else {
             $request = clone $this->requestPrototype;
             $request->setUrl($this->url);
@@ -189,7 +188,11 @@ abstract class AbstractHttp extends Task
             throw new BuildException("Required attribute 'url' is missing");
         }
 
-        $this->processResponse($this->createRequest()->send());
+        try {
+            $this->processResponse($this->createRequest()->send());
+        } catch (HTTP_Request2_MessageException $e) {
+            throw new BuildException($e);
+        }
     }
 
     /**

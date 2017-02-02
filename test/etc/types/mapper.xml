@@ -5,11 +5,11 @@
   <target name="test1">
     <mkdir dir="copytest" />
     <copy todir="copytest">
-      <fileset dir="../../../classes">
-        <include name="**/tasks/system/*.php" />
+      <fileset dir="../../../src">
+        <include name="**/Task/System/*.php" />
       </fileset>
-      <fileset dir="../../classes">
-        <include name="**/tasks/*.php" />
+      <fileset dir="../../../src">
+        <include name="**/Task/*.php" />
       </fileset>
       <mapper type="flatten" />
     </copy>
@@ -18,7 +18,7 @@
   <target name="test2">
       <mkdir dir="copytest" />
       <copy todir="copytest">
-          <fileset dir="../../../classes"/>
+          <fileset dir="../../../src"/>
           <mapper type="composite">
               <mapper type="glob" from="*.xsl" to="*.from.xsl"/>
               <mapper type="glob" from="*.xml" to="*.from.xml"/>
@@ -38,7 +38,7 @@
               <mapper type="glob" from="*.php" to="*.php2"/>
           </mapper>
       </mapper>
-      <fileset dir="../../../classes"/>
+      <fileset dir="../../../src"/>
       </copy>
   </target>
 
@@ -49,7 +49,19 @@
         <mapper type="glob" from="*.xml" to="*.php1"/>
         <mapper type="glob" from="*.php" to="*.php2"/>
       </mapper>
-      <fileset dir="../../../classes/phing/mappers"/>
+      <fileset dir="../../../src/Mapper"/>
+    </copy>
+  </target>
+
+  <target name="testCutDirsMapper">
+    <property name="input" value="copytest/testinput"/>
+    <property name="output" value="copytest/testoutput"/>
+    <mkdir dir="${input}/a/b/c"/>
+    <touch file="${input}/a/b/D"/>
+    <touch file="${input}/a/b/c/E"/>
+    <copy todir="${output}">
+      <mapper type="cutdirs" to="2"/>
+      <fileset dir="${input}"/>
     </copy>
   </target>
 

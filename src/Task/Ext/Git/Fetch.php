@@ -365,5 +365,4 @@ class Fetch extends AbstractGitTask
     {
         return $this->group;
     }
-
 }

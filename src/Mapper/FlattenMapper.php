@@ -45,7 +45,7 @@ class FlattenMapper implements FileNameMapperInterface
     {
         $f = new File($sourceFileName);
 
-        return array($f->getName());
+        return [$f->getName()];
     }
 
     /**

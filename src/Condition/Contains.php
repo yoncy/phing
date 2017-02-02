@@ -33,7 +33,6 @@ use Phing\Exception\BuildException;
  */
 class Contains implements ConditionInterface
 {
-
     private $string;
     private $subString;
     private $caseSensitive = true;

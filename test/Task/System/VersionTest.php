@@ -31,10 +31,20 @@ use Phing\Test\Helper\AbstractBuildFileTest;
  */
 class VersionTest extends AbstractBuildFileTest
 {
-
     public function setUp()
     {
         $this->configureProject(PHING_TEST_BASE . "/etc/tasks/system/VersionTest.xml");
+    }
+
+    public function tearDown()
+    {
+        if (file_exists(PHING_TEST_BASE . "/etc/tasks/system/" . 'build.version')) {
+            unlink(PHING_TEST_BASE . "/etc/tasks/system/" . 'build.version');
+        }
+
+        if (file_exists(PHING_TEST_BASE . "/etc/tasks/system/" . 'property.version')) {
+            unlink(PHING_TEST_BASE . "/etc/tasks/system/" . 'property.version');
+        }
     }
 
     public function testBugfix()
@@ -50,5 +60,33 @@ class VersionTest extends AbstractBuildFileTest
     public function testMajor()
     {
         $this->expectLog("testMajor", "2.0.0");
+    }
+
+    public function testDefault()
+    {
+        $this->executeTarget(__FUNCTION__);
+        $this->assertPropertyEquals('build.version', '1.0.0');
+        $this->assertFileExists(PHING_TEST_BASE . "/etc/tasks/system/" . 'build.version', 'File not found');
+    }
+
+    public function testPropFile()
+    {
+        $this->executeTarget(__FUNCTION__);
+        $this->assertPropertyEquals('propfile.version', '4.5.5');
+        $this->assertFileExists(PHING_TEST_BASE . "/etc/tasks/system/" . 'property.version', 'File not found');
+    }
+
+    public function testPropFileWithDefaultProperty()
+    {
+        $this->executeTarget(__FUNCTION__);
+        $this->assertPropertyEquals('build.version', '4.5.5');
+        $this->assertFileExists(PHING_TEST_BASE . "/etc/tasks/system/" . 'build.version', 'File not found');
+    }
+
+    public function testWithStartingVersion()
+    {
+        $this->executeTarget(__FUNCTION__);
+        $this->assertPropertyEquals('build.version', '1.0.1');
+        $this->assertFileExists(PHING_TEST_BASE . "/etc/tasks/system/" . 'build.version', 'File not found');
     }
 }

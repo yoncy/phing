@@ -33,10 +33,8 @@ use Phing\Type\FileSet;
  */
 class FileSetTest extends AbstractFileSetTest
 {
-
     protected function getInstance()
     {
         return new FileSet();
     }
-
 }

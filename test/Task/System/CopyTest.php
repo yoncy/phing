@@ -74,12 +74,23 @@ class CopyTest extends AbstractBuildFileTest
     }
 
     /**
-     * Regression test for ticket http://www.phing.info/trac/ticket/229
+     * Regression test for ticket {@link http://www.phing.info/trac/ticket/229}
      * - CopyTask should accept filelist subelement
      */
     public function testCopyShouldAcceptFileList()
     {
         $this->executeTarget(__FUNCTION__);
         $this->assertInLogs("Copying 2 files to");
+    }
+
+    /**
+     * Regression test for ticket {@link https://github.com/phingofficial/phing/issues/562}
+     * - Error overwriting symlinks on copy or move
+     */
+    public function testOverwriteExistingSymlink()
+    {
+        $this->executeTarget(__FUNCTION__);
+        $this->assertInLogs("Copying 1 file to");
+        $this->assertEquals("tmp/target-a", readlink(PHING_TEST_BASE . "/etc/tasks/system/tmp/link-b"));
     }
 }

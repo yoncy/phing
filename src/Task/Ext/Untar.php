@@ -110,10 +110,10 @@ class Untar extends AbstractExtract
         $tarfileName = $tarfile->getName();
         $mode = strtolower(substr($tarfileName, strrpos($tarfileName, '.')));
 
-        $compressions = array(
-            'gz' => array('.gz', '.tgz',),
-            'bz2' => array('.bz2',),
-        );
+        $compressions = [
+            'gz' => ['.gz', '.tgz',],
+            'bz2' => ['.bz2',],
+        ];
         foreach ($compressions as $algo => $ext) {
             if (array_search($mode, $ext) !== false) {
                 $compression = $algo;

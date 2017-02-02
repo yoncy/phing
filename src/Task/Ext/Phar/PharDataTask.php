@@ -58,7 +58,7 @@ class PharDataTask extends AbstractMatching
     /**
      * @var FileSet[]
      */
-    private $filesets = array();
+    private $filesets = [];
 
     /**
      * @return FileSet
@@ -135,7 +135,7 @@ class PharDataTask extends AbstractMatching
                     $this->log("Could not delete destination file $this->destinationFile", Project::MSG_WARN);
                 }
             }
-
+            
             $pharData = new PharData($this->baseDirectory->getPath() . '/' . $this->destinationFile->getName());
 
             foreach ($this->filesets as $fileset) {

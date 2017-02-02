@@ -58,5 +58,4 @@ interface FileNameMapperInterface
      * @return void
      */
     public function setFrom($from);
-
 }

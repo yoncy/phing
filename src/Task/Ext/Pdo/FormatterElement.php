@@ -6,6 +6,7 @@ use Phing\Io\AbstractWriter;
 use Phing\Io\File;
 use Phing\Io\FileWriter;
 use Phing\Io\LogWriter;
+use Phing\Parser\Location;
 use Phing\Phing;
 use Phing\Project;
 use Phing\Type\Parameter;
@@ -107,7 +108,7 @@ class FormatterElement
      * Parameters for a custom formatter.
      * @var array Parameter[]
      */
-    private $formatterParams = array();
+    private $formatterParams = [];
 
     /**
      * @var SqlExec
@@ -118,6 +119,11 @@ class FormatterElement
      * @var Parameter[]
      */
     private $parameters;
+
+    /**
+     * @var bool
+     */
+    private $formatOutput;
 
     /**
      * Construct a new PDOSQLExecFormatterElement with parent task.
@@ -159,12 +165,12 @@ class FormatterElement
 
     /**
      * Configures wrapped formatter class with any attributes on this element.
+     * @throws BuildException
      */
-    public function prepare()
+    public function prepare(Location $location)
     {
-
         if (!$this->formatter) {
-            throw new BuildException("No formatter specified (use type or classname attribute)", $this->getLocation());
+            throw new BuildException("No formatter specified (use type or classname attribute)", $location);
         }
 
         $out = $this->getOutputWriter();
@@ -190,10 +196,9 @@ class FormatterElement
                 throw new BuildException(
                     "Formatter " . get_class(
                         $this->formatter
-                    ) . " does not have a $method method.", $this->getLocation()
-                );
+                    ) . " does not have a $method method.", $location);
             }
-            call_user_func(array($this->formatter, $method), $param->getValue());
+            call_user_func([$this->formatter, $method], $param->getValue());
         }
     }
 
@@ -258,10 +263,6 @@ class FormatterElement
     public function getOutfile()
     {
         return $this->outfile;
-        /*
-        } else {
-            return new File($this->formatter->getPreferredOutfile());
-        }*/
     }
 
     /**

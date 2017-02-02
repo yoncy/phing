@@ -21,6 +21,8 @@
 
 namespace Phing\Type;
 
+use Phing\Mapper\CutDirsMapper;
+use Phing\Mapper\FirstMatchMapper;
 use Phing\Type\DataType;
 use Phing\Exception\BuildException;
 use Phing\Mapper\CompositeMapper;
@@ -28,6 +30,12 @@ use Phing\Mapper\ContainerMapper;
 use Phing\Mapper\FileNameMapperInterface;
 use Phing\Project;
 use Phing\Type\Reference;
+use Phing\Mapper\ChainedMapper;
+use Phing\Mapper\IdentityMapper;
+use Phing\Mapper\FlattenMapper;
+use Phing\Mapper\GlobMapper;
+use Phing\Mapper\RegexpMapper;
+use Phing\Mapper\MergeMapper;
 
 /**
  * Filename Mapper maps source file name(s) to target file name(s).
@@ -48,7 +56,6 @@ use Phing\Type\Reference;
  */
 class Mapper extends DataType
 {
-
     protected $type;
     protected $classname;
     protected $from;
@@ -245,29 +252,32 @@ class Mapper extends DataType
         if ($this->type !== null) {
             switch ($this->type) {
                 case 'chained':
-                    $this->classname = 'Phing\\Mapper\\ChainedMapper';
+                    $this->classname = ChainedMapper::class;
                     break;
                 case 'composite':
-                    $this->classname = 'Phing\\Mapper\\CompositeMapper';
+                    $this->classname = CompositeMapper::class;
+                    break;
+                case 'cutdirs':
+                    $this->classname = CutDirsMapper::class;
                     break;
                 case 'identity':
-                    $this->classname = 'Phing\\Mapper\\IdentityMapper';
+                    $this->classname = IdentityMapper::class;
                     break;
                 case 'firstmatch':
-                    $this->classname = 'phing.mappers.FirstMatchMapper';
+                    $this->classname = FirstMatchMapper::class;
                     break;
                 case 'flatten':
-                    $this->classname = 'Phing\\Mapper\\FlattenMapper';
+                    $this->classname = FlattenMapper::class;
                     break;
                 case 'glob':
-                    $this->classname = 'Phing\\Mapper\\GlobMapper';
+                    $this->classname = GlobMapper::class;
                     break;
                 case 'regexp':
                 case 'regex':
-                    $this->classname = 'Phing\\Mapper\\RegexpMapper';
+                    $this->classname = RegexpMapper::class;
                     break;
                 case 'merge':
-                    $this->classname = 'Phing\\Mapper\\MergeMapper';
+                    $this->classname = MergeMapper::class;
                     break;
                 default:
                     throw new BuildException("Mapper type {$this->type} not known");
@@ -286,7 +296,7 @@ class Mapper extends DataType
     private function getRef()
     {
         if (!$this->checked) {
-            $stk = array();
+            $stk = [];
             $stk[] = $this;
             $this->dieOnCircularReference($stk, $this->project);
         }

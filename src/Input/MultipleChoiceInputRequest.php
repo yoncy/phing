@@ -30,7 +30,7 @@ namespace Phing\Input;
 class MultipleChoiceInputRequest extends InputRequest
 {
     /** @var array $choises */
-    protected $choices = array();
+    protected $choices = [];
 
     /**
      * @param string $prompt The prompt to show to the user.  Must not be null.

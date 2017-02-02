@@ -152,7 +152,6 @@ class DepthSelector extends AbstractExtendSelector
      */
     public function isSelected(File $basedir, $filename, File $file)
     {
-
         $this->validate();
 
         $depth = -1;

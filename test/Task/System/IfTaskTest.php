@@ -14,7 +14,6 @@ use Phing\Test\Helper\AbstractBuildFileTest;
  */
 class IfTaskTest extends AbstractBuildFileTest
 {
-
     public function setUp()
     {
         $this->configureProject(
@@ -48,7 +47,6 @@ class IfTaskTest extends AbstractBuildFileTest
 
         // check the output for the expected value
         $this->assertInLogs("The value of property foo is 'foo'");
-
     }
 
     /**
@@ -108,7 +106,6 @@ class IfTaskTest extends AbstractBuildFileTest
         $cause = 'you cannot have more than 1 condition in your if-statement';
         $msg = 'You must not nest more than one condition into <if>';
         $this->expectBuildExceptionContaining($target, $cause, $msg);
-
     }
 
     /**

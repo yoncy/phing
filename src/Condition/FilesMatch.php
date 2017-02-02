@@ -36,7 +36,8 @@ class FilesMatch implements ConditionInterface
     /**
      * files to compare
      */
-    private $file1, $file2;
+    private $file1;
+    private $file2;
 
     /**
      * Sets the File1 attribute

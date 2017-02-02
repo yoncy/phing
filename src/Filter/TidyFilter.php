@@ -47,7 +47,7 @@ class TidyFilter extends BaseParamFilterReader implements ChainableReaderInterfa
     private $encoding = 'utf8';
 
     /** @var array Parameter[] */
-    private $configParameters = array();
+    private $configParameters = [];
 
     /**
      * Set the encoding for resulting (X)HTML document.
@@ -85,7 +85,7 @@ class TidyFilter extends BaseParamFilterReader implements ChainableReaderInterfa
      */
     private function getDistilledConfig()
     {
-        $config = array();
+        $config = [];
         foreach ($this->configParameters as $p) {
             $config[$p->getName()] = $p->getValue();
         }
@@ -97,13 +97,12 @@ class TidyFilter extends BaseParamFilterReader implements ChainableReaderInterfa
      * Reads input and returns Tidy-filtered output.
      *
      * @param null $len
-     * @throws \Phing\Exception\BuildException
-     * @return the resulting stream, or -1 if the end of the resulting stream has been reached
+     * @throws BuildException
+     * @return int the resulting stream, or -1 if the end of the resulting stream has been reached
      *
      */
     public function read($len = null)
     {
-
         if (!class_exists('Tidy')) {
             throw new BuildException("You must enable the 'tidy' extension in your PHP configuration in order to use the Tidy filter.");
         }
@@ -125,7 +124,6 @@ class TidyFilter extends BaseParamFilterReader implements ChainableReaderInterfa
         $tidy->cleanRepair();
 
         return tidy_get_output($tidy);
-
     }
 
     /**
@@ -135,8 +133,7 @@ class TidyFilter extends BaseParamFilterReader implements ChainableReaderInterfa
      * @internal param A $reader Reader object providing the underlying stream.
      *               Must not be <code>null</code>.
      *
-     * @return a new filter based on this configuration, but filtering
-     *           the specified reader
+     * @return TidyFilter a new filter based on this configuration, but filtering the specified reader
      */
     public function chain(AbstractReader $reader)
     {
@@ -160,15 +157,11 @@ class TidyFilter extends BaseParamFilterReader implements ChainableReaderInterfa
                 if ($param->getType() == "config") {
                     $this->configParameters[] = $param;
                 } else {
-
                     if ($param->getName() == "encoding") {
                         $this->setEncoding($param->getValue());
                     }
-
                 }
-
             }
         }
     }
-
 }

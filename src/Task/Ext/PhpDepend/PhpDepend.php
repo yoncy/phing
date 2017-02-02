@@ -59,7 +59,7 @@ class PhpDepend extends Task
      *
      * @var FileSet[]
      */
-    protected $filesets = array();
+    protected $filesets = [];
 
     /**
      * List of allowed file extensions. Default file extensions are <b>php</b>
@@ -67,7 +67,7 @@ class PhpDepend extends Task
      *
      * @var array<string>
      */
-    protected $allowedFileExtensions = array('php', 'php5');
+    protected $allowedFileExtensions = ['php', 'php5'];
 
     /**
      * List of exclude directories. Default exclude dirs are <b>.git</b>,
@@ -75,14 +75,14 @@ class PhpDepend extends Task
      *
      * @var array<string>
      */
-    protected $excludeDirectories = array('.git', '.svn', 'CVS');
+    protected $excludeDirectories = ['.git', '.svn', 'CVS'];
 
     /**
      * List of exclude packages
      *
      * @var array<string>
      */
-    protected $excludePackages = array();
+    protected $excludePackages = [];
 
     /**
      * Should the parse ignore doc comment annotations?
@@ -117,14 +117,14 @@ class PhpDepend extends Task
      *
      * @var PhpDependLoggerElement[]
      */
-    protected $loggers = array();
+    protected $loggers = [];
 
     /**
      * Analyzer elements
      *
      * @var PhpDependAnalyzerElement[]
      */
-    protected $analyzers = array();
+    protected $analyzers = [];
 
     /**
      * Holds the PHP_Depend runner instance
@@ -219,7 +219,7 @@ class PhpDepend extends Task
      */
     public function setAllowedFileExtensions($fileExtensions)
     {
-        $this->allowedFileExtensions = array();
+        $this->allowedFileExtensions = [];
 
         $token = ' ,;';
         $ext = strtok($fileExtensions, $token);
@@ -237,7 +237,7 @@ class PhpDepend extends Task
      */
     public function setExcludeDirectories($excludeDirectories)
     {
-        $this->excludeDirectories = array();
+        $this->excludeDirectories = [];
 
         $token = ' ,;';
         $pattern = strtok($excludeDirectories, $token);
@@ -255,7 +255,7 @@ class PhpDepend extends Task
      */
     public function setExcludePackages($excludePackages)
     {
-        $this->excludePackages = array();
+        $this->excludePackages = [];
 
         $token = ' ,;';
         $pattern = strtok($excludePackages, $token);
@@ -479,7 +479,7 @@ class PhpDepend extends Task
      */
     private function getFilesToParse()
     {
-        $filesToParse = array();
+        $filesToParse = [];
 
         if ($this->file instanceof File) {
             $filesToParse[] = $this->file->__toString();

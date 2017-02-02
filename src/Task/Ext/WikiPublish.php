@@ -78,11 +78,11 @@ class WikiPublish extends Task
      * Publish modes map
      * @var array
      */
-    private $modeMap = array(
+    private $modeMap = [
         'overwrite' => 'text',
         'append' => 'appendtext',
         'prepend' => 'prependtext',
-    );
+    ];
     /**
      * Curl handler
      *
@@ -272,7 +272,6 @@ class WikiPublish extends Task
      */
     private function validateAttributes()
     {
-
         if (null === $this->apiUrl) {
             throw new BuildException('Wiki apiUrl is required');
         }
@@ -280,7 +279,6 @@ class WikiPublish extends Task
         if (null === $this->id && null === $this->title) {
             throw new BuildException('Wiki page id or title is required');
         }
-
     }
 
     /**
@@ -292,7 +290,7 @@ class WikiPublish extends Task
      */
     private function callApiLogin($token = null)
     {
-        $postData = array('lgname' => $this->apiUser, 'lgpassword' => $this->apiPassword);
+        $postData = ['lgname' => $this->apiUser, 'lgpassword' => $this->apiPassword];
         if (null !== $token) {
             $postData['lgtoken'] = $token;
         }
@@ -331,9 +329,9 @@ class WikiPublish extends Task
      */
     private function getApiEditData()
     {
-        $result = array(
+        $result = [
             'minor' => '',
-        );
+        ];
         if (null !== $this->title) {
             $result['title'] = $this->title;
         }

@@ -21,10 +21,11 @@
 
 namespace Phing\Type;
 
+use Phing\Type\Selector\DifferentSelector;
+use IteratorAggregate;
 use Phing\Type\Selector\AndSelector;
 use Phing\Type\Selector\ContainsRegexpSelector;
 use Phing\Type\Selector\ContainsSelector;
-use Phing\Type\DataType;
 use Phing\Type\Selector\DateSelector;
 use Phing\Type\Selector\DependSelector;
 use Phing\Type\Selector\DepthSelector;
@@ -32,23 +33,22 @@ use Exception;
 use Phing\Type\Selector\ExtendSelector;
 use Phing\Type\Selector\FilenameSelector;
 use Phing\Type\Selector\FileSelectorInterface;
-use Phing\Type\FileSet;
 use Phing\Type\Selector\MajoritySelector;
 use Phing\Type\Selector\NoneSelector;
 use Phing\Type\Selector\NotSelector;
 use Phing\Type\Selector\OrSelector;
-use Phing\Type\PatternSet;
 use Phing\Exception\BuildException;
 use Phing\Io\File;
 use Phing\Io\Scanner\DirectoryScanner;
 use Phing\Io\Scanner\SelectorScannerInterface;
 use Phing\Project;
 use Phing\Type\Selector\PresentSelector;
-use Phing\Type\Reference;
 use Phing\Type\Selector\SelectorContainerInterface;
 use Phing\Type\Selector\SelectSelector;
 use Phing\Type\Selector\SizeSelector;
 use Phing\Type\Selector\TypeSelector;
+use Phing\Type\Selector\ReadableSelector;
+use Phing\Type\Selector\WritableSelector;
 
 /**
  * The FileSet class provides methods and properties for accessing
@@ -69,7 +69,7 @@ use Phing\Type\Selector\TypeSelector;
  * @see        ProjectComponent
  * @package    phing.types
  */
-class AbstractFileSet extends DataType implements SelectorContainerInterface
+abstract class AbstractFileSet extends DataType implements SelectorContainerInterface, IteratorAggregate
 {
 
     // These vars are public for cloning purposes
@@ -90,10 +90,10 @@ class AbstractFileSet extends DataType implements SelectorContainerInterface
      */
     public $defaultPatterns;
 
-    public $additionalPatterns = array();
+    public $additionalPatterns = [];
     public $dir;
     public $isCaseSensitive = true;
-    public $selectors = array();
+    public $selectors = [];
 
     /**
      * @param null $fileset
@@ -405,7 +405,7 @@ class AbstractFileSet extends DataType implements SelectorContainerInterface
     public function getRef(Project $p)
     {
         if (!$this->checked) {
-            $stk = array();
+            $stk = [];
             array_push($stk, $this);
             $this->dieOnCircularReference($stk, $p);
         }
@@ -442,7 +442,6 @@ class AbstractFileSet extends DataType implements SelectorContainerInterface
      */
     public function hasPatterns()
     {
-
         if ($this->isReference() && $this->getProject() !== null) {
             return $this->getRef($this->getProject())->hasPatterns();
         }
@@ -493,7 +492,7 @@ class AbstractFileSet extends DataType implements SelectorContainerInterface
             return $this->getRef($p)->getSelectors($p);
         } else {
             // *copy* selectors
-            $result = array();
+            $result = [];
             for ($i = 0, $size = count($this->selectors); $i < $size; $i++) {
                 $result[] = clone $this->selectors[$i];
             }
@@ -716,4 +715,39 @@ class AbstractFileSet extends DataType implements SelectorContainerInterface
 
         return $o;
     }
+
+    /**
+     * add a readable selector entry on the selector list
+     */
+    public function createReadable()
+    {
+        $o = new ReadableSelector();
+        $this->appendSelector($o);
+
+        return $o;
+    }
+
+    /**
+     * add a writable selector entry on the selector list
+     */
+    public function createWritable()
+    {
+        $o = new WritableSelector();
+        $this->appendSelector($o);
+
+        return $o;
+    }
+
+    /**
+     * add a different selector entry on the selector list
+     */
+    public function createDifferent()
+    {
+        $o = new DifferentSelector();
+        $this->appendSelector($o);
+
+        return $o;
+    }
+
+    abstract public function getIterator();
 }

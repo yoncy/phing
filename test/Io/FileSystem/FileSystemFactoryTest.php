@@ -23,9 +23,12 @@
 namespace Phing\Test\Io\FileSystem;
 
 use Phing\Io\FileSystem\FileSystemFactory;
+use Phing\Io\IOException;
 use Phing\Phing;
 use PHPUnit_Framework_TestCase;
 use ReflectionClass;
+use Phing\Io\FileSystem\UnixFileSystem;
+use Phing\Io\FileSystem\Win32FileSystem;
 
 /**
  * Unit test for FileSystem
@@ -34,7 +37,6 @@ use ReflectionClass;
  */
 class FileSystemFactoryTest extends PHPUnit_Framework_TestCase
 {
-
     private $oldFsType = "";
 
     public function setUp()
@@ -50,20 +52,19 @@ class FileSystemFactoryTest extends PHPUnit_Framework_TestCase
 
     protected function _resetFileSystem()
     {
-        $refClass = new ReflectionClass('Phing\\Io\\FileSystem\\FileSystemFactory');
+        $refClass = new ReflectionClass(FileSystemFactory::class);
         $refProperty = $refClass->getProperty('fs');
         $refProperty->setAccessible(true);
         $refProperty->setValue(null);
     }
 
-    /**
-     * @expectedException Phing\Io\IOException
-     */
     public function testGetFileSystemWithUnknownTypeKeyThrowsException()
     {
         $this->_resetFileSystem();
 
         Phing::setProperty('host.fstype', 'UNRECOGNISED');
+        
+        $this->expectException(IOException::class);
 
         FileSystemFactory::getFileSystem();
     }
@@ -84,10 +85,10 @@ class FileSystemFactoryTest extends PHPUnit_Framework_TestCase
 
     public function fileSystemMappingsDataProvider()
     {
-        return array(
-            array('Phing\\Io\\FileSystem\\UnixFileSystem', 'UNIX'),
-            array('Phing\\Io\\FileSystem\\Win32FileSystem', 'WIN32'),
-            array('Phing\\Io\\FileSystem\\Win32FileSystem', 'WINNT')
-        );
+        return [
+            [UnixFileSystem::class, 'UNIX'],
+            [Win32FileSystem::class, 'WIN32'],
+            [Win32FileSystem::class, 'WINNT']
+        ];
     }
 }

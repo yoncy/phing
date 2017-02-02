@@ -55,8 +55,8 @@ class Apply extends Task
      * File Set/List of files.
      * @var array
      */
-    protected $filesets = array();
-    protected $filelists = array();
+    protected $filesets = [];
+    protected $filelists = [];
 
     /**
      * Commandline managing object
@@ -462,7 +462,7 @@ class Apply extends Task
      */
     public function createSrcfile()
     {
-        return $this->commandline->addArguments(array(self::SOURCEFILE_ID));
+        return $this->commandline->addArguments([self::SOURCEFILE_ID]);
     }
 
     /**
@@ -485,7 +485,6 @@ class Apply extends Task
      */
     public function init()
     {
-
         $this->commandline = new CommandLine();
         $this->loglevel = Project::MSG_VERBOSE;
     }
@@ -524,7 +523,6 @@ class Apply extends Task
                 );
             }
             unset($this->filesets);
-
         }
 
         /// Cleanup //
@@ -532,7 +530,6 @@ class Apply extends Task
 
         // Log
         $this->log('End ', $this->loglevel);
-
     }
 
     /**********************************************************************************/
@@ -590,7 +587,7 @@ class Apply extends Task
 
         // Executable
         if ($this->commandline->getExecutable() === null) {
-            return $this->throwBuildException('Please provide "executable" information');
+            $this->throwBuildException('Please provide "executable" information');
         }
 
         // Retrieving the current working directory
@@ -601,7 +598,7 @@ class Apply extends Task
 
             // Try expanding (any) symbolic links
             if (!$this->dir->getCanonicalFile()->isDirectory()) {
-                return $this->throwBuildException("'" . $this->dir . "' is not a valid directory");
+                $this->throwBuildException("'" . $this->dir . "' is not a valid directory");
             }
 
             // Change working directory
@@ -613,7 +610,6 @@ class Apply extends Task
                 ),
                 $this->loglevel
             );
-
         }
 
         ///// Preparing the task environment /////
@@ -664,11 +660,9 @@ class Apply extends Task
 
         // Setting command output redirection with content appending
         if ($this->output !== null) {
-
             $this->realCommand .= ' 1>';
             $this->realCommand .= ($this->appendoutput ? '>' : ''); // Append output
             $this->realCommand .= ' ' . escapeshellarg($this->output->getPath());
-
         } elseif ($this->spawn) { // Validating the 'spawn' configuration, and redirecting the output to 'null'
 
             // Validating the O.S. variant
@@ -697,7 +691,6 @@ class Apply extends Task
             } else {
                 $this->realCommand .= ' &'; // GNU/Linux background process forking
             }
-
         }
 
         // Log
@@ -739,7 +732,8 @@ class Apply extends Task
                     $files,
                     0,
                     (($this->maxparallel > 0) ? $this->maxparallel : count($files))
-                );;
+                );
+                ;
 
                 $absolutefilename = implode(' ', $this->getFilePath($slicedfiles, $basedir, $this->relative));
             }
@@ -751,7 +745,7 @@ class Apply extends Task
             }
 
             // Preparing the command to be executed
-            $filecommand = str_replace(array(self::SOURCEFILE_ID), array($absolutefilename), $this->realCommand);
+            $filecommand = str_replace([self::SOURCEFILE_ID], [$absolutefilename], $this->realCommand);
 
             // Command execution
             list($returncode, $output) = $this->executeCommand($filecommand);
@@ -763,7 +757,6 @@ class Apply extends Task
                 if ($this->returnProperty) {
                     $this->project->setProperty($this->returnProperty, $returncode);
                 }
-
             }
 
             // Sets the output property
@@ -785,7 +778,6 @@ class Apply extends Task
             if (($this->parallel) && (!array_key_exists($count, $files))) {
                 break;
             }
-
         } // Each file processing loop ends
 
         return;
@@ -802,7 +794,7 @@ class Apply extends Task
     {
 
         // Var(s)
-        $output = array();
+        $output = [];
         $return = null;
 
         // Validating the command executor container
@@ -814,7 +806,7 @@ class Apply extends Task
             $this->loglevel
         );
 
-        return array($return, $output);
+        return [$return, $output];
     }
 
     /**
@@ -847,10 +839,10 @@ class Apply extends Task
     {
 
         // Var(s)
-        $files = array();
+        $files = [];
 
         // Validating the 'file' information
-        $files = (is_array($filename)) ? $filename : array($filename);
+        $files = (is_array($filename)) ? $filename : [$filename];
 
         // Processing the file information
         foreach ($files as $index => $file) {
@@ -874,5 +866,4 @@ class Apply extends Task
     {
         throw new BuildException('ApplyTask: ' . (string)$information);
     }
-
 }

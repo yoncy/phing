@@ -31,7 +31,6 @@ use Phing\Test\Helper\AbstractBuildFileTest;
  */
 class LineContainsTest extends AbstractBuildFileTest
 {
-
     /**
      * @var FileUtils
      */
@@ -56,5 +55,4 @@ class LineContainsTest extends AbstractBuildFileTest
         $result = $this->getProject()->resolveFile("result/linecontains.test");
         $this->assertTrue($this->fu->contentEquals($expected, $result), "Files don't match!");
     }
-
 }

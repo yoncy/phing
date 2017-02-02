@@ -57,7 +57,6 @@ use Phing\Util\Properties\Properties;
  */
 class HtmlColorLogger extends DefaultLogger
 {
-
     const CLASS_ERR = 'phing_err';
     const CLASS_VERBOSE = 'phing_verbose';
     const CLASS_DEBUG = 'phing_debug';
@@ -96,7 +95,6 @@ class HtmlColorLogger extends DefaultLogger
      */
     final private function setColors()
     {
-
         $systemColorFile = new File(Phing::getResourcePath("etc/loggers.properties"));
 
         try {
@@ -138,18 +136,17 @@ class HtmlColorLogger extends DefaultLogger
     final protected function printMessage($message, OutputStream $stream, $priority)
     {
         if ($message !== null) {
-
             if (!$this->colorsSet) {
                 $this->setColors();
                 $this->colorsSet = true;
             }
 
-            $search = array('<', '>');
-            $replace = array('&lt;', '&gt;');
+            $search = ['<', '>'];
+            $replace = ['&lt;', '&gt;'];
             $message = str_replace($search, $replace, $message);
 
-            $search = array("\t", "\n", "\r");
-            $replace = array('&nbsp;&nbsp;&nbsp;', '<br>', '');
+            $search = ["\t", "\n", "\r"];
+            $replace = ['&nbsp;&nbsp;&nbsp;', '<br>', ''];
             $message = str_replace($search, $replace, $message);
 
             if (preg_match('@^( +)([^ ].+)@', $message, $matches)) {

@@ -34,17 +34,59 @@ use Phing\Task;
  */
 class Ssh extends Task
 {
-
+    /**
+     * @var string
+     */
     private $host = "";
+
+    /**
+     * @var int
+     */
     private $port = 22;
+
+    /**
+     * @var Ssh2MethodParam
+     */
     private $methods = null;
+
+    /**
+     * @var string
+     */
     private $username = "";
+
+    /**
+     * @var string
+     */
     private $password = "";
+
+    /**
+     * @var string
+     */
     private $command = "";
+
+    /**
+     * @var string
+     */
     private $pubkeyfile = '';
+
+    /**
+     * @var string
+     */
     private $privkeyfile = '';
+
+    /**
+     * @var string
+     */
     private $privkeyfilepassphrase = '';
+
+    /**
+     * @var string
+     */
     private $pty = '';
+
+    /**
+     * @var bool
+     */
     private $failonerror = false;
 
     /**
@@ -58,6 +100,11 @@ class Ssh extends Task
      * @var boolean
      */
     private $display = true;
+
+    /**
+     * @var resource
+     */
+    private $connection;
 
     /**
      * @param $host
@@ -263,7 +310,7 @@ class Ssh extends Task
             throw new BuildException("To use SshTask, you need to install the PHP SSH2 extension.");
         }
 
-        $methods = !empty($this->methods) ? $this->methods->toArray($p) : array();
+        $methods = !empty($this->methods) ? $this->methods->toArray($p) : [];
         $this->connection = ssh2_connect($this->host, $this->port, $methods);
         if (!$this->connection) {
             throw new BuildException("Could not establish connection to " . $this->host . ":" . $this->port . "!");
@@ -339,5 +386,4 @@ class Ssh extends Task
             throw new BuildException("SSH Task failed: " . $result_error);
         }
     }
-
 }

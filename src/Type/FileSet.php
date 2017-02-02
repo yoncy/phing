@@ -37,7 +37,7 @@ use Iterator;
  * @author  Stefan Bodewig <stefan.bodewig@epost.de> (Ant)
  * @author  Magesh Umasankar (Ant)
  */
-class FileSet extends AbstractFileSet implements \IteratorAggregate
+class FileSet extends AbstractFileSet
 {
     /**
      * Return a FileSet that has the same basedir and same patternsets as this one.
@@ -52,7 +52,7 @@ class FileSet extends AbstractFileSet implements \IteratorAggregate
     }
 
     /**
-     * @return Iterator
+     * @return \Traversable
      */
     public function getIterator()
     {
@@ -66,12 +66,10 @@ class FileSet extends AbstractFileSet implements \IteratorAggregate
     {
         $directoryScanner = $this->getDirectoryScanner($this->getProject());
         $files = $directoryScanner->getIncludedFiles();
-
         $baseDirectory = $directoryScanner->getBasedir();
         foreach ($files as $index => $file) {
             $files[$index] = realpath($baseDirectory . '/' . $file);
         }
-
         return $files;
     }
 }

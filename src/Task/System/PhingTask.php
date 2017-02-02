@@ -60,7 +60,7 @@ class PhingTask extends Task
     private $dir;
 
     /** build.xml (can be absolute) in this case dir will be ignored */
-    private $File;
+    private $file;
 
     /** the target to call if any */
     protected $newTarget;
@@ -72,13 +72,13 @@ class PhingTask extends Task
     private $inheritRefs = false;
 
     /** the properties to pass to the new project */
-    private $properties = array();
+    private $properties = [];
 
     /** the references to pass to the new project */
-    private $references = array();
+    private $references = [];
 
     /** The filesets that contain the files PhingTask is to be run on. */
-    private $filesets = array();
+    private $filesets = [];
 
     /** the temporary project created to run the build file */
     private $newProject;
@@ -160,7 +160,7 @@ class PhingTask extends Task
     {
 
         // Call Phing on the file set with the attribute "File"
-        if ($this->File !== null or $this->dir !== null) {
+        if ($this->file !== null or $this->dir !== null) {
             $this->processFile();
         }
 
@@ -168,7 +168,7 @@ class PhingTask extends Task
         if (!empty($this->filesets)) {
             // preserve old settings
             $savedDir = $this->dir;
-            $savedFile = $this->File;
+            $savedFile = $this->file;
             $savedTarget = $this->newTarget;
 
             // set no specific target for files in filesets
@@ -176,7 +176,6 @@ class PhingTask extends Task
             // $this->newTarget = null;
 
             foreach ($this->filesets as $fs) {
-
                 $ds = $fs->getDirectoryScanner($this->project);
 
                 $fromDir = $fs->getDir($this->project);
@@ -185,7 +184,7 @@ class PhingTask extends Task
                 foreach ($srcFiles as $fname) {
                     $f = new File($ds->getbasedir(), $fname);
                     $f = $f->getAbsoluteFile();
-                    $this->File = $f->getAbsolutePath();
+                    $this->file = $f->getAbsolutePath();
                     $this->dir = $f->getParentFile();
                     $this->processFile(); // run Phing!
                 }
@@ -193,7 +192,7 @@ class PhingTask extends Task
 
             // side effect free programming ;-)
             $this->dir = $savedDir;
-            $this->File = $savedFile;
+            $this->file = $savedFile;
             $this->newTarget = $savedTarget;
 
             // [HL] change back to correct dir
@@ -216,16 +215,14 @@ class PhingTask extends Task
      */
     private function processFile()
     {
-
         $buildFailed = false;
         $savedDir = $this->dir;
-        $savedFile = $this->File;
+        $savedFile = $this->file;
         $savedTarget = $this->newTarget;
 
         $savedBasedirAbsPath = null; // this is used to save the basedir *if* we change it
 
         try {
-
             if ($this->newProject === null) {
                 $this->reinit();
             }
@@ -233,7 +230,6 @@ class PhingTask extends Task
             $this->initializeProject();
 
             if ($this->dir !== null) {
-
                 $dirAbsPath = $this->dir->getAbsolutePath();
 
                 // BE CAREFUL! -- when the basedir is changed for a project,
@@ -253,7 +249,6 @@ class PhingTask extends Task
                 if ($savedDir !== null) { // has been set explicitly
                     $this->newProject->setInheritedProperty("project.basedir", $this->dir->getAbsolutePath());
                 }
-
             } else {
 
                 // Since we're not changing the basedir here (for file resolution),
@@ -262,22 +257,22 @@ class PhingTask extends Task
             }
 
             $this->overrideProperties();
-            if ($this->File === null) {
-                $this->File = "build.xml";
+            if ($this->file === null) {
+                $this->file = "build.xml";
             }
 
             $fu = new FileUtils();
-            $file = $fu->resolveFile($this->dir, $this->File);
-            $this->File = $file->getAbsolutePath();
+            $file = $fu->resolveFile($this->dir, $this->file);
+            $this->file = $file->getAbsolutePath();
 
             $this->log(
-                "Calling Buildfile '" . $this->File . "' with target '" . $this->newTarget . "'",
+                "Calling Buildfile '" . $this->file . "' with target '" . $this->newTarget . "'",
                 Project::MSG_VERBOSE
             );
 
-            $this->newProject->setUserProperty("phing.file", $this->File);
+            $this->newProject->setUserProperty("phing.file", $this->file);
 
-            ProjectConfigurator::configureProject($this->newProject, new File($this->File));
+            ProjectConfigurator::configureProject($this->newProject, new File($this->file));
 
             if ($this->newTarget === null) {
                 $this->newTarget = $this->newProject->getDefaultTarget();
@@ -289,13 +284,11 @@ class PhingTask extends Task
                 $this->getOwningTarget() !== null &&
                 $this->newTarget == $this->getOwningTarget()->getName()
             ) {
-
                 throw new BuildException("phing task calling its own parent target");
             }
 
             $this->addReferences();
             $this->newProject->executeTarget($this->newTarget);
-
         } catch (Exception $e) {
             $buildFailed = true;
             $this->log($e->getMessage(), Project::MSG_ERR);
@@ -317,7 +310,7 @@ class PhingTask extends Task
         }
 
         $this->dir = $savedDir;
-        $this->File = $savedFile;
+        $this->file = $savedFile;
         $this->newTarget = $savedTarget;
 
         // If the basedir for any project was changed, we need to set that back here.
@@ -343,7 +336,6 @@ class PhingTask extends Task
      */
     private function initializeProject()
     {
-
         $this->newProject->setInputHandler($this->project->getInputHandler());
 
         foreach ($this->project->getBuildListeners() as $listener) {
@@ -375,7 +367,6 @@ class PhingTask extends Task
             // set System built-in properties separately,
             // b/c we won't inherit them.
             $this->newProject->setSystemProperties();
-
         } else {
             // set all properties from calling project
             $properties = $this->project->getProperties();
@@ -390,9 +381,7 @@ class PhingTask extends Task
                     $this->newProject->setNewProperty($name, $value);
                 }
             }
-
         }
-
     }
 
     /**
@@ -428,7 +417,7 @@ class PhingTask extends Task
 
         $newReferences = $this->newProject->getReferences();
 
-        $subprojRefKeys = array();
+        $subprojRefKeys = [];
 
         if (count($this->references) > 0) {
             for ($i = 0, $count = count($this->references); $i < $count; $i++) {
@@ -570,7 +559,7 @@ class PhingTask extends Task
         // it is a string and not a file to handle relative/absolute
         // otherwise a relative file will be resolved based on the current
         // basedir.
-        $this->File = $s;
+        $this->file = $s;
     }
 
     /**
@@ -631,5 +620,4 @@ class PhingTask extends Task
 
         return $this->references[$num - 1];
     }
-
 }

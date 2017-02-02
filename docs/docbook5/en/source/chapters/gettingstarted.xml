@@ -173,6 +173,11 @@
                             <entry>The description of the project.</entry>
                             <entry>No</entry>
                         </row>
+                        <row>
+                            <entry><literal>strict</literal></entry>
+                            <entry>Enables the strict-mode for the project build process.</entry>
+                            <entry>No</entry>
+                        </row>
                     </tbody>
                 </tgroup>
             </table>
@@ -369,11 +374,11 @@
             it defines a <link linkend="FileSet">fileset</link> and two <link linkend="Target">targets</link>.
             Let us have a quick rundown of this build file.</para>
 
-        <para> The first five four within the <literal>project</literal> tag define properties. They
-            appear in the two ways this tag can occur: </para>
+        <para> The first four tags within the <literal>project</literal> tag define properties. They
+            appear in two possible variants: </para>
         <itemizedlist>
             <listitem>
-                <para>The second <literal>property</literal> tag contains only the
+                <para>The first <literal>property</literal> tag contains only the
                         <literal>file</literal> attribute. The value has to be a relative or
                     absolute path to a property file (for the format, see <xref
                         xlink:href="#app.fileformats"/>).</para>

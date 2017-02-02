@@ -57,15 +57,15 @@ class TestRunner extends PHPUnit_Runner_BaseTestRunner implements PHPUnit_Framew
     private $lastFailureMessage = '';
     private $lastIncompleteMessage = '';
     private $lastSkippedMessage = '';
-    private $formatters = array();
-    private $listeners = array();
+    private $formatters = [];
+    private $listeners = [];
 
     private $codecoverage = null;
 
     private $project = null;
 
-    private $groups = array();
-    private $excludeGroups = array();
+    private $groups = [];
+    private $excludeGroups = [];
 
     private $processIsolation = false;
 
@@ -79,8 +79,8 @@ class TestRunner extends PHPUnit_Runner_BaseTestRunner implements PHPUnit_Framew
      */
     public function __construct(
         Project $project,
-        $groups = array(),
-        $excludeGroups = array(),
+        $groups = [],
+        $excludeGroups = [],
         $processIsolation = false
     ) {
         $this->project = $project;
@@ -154,7 +154,7 @@ class TestRunner extends PHPUnit_Runner_BaseTestRunner implements PHPUnit_Framew
 
         /* Set PHPUnit error handler */
         if ($this->useCustomErrorHandler) {
-            $oldErrorHandler = set_error_handler(array($this, 'handleError'), E_ALL | E_STRICT);
+            $oldErrorHandler = set_error_handler([$this, 'handleError'], E_ALL | E_STRICT);
         }
 
         $version = PHPUnit_Runner_Version::id();

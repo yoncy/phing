@@ -44,7 +44,7 @@ class Parameter extends DataType
     protected $value;
 
     /** Nested parameters */
-    protected $parameters = array();
+    protected $parameters = [];
 
     /**
      * @param $name

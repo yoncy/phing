@@ -42,7 +42,7 @@ class IdentityMapper implements FileNameMapperInterface
      */
     public function main($sourceFileName)
     {
-        return array($sourceFileName);
+        return [$sourceFileName];
     }
 
     /**

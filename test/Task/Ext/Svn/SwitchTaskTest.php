@@ -57,7 +57,7 @@ class SwitchTaskTest extends AbstractBuildFileTest
         $this->executeTarget('switchSimple');
         $this->assertInLogs("Checking out SVN repository to '" . $repository . "'");
         $this->assertInLogs(
-            "Switching SVN repository at '$repository' to 'https://github.com/phingofficial/phing/tags/2.4.12/etc'"
+            "Switching SVN repository at '$repository' to 'https://github.com/phingofficial/phing/tags/2.10.0/etc'"
         );
     }
 }

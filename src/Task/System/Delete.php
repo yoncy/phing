@@ -37,10 +37,9 @@ use Phing\Type\FileSet;
  */
 class Delete extends Task
 {
-
     protected $file;
     protected $dir;
-    protected $filesets = array();
+    protected $filesets = [];
     protected $includeEmpty = false;
 
     protected $quiet = false;
@@ -48,7 +47,7 @@ class Delete extends Task
     protected $verbosity = Project::MSG_VERBOSE;
 
     /** Any filelists of files that should be deleted. */
-    private $filelists = array();
+    private $filelists = [];
 
     /**
      * Set the name of a single file to be removed.
@@ -155,7 +154,7 @@ class Delete extends Task
         }
 
         if ($this->quiet && $this->failonerror) {
-            throw new BuildException("quiet and failonerror cannot both be set to true", $this->location);
+            throw new BuildException("quiet and failonerror cannot both be set to true", $this->getLocation());
         }
 
         // delete a single file
@@ -212,7 +211,7 @@ class Delete extends Task
         foreach ($this->filelists as $fl) {
             try {
                 $files = $fl->getFiles($this->project);
-                $this->removeFiles($fl->getDir($this->project), $files, $empty = array());
+                $this->removeFiles($fl->getDir($this->project), $files, $empty = []);
             } catch (BuildException $be) {
                 // directory doesn't exist or is not readable
                 if ($this->failonerror) {
@@ -250,7 +249,7 @@ class Delete extends Task
     {
         $list = $d->listDir();
         if ($list === null) {
-            $list = array();
+            $list = [];
         }
 
         foreach ($list as $s) {
@@ -309,7 +308,6 @@ class Delete extends Task
                         $this->log($message, $this->quiet ? Project::MSG_VERBOSE : Project::MSG_WARN);
                     }
                 }
-
             }
         }
 

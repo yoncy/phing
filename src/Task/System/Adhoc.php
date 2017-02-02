@@ -45,7 +45,7 @@ class Adhoc extends Task
      */
     protected $script;
 
-    protected $newClasses = array();
+    protected $newClasses = [];
 
     /**
      * Main entry point
@@ -91,5 +91,4 @@ class Adhoc extends Task
     {
         $this->script = $script;
     }
-
 }

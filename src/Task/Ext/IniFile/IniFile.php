@@ -58,13 +58,13 @@ class IniFile extends Task
      *
      * @var SetCommand[]
      */
-    protected $sets = array();
+    protected $sets = [];
     /**
      * Removals
      *
      * @var RemoveCommand[]
      */
-    protected $removals = array();
+    protected $removals = [];
 
     /**
      * IniFileConfig instance
@@ -85,7 +85,7 @@ class IniFile extends Task
      * @param string $readFile Filename
      *
      * @throws BuildException
-     * @return boolean
+     * @return bool
      */
     public function checkReadFile($readFile)
     {
@@ -117,7 +117,7 @@ class IniFile extends Task
      * Check file to write to
      *
      * @param string $writeFile Filename
-     * @return boolean
+     * @return bool
      * @throws BuildException
      */
     public function checkWriteFile($writeFile)

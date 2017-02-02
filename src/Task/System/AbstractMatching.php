@@ -263,7 +263,7 @@ abstract class AbstractMatching extends Task implements SelectorContainerInterfa
     /**
      * Returns an enumerator for accessing the set of selectors.
      *
-     * @return an enumerator that goes through each of the selectors
+     * @return array an enumerator that goes through each of the selectors
      */
     public function selectorElements()
     {
@@ -407,6 +407,33 @@ abstract class AbstractMatching extends Task implements SelectorContainerInterfa
     public function createDepend()
     {
         return $this->fileset->createDepend();
+    }
+
+    /**
+     * add a readable selector entry on the selector list
+     * @return ReadableSelector
+     */
+    public function createReadable()
+    {
+        return $this->fileset->createReadable();
+    }
+
+    /**
+     * add a writable selector entry on the selector list
+     * @return WritableSelector
+     */
+    public function createWritable()
+    {
+        return $this->fileset->createWritable();
+    }
+
+    /**
+     * add a different selector entry on the selector list
+     * @return DifferentSelector
+     */
+    public function createDifferent()
+    {
+        return $this->fileset->createDifferent();
     }
 
     /**

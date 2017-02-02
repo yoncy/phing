@@ -31,7 +31,6 @@ use Phing\Test\Helper\AbstractBuildFileTest;
  */
 class RecursivePropertyTest extends AbstractBuildFileTest
 {
-
     public function setUp()
     {
         $this->configureProject(PHING_TEST_BASE . "/etc/regression/269/build.xml");

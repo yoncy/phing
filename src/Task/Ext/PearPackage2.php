@@ -96,7 +96,6 @@ use Phing\Exception\BuildException;
  */
 class PearPackage2 extends PearPackage
 {
-
     public function init()
     {
         include_once 'PEAR/PackageFileManager2.php';
@@ -113,7 +112,7 @@ class PearPackage2 extends PearPackage
         $this->pkg->setDate(strftime('%Y-%m-%d'));
         $this->pkg->setTime(strftime('%H:%M:%S'));
 
-        $newopts = array();
+        $newopts = [];
         foreach ($this->options as $opt) {
             switch ($opt->getName()) {
                 case 'summary':
@@ -175,7 +174,7 @@ class PearPackage2 extends PearPackage
         }
         $this->options = $newopts;
 
-        $newmaps = array();
+        $newmaps = [];
         foreach ($this->mappings as $map) {
             switch ($map->getName()) {
                 case 'deps':
@@ -293,9 +292,8 @@ class PearPackage2 extends PearPackage
         $this->pkg->addRelease();
         $this->pkg->generateContents();
         $e = $this->pkg->writePackageFile();
-        if (PEAR::isError($e)) {
+        if (@PEAR::isError($e)) {
             throw new BuildException("Unable to write package file.", new Exception($e->getMessage()));
         }
     }
-
 }

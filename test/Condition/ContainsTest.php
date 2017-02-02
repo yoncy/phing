@@ -34,7 +34,6 @@ use PHPUnit_Framework_TestCase;
  */
 class ContainsTest extends PHPUnit_Framework_TestCase
 {
-
     public function testCaseSensitive()
     {
         $con = new Contains();
@@ -45,5 +44,4 @@ class ContainsTest extends PHPUnit_Framework_TestCase
         $con->setCaseSensitive(false);
         $this->assertTrue($con->evaluate());
     }
-
 }

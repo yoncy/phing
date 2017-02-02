@@ -1,5 +1,4 @@
 <?php
-namespace Phing;
 
 /**
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
@@ -18,6 +17,10 @@ namespace Phing;
  * and is licensed under the LGPL. For more information please see
  * <http://phing.info>.
  */
+
+namespace Phing;
+
+use Phing\Parser\Location;
 
 /**
  *  Abstract class providing properties and methods common to all
@@ -38,6 +41,10 @@ abstract class AbstractProjectComponent
      */
     protected $project = null;
 
+    private $location;
+    
+    private $description;
+    
     /**
      * References the project to the current component.
      *
@@ -58,6 +65,53 @@ abstract class AbstractProjectComponent
     public function getProject()
     {
         return $this->project;
+    }
+
+    /**
+     * Returns the file/location where this task was defined.
+     *
+     * @return Location the file/location where this task was defined.
+     *         Should not return <code>null</code>.
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+    /**
+     * Sets the file/location where this task was defined.
+     *
+     * @param Location $location The file/location where this task was defined.
+     *                 Should not be <code>null</code>
+     */
+    public function setLocation(Location $location)
+    {
+        $this->location = $location;
+    }
+
+    /**
+     * Sets a description of the current action. This may be used for logging
+     * purposes.
+     *
+     * @param string $desc Description of the current action.
+     *             May be <code>null</code>, indicating that no description is
+     *             available.
+     *
+     */
+    public function setDescription($desc)
+    {
+        $this->description = $desc;
+    }
+
+    /**
+     * Returns the description of the current action.
+     *
+     * @return string the description of the current action, or <code>null</code> if
+     *         no description is available.
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 
     /**

@@ -70,7 +70,7 @@ class SuffixLines extends BaseParamFilterReader implements ChainableReaderInterf
             return -1;
         }
         $lines = preg_split("~\R~", $buffer);
-        $filtered = array();
+        $filtered = [];
 
         foreach ($lines as $line) {
             $filtered[] = $line . $this->suffix;

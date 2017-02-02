@@ -56,10 +56,14 @@ use Phing\Util\StringHelper;
 class Property extends Task
 {
 
-    /** name of the property */
+    /**
+     * @var string name of the property
+     */
     protected $name;
 
-    /** value of the property */
+    /**
+     * @var mixed value of the property
+     */
     protected $value;
 
     /**
@@ -67,11 +71,29 @@ class Property extends Task
      */
     protected $reference;
 
-    protected $env; // Environment
+    /**
+     * @var string environment
+     */
+    protected $env;
+
+    /**
+     * @var File
+     */
     protected $file;
-    protected $ref;
+
+    /**
+     * @var string
+     */
     protected $prefix;
+
+    /**
+     * @var string
+     */
     protected $section;
+
+    /**
+     * @var Project
+     */
     protected $fallback;
 
     /** Whether to force overwrite of existing property. */
@@ -81,9 +103,9 @@ class Property extends Task
     protected $userProperty = false;
 
     /**
-     * All filterchain objects assigned to this task
+     * @var FilterChain[] All filterchain objects assigned to this task
      */
-    protected $filterChains = array();
+    protected $filterChains = [];
 
     /**
      * @var FileList[] FileList objects assigned to this task
@@ -123,7 +145,7 @@ class Property extends Task
 
     /**
      * Sets a the value of current property component.
-     * @param    mixed $value     Value of name, all scalars allowed
+     * @param  mixed $value Value of name, all scalars allowed
      */
     public function setValue($value)
     {
@@ -380,8 +402,10 @@ class Property extends Task
 
                     if ($referencedObject instanceof Exception) {
                         $reference = $referencedObject->getMessage();
-                    } else {
+                    } elseif (method_exists($referencedObject, 'toString')) {
                         $reference = $referencedObject->toString();
+                    } else {
+                        $reference = (string) $referencedObject;
                     }
 
                     $this->addProperty($this->name, $reference);

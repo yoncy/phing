@@ -30,7 +30,7 @@ use Phing\Phing;
  */
 class ProfileLogger extends DefaultLogger
 {
-    private $profileData = array();
+    private $profileData = [];
 
     protected static $dateFormat = DATE_RFC2822;
 

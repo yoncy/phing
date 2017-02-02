@@ -84,9 +84,9 @@ class HttpGet extends AbstractHttp
             throw new BuildException("Required attribute 'dir' is missing");
         }
 
-        $config = array(
+        $config = [
             'ssl_verify_peer' => $this->sslVerifyPeer
-        );
+        ];
         if (isset($this->proxy)) {
             $config['proxy'] = $this->proxy;
         }
@@ -123,12 +123,10 @@ class HttpGet extends AbstractHttp
 
         if ($this->filename) {
             $filename = $this->filename;
-
         } elseif ($disposition && 0 == strpos($disposition, 'attachment')
             && preg_match('/filename="([^"]+)"/', $disposition, $m)
         ) {
             $filename = basename($m[1]);
-
         } else {
             $filename = basename(parse_url($this->url, PHP_URL_PATH));
         }

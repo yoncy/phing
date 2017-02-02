@@ -48,8 +48,8 @@ use ReflectionClass;
  */
 class PhpUnit extends Task
 {
-    private $batchtests = array();
-    private $formatters = array();
+    private $batchtests = [];
+    private $formatters = [];
     private $bootstrap = "";
     private $haltonerror = false;
     private $haltonfailure = false;
@@ -63,11 +63,11 @@ class PhpUnit extends Task
     private $testfailed = false;
     private $testfailuremessage = "";
     private $codecoverage = null;
-    private $groups = array();
-    private $excludeGroups = array();
+    private $groups = [];
+    private $excludeGroups = [];
     private $processIsolation = false;
     private $usecustomerrorhandler = true;
-    private $listeners = array();
+    private $listeners = [];
 
     /**
      * @var string
@@ -262,7 +262,7 @@ class PhpUnit extends Task
     public function setGroups($groups)
     {
         $token = ' ,;';
-        $this->groups = array();
+        $this->groups = [];
         $tok = strtok($groups, $token);
         while ($tok !== false) {
             $this->groups[] = $tok;
@@ -276,7 +276,7 @@ class PhpUnit extends Task
     public function setExcludeGroups($excludeGroups)
     {
         $token = ' ,;';
-        $this->excludeGroups = array();
+        $this->excludeGroups = [];
         $tok = strtok($excludeGroups, $token);
         while ($tok !== false) {
             $this->excludeGroups[] = $tok;
@@ -424,6 +424,12 @@ class PhpUnit extends Task
 
         $suite = new PHPUnit_Framework_TestSuite('AllTests');
 
+        $autoloadSave = spl_autoload_functions();
+
+        if ($this->bootstrap) {
+            require $this->bootstrap;
+        }
+
         if ($this->configuration) {
             $arguments = $this->handlePHPUnitConfiguration($this->configuration);
 
@@ -444,12 +450,6 @@ class PhpUnit extends Task
             $this->formatters[] = $fe;
         }
 
-        $autoloadSave = spl_autoload_functions();
-
-        if ($this->bootstrap) {
-            require $this->bootstrap;
-        }
-
         foreach ($this->batchtests as $batchTest) {
             $this->appendBatchTestToTestSuite($batchTest, $suite);
         }
@@ -461,13 +461,13 @@ class PhpUnit extends Task
         }
 
         $autoloadNew = spl_autoload_functions();
-        if(is_array($autoloadNew)) {
+        if (is_array($autoloadNew)) {
             foreach ($autoloadNew as $autoload) {
                 spl_autoload_unregister($autoload);
             }
         }
 
-        if(is_array($autoloadSave)) {
+        if (is_array($autoloadSave)) {
             foreach ($autoloadSave as $autoload) {
                 spl_autoload_register($autoload);
             }
@@ -485,12 +485,25 @@ class PhpUnit extends Task
             /**
              * Add some defaults to the PHPUnit filter
              */
-            $pwd = dirname(__FILE__);
+            $pwd = __DIR__;
             $path = realpath($pwd . '/../../../');
 
-            $filter = new PHP_CodeCoverage_Filter();
-            $filter->addDirectoryToBlacklist($path);
-            $runner->setCodecoverage(new PHP_CodeCoverage(null, $filter));
+            if (class_exists('PHP_CodeCoverage_Filter')) {
+                $filter = new PHP_CodeCoverage_Filter();
+            } elseif (class_exists('\SebastianBergmann\CodeCoverage\Filter')) {
+                $filterClass = '\SebastianBergmann\CodeCoverage\Filter';
+                $filter = new $filterClass;
+            }
+            if (method_exists($filter, 'addDirectoryToBlacklist')) {
+                $filter->addDirectoryToBlacklist($path);
+            }
+            if (class_exists('PHP_CodeCoverage')) {
+                $codeCokverage = new PHP_CodeCoverage(null, $filter);
+            } elseif (class_exists('\SebastianBergmann\CodeCoverage\CodeCoverage')) {
+                $codeCokverageClass = '\SebastianBergmann\CodeCoverage\CodeCoverage';
+                $codeCokverage = new $codeCokverageClass(null, $filter);
+            }
+            $runner->setCodecoverage($codeCokverage);
         }
 
         $runner->setUseCustomErrorHandler($this->usecustomerrorhandler);

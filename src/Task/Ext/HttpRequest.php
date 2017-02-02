@@ -61,14 +61,14 @@ class HttpRequest extends AbstractHttp
      *
      * @var array<string>
      */
-    protected $observerEvents = array(
+    protected $observerEvents = [
         'connect',
         'sentHeaders',
         'sentBodyPart',
         'receivedHeaders',
         'receivedBody',
         'disconnect',
-    );
+    ];
 
     /**
      * Holds the request method
@@ -82,7 +82,7 @@ class HttpRequest extends AbstractHttp
      *
      * @var Parameter[]
      */
-    protected $postParameters = array();
+    protected $postParameters = [];
 
     /**
      * Sets the response regex
@@ -111,7 +111,7 @@ class HttpRequest extends AbstractHttp
      */
     public function setObserverEvents($observerEvents)
     {
-        $this->observerEvents = array();
+        $this->observerEvents = [];
 
         $token = ' ,;';
         $ext = strtok($observerEvents, $token);
@@ -197,7 +197,7 @@ class HttpRequest extends AbstractHttp
     protected function processResponse(HTTP_Request2_Response $response)
     {
         if ($this->responseRegex !== '') {
-            $matches = array();
+            $matches = [];
             preg_match($this->responseRegex, $response->getBody(), $matches);
 
             if (count($matches) === 0) {

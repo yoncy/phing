@@ -34,7 +34,6 @@ use PHPUnit_Framework_TestCase;
  */
 class EqualsTest extends PHPUnit_Framework_TestCase
 {
-
     public function testTrim()
     {
         $eq = new Equals();
@@ -59,5 +58,4 @@ class EqualsTest extends PHPUnit_Framework_TestCase
         $eq->setCasesensitive(false);
         $this->assertTrue($eq->evaluate());
     }
-
 }

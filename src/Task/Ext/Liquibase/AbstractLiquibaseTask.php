@@ -36,12 +36,12 @@ abstract class AbstractLiquibaseTask extends Task
     /**
      * Used for liquibase -Dname=value properties.
      */
-    private $properties = array();
+    private $properties = [];
 
     /**
      * Used to set liquibase --name=value parameters
      */
-    private $parameters = array();
+    private $parameters = [];
 
     protected $jar;
     protected $changeLogFile;
@@ -225,14 +225,7 @@ abstract class AbstractLiquibaseTask extends Task
             );
         }
 
-        if ((null === $this->changeLogFile) or !file_exists($this->changeLogFile)) {
-            throw new BuildException(
-                sprintf(
-                    'Specify the name of the Changelog file. "%s" does not exist!',
-                    $this->changeLogFile
-                )
-            );
-        }
+        $this->checkChangeLogFile();
 
         if (null === $this->classpathref) {
             throw new BuildException('Please provide a classpath!');
@@ -287,7 +280,7 @@ abstract class AbstractLiquibaseTask extends Task
         if ($this->passthru) {
             passthru($command);
         } else {
-            $output = array();
+            $output = [];
             $return = null;
             exec($command, $output, $return);
             $output = implode(PHP_EOL, $output);
@@ -306,5 +299,27 @@ abstract class AbstractLiquibaseTask extends Task
         }
 
         return;
+    }
+
+    protected function checkChangeLogFile()
+    {
+        if (null === $this->changeLogFile) {
+            throw new BuildException('Specify the name of the changelog file.');
+        }
+
+        foreach (explode(":", $this->classpathref) as $path) {
+            if (file_exists($path . DIRECTORY_SEPARATOR . $this->changeLogFile)) {
+                return;
+            }
+        }
+
+        if (!file_exists($this->changeLogFile)) {
+            throw new BuildException(
+                sprintf(
+                    'The changelog file "%s" does not exist!',
+                    $this->changeLogFile
+                )
+            );
+        }
     }
 }

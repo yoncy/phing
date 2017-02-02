@@ -24,7 +24,6 @@ use Phing\Condition\AbstractCondition;
 use Phing\Exception\BuildException;
 use Phing\Project;
 
-
 /**
  *  Based on Apache Ant Wait For:
  *
@@ -66,6 +65,11 @@ class WaitFor extends AbstractCondition
     protected $checkEveryMultiplier = self::ONE_MILLISECOND;
 
     protected $timeoutProperty = null;
+
+    public function __construct($taskName = 'waitfor')
+    {
+        parent::__construct($taskName);
+    }
 
     /**
      * Set the maximum length of time to wait.
@@ -179,15 +183,24 @@ class WaitFor extends AbstractCondition
 
         while (microtime(true) * 1000 < $end) {
             if ($condition->evaluate()) {
-                $this->log("waitfor: condition was met", Project::MSG_VERBOSE);
-
+                $this->processSuccess();
                 return;
             }
 
             usleep($checkEveryMillis * 1000);
         }
 
-        $this->log("waitfor: timeout", Project::MSG_VERBOSE);
+        $this->processTimeout();
+    }
+
+    protected function processSuccess()
+    {
+        $this->log($this->getTaskName() . ": condition was met", Project::MSG_VERBOSE);
+    }
+
+    protected function processTimeout()
+    {
+        $this->log($this->getTaskName() . ": timeout", Project::MSG_VERBOSE);
 
         if ($this->timeoutProperty != null) {
             $this->project->setNewProperty($this->timeoutProperty, "true");

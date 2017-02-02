@@ -36,14 +36,14 @@ class TraceHttpAdapter extends HTTP_Request2_Adapter_Mock
 
     public function sendRequest(HTTP_Request2 $request)
     {
-        $this->requests[] = array(
+        $this->requests[] = [
             'config' => $request->getConfig(),
             'url' => $request->getUrl(),
             'method' => $request->getMethod(),
             'headers' => $request->getHeaders(),
             'auth' => $request->getAuth(),
-            'body' => (string)$request->getBody()
-        );
+            'body' => (string) $request->getBody()
+        ];
 
         return parent::sendRequest($request);
     }

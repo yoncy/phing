@@ -73,5 +73,4 @@ class AndSelector extends AbstractSelectorContainer
 
         return true;
     }
-
 }

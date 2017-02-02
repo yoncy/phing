@@ -105,7 +105,7 @@ class MethodConnectionParam
     {
         return array_filter(
             get_object_vars($this),
-            array($this, '_filterParam')
+            [$this, '_filterParam']
         );
     }
 

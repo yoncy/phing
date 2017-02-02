@@ -81,7 +81,7 @@ class CommandLineTest extends PHPUnit_Framework_TestCase
 
     public function testCreateMarkerWithArgument()
     {
-        $this->cmd->addArguments(array('foo'));
+        $this->cmd->addArguments(['foo']);
         $marker = $this->cmd->createMarker();
         self::assertInstanceOf(CommandLineMarker::class, $marker);
         self::assertEquals(1, $marker->getPosition());
@@ -93,5 +93,4 @@ class CommandLineTest extends PHPUnit_Framework_TestCase
         self::assertInstanceOf(CommandLineMarker::class, $marker);
         self::assertEquals(0, $marker->getPosition());
     }
-
 }

@@ -62,7 +62,6 @@ class NoneSelector extends AbstractSelectorContainer
      */
     public function isSelected(File $basedir, $filename, File $file)
     {
-
         $this->validate();
 
         $selectors = $this->selectorElements();
@@ -76,5 +75,4 @@ class NoneSelector extends AbstractSelectorContainer
 
         return true;
     }
-
 }

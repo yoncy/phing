@@ -77,17 +77,11 @@ class Manifest extends Task
     private $action = 'w';
 
     /**
-     * The target file passed in the buildfile.
-     * @var File
-     */
-    private $file;
-
-    /**
      * Holds filesets
      *
      * @var FileSet[] An Array of objects
      */
-    private $filesets = array();
+    private $filesets = [];
 
     /**
      * Enable/Disable checksuming or/and select algorithm
@@ -112,7 +106,12 @@ class Manifest extends Task
      *
      * @var array
      */
-    private $meta = array('totalFileCount' => 0, 'totalFileSize' => 0);
+    private $meta = ['totalFileCount' => 0, 'totalFileSize' => 0];
+
+    /**
+     * @var File The target file passed in the buildfile.
+     */
+    private $file;
 
     /**
      * The setter for the attribute "file".
@@ -137,16 +136,15 @@ class Manifest extends Task
     public function setChecksum($mixed)
     {
         if (is_string($mixed)) {
-            $data = array(strtolower($mixed));
+            $data = [strtolower($mixed)];
 
             if (strpos($data[0], ',')) {
                 $data = explode(',', $mixed);
             }
 
             $this->checksum = $data;
-
         } elseif ($mixed === true) {
-            $this->checksum = array('md5');
+            $this->checksum = ['md5'];
         }
     }
 
@@ -196,10 +194,8 @@ class Manifest extends Task
 
         if ($this->action == 'w') {
             $this->write();
-
         } elseif ($this->action == 'r') {
             $this->read();
-
         }
     }
 
@@ -224,7 +220,6 @@ class Manifest extends Task
         }
 
         foreach ($this->filesets as $fs) {
-
             $dir = $fs->getDir($this->project)->getPath();
 
             $ds = $fs->getDirectoryScanner($project);
@@ -249,7 +244,6 @@ class Manifest extends Task
                 $this->meta['totalFileCount']++;
                 $this->meta['totalFileSize'] += filesize($dir . '/' . $file_path);
             }
-
         }
 
         file_put_contents($this->file, $manifest);
@@ -289,7 +283,6 @@ class Manifest extends Task
             if (in_array($algo, hash_algos())) {
                 return hash($algo, $this->salt . $msg);
             }
-
         }
 
         if (extension_loaded('mhash')) {
@@ -297,7 +290,6 @@ class Manifest extends Task
 
             if (defined('MHASH_' . $algo)) {
                 return mhash('MHASH_' . $algo, $this->salt . $msg);
-
             }
         }
 

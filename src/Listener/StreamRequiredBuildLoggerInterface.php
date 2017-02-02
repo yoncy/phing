@@ -35,5 +35,4 @@ namespace Phing\Listener;
  */
 interface StreamRequiredBuildLoggerInterface extends BuildLoggerInterface
 {
-
 }

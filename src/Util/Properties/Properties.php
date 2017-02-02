@@ -103,7 +103,7 @@ class Properties implements IteratorAggregate
      * Parses the file given.
      *
      * @param  File $file
-     * @return array   Properties loaded from file (no prop replacements done yet).
+     * @return void
      */
     protected function parse(File $file, $section = null)
     {
@@ -159,9 +159,8 @@ class Properties implements IteratorAggregate
         $bw->write("#" . gmdate('D, d M Y H:i:s', time()) . ' GMT');
         $bw->newLine();
         foreach ($this->getProperties() as $key => $value) {
-                $bw->write($key . "=" . $value);
-                $bw->newLine();
-
+            $bw->write($key . "=" . $value);
+            $bw->newLine();
         }
         $bw->flush();
     }

@@ -42,12 +42,14 @@ use Phing\Type\FileSet;
  */
 class Touch extends Task
 {
-
+    /** @var File $file */
     private $file;
     private $millis = -1;
     private $dateTime;
-    private $filesets = array();
+    private $filesets = [];
     private $fileUtils;
+    private $mkdirs = false;
+    private $verbose = true;
 
     /**
      *
@@ -93,6 +95,26 @@ class Touch extends Task
     }
 
     /**
+     * Set whether nonexistent parent directories should be created
+     * when touching new files.
+     * @param boolean $mkdirs whether to create parent directories.
+     */
+    public function setMkdirs($mkdirs)
+    {
+        $this->mkdirs = $mkdirs;
+    }
+
+    /**
+     * Set whether the touch task will report every file it creates;
+     * defaults to <code>true</code>.
+     * @param boolean $verbose flag.
+     */
+    public function setVerbose($verbose)
+    {
+        $this->verbose = $verbose;
+    }
+
+    /**
      * Nested adder, adds a set of files (nested fileset attribute).
      *
      * @param FileSet $fs
@@ -130,11 +152,10 @@ class Touch extends Task
             }
             $this->_touch();
         } catch (Exception $ex) {
-            throw new BuildException("Error touch()ing file", $ex, $this->location);
+            throw new BuildException("Error touch()ing file", $ex, $this->getLocation());
         }
 
         $this->millis = $savedMillis;
-
     }
 
     /**
@@ -144,13 +165,12 @@ class Touch extends Task
     {
         if ($this->file !== null) {
             if (!$this->file->exists()) {
-                $this->log("Creating " . $this->file->__toString(), Project::MSG_INFO);
+                $this->log("Creating " . $this->file->__toString(), $this->verbose ? Project::MSG_INFO : Project::MSG_VERBOSE);
                 try { // try to create file
-                    $this->file->createNewFile();
+                    $this->file->createNewFile($this->mkdirs);
                 } catch (IOException  $ioe) {
-                    throw new BuildException(
-                        "Error creating new file " . $this->file->__toString(), $ioe, $this->location
-                    );
+                    throw new BuildException("Error creating new file " . $this->file->__toString(
+                        ), $ioe, $this->getLocation());
                 }
             }
         }
@@ -167,7 +187,6 @@ class Touch extends Task
 
         // deal with the filesets
         foreach ($this->filesets as $fs) {
-
             $ds = $fs->getDirectoryScanner($this->getProject());
             $fromDir = $fs->getDir($this->getProject());
 
@@ -199,5 +218,4 @@ class Touch extends Task
         }
         $file->setLastModified($this->millis);
     }
-
 }

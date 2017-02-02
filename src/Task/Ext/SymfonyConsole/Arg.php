@@ -117,5 +117,4 @@ class Arg extends DataType
 
         return $name . $value;
     }
-
 }

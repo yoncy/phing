@@ -30,7 +30,6 @@ use Phing\Test\Helper\AbstractBuildFileTest;
  */
 class ConcatFilterTest extends AbstractBuildFileTest
 {
-
     protected $fu;
 
     public function setUp()
@@ -52,5 +51,4 @@ class ConcatFilterTest extends AbstractBuildFileTest
         $result = $this->getProject()->resolveFile("result/concatfilter.test");
         $this->assertTrue($this->fu->contentEquals($expected, $result), "Files don't match!");
     }
-
 }

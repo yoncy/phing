@@ -97,7 +97,7 @@ class SelectSelector extends AndSelector
     /**
      * Returns the set of selectors as an array.
      * @param Project $p
-     * @return \an|array
+     * @return array
      */
     public function getSelectors(Project $p)
     {
@@ -148,5 +148,4 @@ class SelectSelector extends AndSelector
             );
         }
     }
-
 }

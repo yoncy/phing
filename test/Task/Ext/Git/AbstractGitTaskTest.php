@@ -31,7 +31,6 @@ use Phing\Test\Helper\AbstractBuildFileTest;
  */
 class AbstractGitTaskTest extends AbstractBuildFileTest
 {
-
     protected $mock;
 
     public function setUp()
@@ -75,5 +74,4 @@ class AbstractGitTaskTest extends AbstractBuildFileTest
         $this->assertEquals('/tmp', $this->mock->getRepository());
         $this->mock->setRepository($repository);
     }
-
 }

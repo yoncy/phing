@@ -62,12 +62,12 @@ class Copy extends AbstractSvnTask
 
         $this->log("Copying SVN repository from '" . $this->getRepositoryUrl() . "' to '" . $this->getToDir() . "'");
 
-        $options = array();
+        $options = [];
 
         if (strlen($this->getMessage()) > 0) {
             $options['message'] = $this->getMessage();
         }
 
-        $this->run(array($this->getToDir()), $options);
+        $this->run([$this->getToDir()], $options);
     }
 }

@@ -90,14 +90,14 @@ class Merge extends AbstractGitTask
      * Valid merge strategies
      * @var array
      */
-    private $validStrategies = array(
+    private $validStrategies = [
         'octopus',
         'ours',
         'theirs',
         'recursive',
         'resolve',
         'subtree'
-    );
+    ];
 
     /**
      * The main entry point for the task
@@ -166,7 +166,6 @@ class Merge extends AbstractGitTask
             Project::MSG_INFO
         );
         $this->log('git-merge output: ' . trim($output), Project::MSG_INFO);
-
     }
 
     /**

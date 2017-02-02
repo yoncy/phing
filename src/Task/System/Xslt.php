@@ -40,13 +40,14 @@ class Xslt extends Copy
 {
 
     /**
-     * XSLTFilter object that we use to handle transformation.
-     * @var XsltFilter
+     * @var XsltFilter object that we use to handle transformation.
      */
     private $xsltFilter;
 
-    /** Parameters to pass to XSLT procesor. */
-    private $parameters = array();
+    /**
+     * @var XsltParam[] parameters to pass to XSLT processor.
+     */
+    private $parameters = [];
 
     /**
      * Setup the filterchains w/ XSLTFilter that we will use while copying the files.
@@ -54,7 +55,7 @@ class Xslt extends Copy
     public function init()
     {
         $xf = new XsltFilter();
-        $chain = $this->createFilterChain($this->getProject());
+        $chain = $this->createFilterChain();
         $chain->addXsltFilter($xf);
         $this->xsltFilter = $xf;
     }

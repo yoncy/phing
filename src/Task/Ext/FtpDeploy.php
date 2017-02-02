@@ -83,8 +83,8 @@ class FtpDeploy extends Task
      */
     public function __construct()
     {
-        $this->filesets = array();
-        $this->completeDirMap = array();
+        $this->filesets = [];
+        $this->completeDirMap = [];
     }
 
     /**
@@ -248,8 +248,6 @@ class FtpDeploy extends Task
      */
     public function init()
     {
-        require_once 'PEAR.php';
-
         $paths = Phing::explodeIncludePath();
         foreach ($paths as $path) {
             if (file_exists($path . DIRECTORY_SEPARATOR . 'Net' . DIRECTORY_SEPARATOR . 'FTP.php')) {
@@ -266,6 +264,7 @@ class FtpDeploy extends Task
     {
         $project = $this->getProject();
 
+        require_once 'PEAR.php';
         require_once 'Net/FTP.php';
         $ftp = new Net_FTP($this->host, $this->port);
         if ($this->ssl) {
@@ -335,7 +334,7 @@ class FtpDeploy extends Task
 
         foreach ($this->filesets as $fs) {
             // Array for holding directory content informations
-            $remoteFileInformations = array();
+            $remoteFileInformations = [];
 
             $ds = $fs->getDirectoryScanner($project);
             $fromDir = $fs->getDir($project);
@@ -381,7 +380,6 @@ class FtpDeploy extends Task
                 }
 
                 if (!$this->depends || ($local_filemtime > $remoteFileModificationTime)) {
-
                     if ($this->skipOnSameSize === true && $file->length() === $ftp->size($filename)) {
                         $this->log('Skipped ' . $file->getCanonicalPath(), $this->logLevel);
                         continue;
@@ -453,14 +451,14 @@ class FtpDeploy extends Task
     private function parseRawFtpContent($content, $directory = null)
     {
         if (!is_array($content)) {
-            return array();
+            return [];
         }
 
         $this->log('Start parsing FTP_RAW_DATA in ' . $directory);
-        $retval = array();
+        $retval = [];
         foreach ($content as $rawInfo) {
             $rawInfo = explode(' ', $rawInfo);
-            $rawInfo2 = array();
+            $rawInfo2 = [];
             foreach ($rawInfo as $part) {
                 $part = trim($part);
                 if (!empty($part)) {
@@ -481,7 +479,7 @@ class FtpDeploy extends Task
                 $date['year']
             );
 
-            $retval[] = array(
+            $retval[] = [
                 'name' => $rawInfo2[8],
                 'rights' => substr($rawInfo2[0], 1),
                 'user' => $rawInfo2[2],
@@ -489,14 +487,13 @@ class FtpDeploy extends Task
                 'date' => $date,
                 'stamp' => $date,
                 'is_dir' => strpos($rawInfo2[0], 'd') === 0,
-                'files_inside' => (int)$rawInfo2[1],
-                'size' => (int)$rawInfo2[4],
-            );
+                'files_inside' => (int) $rawInfo2[1],
+                'size' => (int) $rawInfo2[4],
+            ];
         }
 
         $this->log('Finished parsing FTP_RAW_DATA in ' . $directory);
 
         return $retval;
     }
-
 }

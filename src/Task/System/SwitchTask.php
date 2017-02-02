@@ -85,7 +85,7 @@ class SwitchTask extends Task
     private $value = null;
 
     /** @var array $cases */
-    private $cases = array();
+    private $cases = [];
 
     /** @var Sequential $defaultCase */
     private $defaultCase = null;

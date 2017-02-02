@@ -87,7 +87,12 @@ class CloverResultFormatter extends AbstractResultFormatter
         $coverage = $this->result->getCodeCoverage();
 
         if (!empty($coverage)) {
-            $clover = new PHP_CodeCoverage_Report_Clover();
+            if (class_exists('PHP_CodeCoverage_Report_Clover')) {
+                $clover = new PHP_CodeCoverage_Report_Clover();
+            } elseif (class_exists('\SebastianBergmann\CodeCoverage\Report\Clover')) {
+                $cloverClass = '\SebastianBergmann\CodeCoverage\Report\Clover';
+                $clover = new $cloverClass;
+            }
 
             $contents = $clover->process($coverage);
 

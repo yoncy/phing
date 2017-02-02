@@ -23,7 +23,6 @@ namespace Phing\Task\Ext\Amazon;
 
 use Phing\Exception\BuildException;
 
-
 /**
  * Downloads an object off S3
  *

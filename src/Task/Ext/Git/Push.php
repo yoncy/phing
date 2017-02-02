@@ -321,5 +321,4 @@ class Push extends AbstractGitTask
     {
         return $this->getQuiet();
     }
-
 }

@@ -12,7 +12,6 @@ use Phing\Test\Helper\AbstractBuildFileTest;
  */
 class DirnameTest extends AbstractBuildFileTest
 {
-
     public function setUp()
     {
         $this->configureProject(

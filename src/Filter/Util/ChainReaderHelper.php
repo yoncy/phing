@@ -77,7 +77,7 @@ class ChainReaderHelper
     private $bufferSize = 8192;
 
     /** Chain of filters */
-    private $filterChains = array();
+    private $filterChains = [];
 
     /** The Phing project */
     private $project;
@@ -144,10 +144,9 @@ class ChainReaderHelper
      */
     public function getAssembledReader()
     {
-
         $instream = $this->primaryReader;
         $filterReadersCount = count($this->filterChains);
-        $finalFilters = array();
+        $finalFilters = [];
 
         // Collect all filter readers of all filter chains used ...
         for ($i = 0; $i < $filterReadersCount; $i++) {
@@ -189,7 +188,6 @@ class ChainReaderHelper
                     }
 
                     $instream = $impl; // now that it's been chained
-
                 } elseif (($filter instanceof ChainableReaderInterface) && ($filter instanceof AbstractReader)) {
                     if ($this->getProject() !== null && ($filter instanceof BaseFilterReader)) {
                         $filter->setProject($this->getProject());
@@ -203,5 +201,4 @@ class ChainReaderHelper
 
         return $instream;
     }
-
 }

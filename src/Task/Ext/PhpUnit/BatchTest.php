@@ -42,7 +42,7 @@ class BatchTest
      *
      * @var FileSet[] $filesets
      */
-    private $filesets = array();
+    private $filesets = [];
 
     /**
      * the reference to the project
@@ -57,7 +57,7 @@ class BatchTest
     private $classpath = null;
 
     /** names of classes to exclude */
-    private $excludeClasses = array();
+    private $excludeClasses = [];
 
     /** name of the batchtest/suite */
     protected $name = "Phing Batchtest";
@@ -150,7 +150,7 @@ class BatchTest
      */
     private function getFilenames()
     {
-        $filenames = array();
+        $filenames = [];
 
         foreach ($this->filesets as $fileset) {
             $ds = $fileset->getDirectoryScanner($this->project);
@@ -206,7 +206,7 @@ class BatchTest
     {
         $filenames = $this->getFilenames();
 
-        $declaredClasses = array();
+        $declaredClasses = [];
 
         foreach ($filenames as $filename) {
             $definedClasses = Util::getDefinedClasses($filename, $this->classpath);
@@ -218,7 +218,7 @@ class BatchTest
             $declaredClasses = array_merge($declaredClasses, $definedClasses);
         }
 
-        $elements = array_filter($declaredClasses, array($this, "filterTests"));
+        $elements = array_filter($declaredClasses, [$this, "filterTests"]);
 
         return $elements;
     }

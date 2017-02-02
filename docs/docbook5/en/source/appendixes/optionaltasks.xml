@@ -1036,7 +1036,9 @@
                     <row>
                         <entry><literal>exclude</literal></entry>
                         <entry><literal role="type">String</literal></entry>
-                        <entry>Excluded file matching pattern.</entry>
+                        <entry>Excluded file matching pattern. Use
+                        comma seperated values to exclude multiple
+                        files/directories, e.g.: a,b</entry>
                         <entry>n/a</entry>
                         <entry>No</entry>
                     </row>
@@ -1110,7 +1112,7 @@
         </table>
         <sect2>
             <title>Examples</title>
-            <programlisting language="xml">&lt;filesync sourcedir="/var/www/development/project1" 
+            <programlisting language="xml">&lt;filesync sourcedir="/var/www/development/project1"
   destinationdir="/var/www/project1" />
 
 &lt;filesync sourcedir="host::module" destinationdir="/var/www/project1/" />
@@ -1303,244 +1305,6 @@
             </itemizedlist>
         </sect2>
     </sect1>
-    <sect1 role="taskdef" xml:id="GitInitTask">
-        <title>GitInitTask</title>
-        <para>Create an empty git repository or reinitialize an existing one.</para>
-
-        <table>
-            <title>Attributes</title>
-            <tgroup cols="5">
-                <colspec colname="name" colnum="1" colwidth="1.5*"/>
-                <colspec colname="type" colnum="2" colwidth="0.8*"/>
-                <colspec colname="description" colnum="3" colwidth="3.5*"/>
-                <colspec colname="default" colnum="4" colwidth="0.8*"/>
-                <colspec colname="required" colnum="5" colwidth="1.2*"/>
-                <thead>
-                    <row>
-                        <entry>Name</entry>
-                        <entry>Type</entry>
-                        <entry>Description</entry>
-                        <entry>Default</entry>
-                        <entry>Required</entry>
-                    </row>
-                </thead>
-                <tbody>
-                    <row>
-                        <entry><literal>gitPath</literal></entry>
-                        <entry><literal role="type">String</literal></entry>
-                        <entry>Path to Git binary</entry>
-                        <entry>/usr/bin/git</entry>
-                        <entry>No</entry>
-                    </row>
-                    <row>
-                        <entry><literal>repository</literal></entry>
-                        <entry><literal role="type">String</literal></entry>
-                        <entry>Path to Git repository</entry>
-                        <entry>n/a</entry>
-                        <entry>Yes</entry>
-                    </row>
-                    <row>
-                        <entry><literal>bare</literal></entry>
-                        <entry><literal role="type">Boolean</literal></entry>
-                        <entry>Create bare repository. See --bare option of <link
-                                xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-init.html"
-                                role="extern">git-init</link>.</entry>
-                        <entry><literal>false</literal></entry>
-                        <entry>No</entry>
-                    </row>
-                </tbody>
-            </tgroup>
-        </table>
-        <sect2>
-            <title>Example</title>
-            <programlisting language="xml">&lt;property name="repo.dir" value="./relative/path/to/repo" />
-&lt;resolvepath propertyName="repo.dir.resolved" file="${repo.dir}" />
-
-&lt;!-- Initialize normal repository -->
-&lt;gitinit repository="${repo.dir.resolved}" />
-
-&lt;!-- Initialize bare repository -->
-&lt;gitinit bare="true" repository="${repo.dir.resolved}" /></programlisting>
-        </sect2>
-    </sect1>
-    <sect1 role="taskdef" xml:id="GitCloneTask">
-        <title>GitCloneTask</title>
-        <para>Clone a repository into a new directory.</para>
-
-        <table>
-            <title>Attributes</title>
-            <tgroup cols="5">
-                <colspec colname="name" colnum="1" colwidth="1.5*"/>
-                <colspec colname="type" colnum="2" colwidth="0.8*"/>
-                <colspec colname="description" colnum="3" colwidth="3.5*"/>
-                <colspec colname="default" colnum="4" colwidth="0.8*"/>
-                <colspec colname="required" colnum="5" colwidth="1.2*"/>
-                <thead>
-                    <row>
-                        <entry>Name</entry>
-                        <entry>Type</entry>
-                        <entry>Description</entry>
-                        <entry>Default</entry>
-                        <entry>Required</entry>
-                    </row>
-                </thead>
-                <tbody>
-                    <row>
-                        <entry><literal>gitPath</literal></entry>
-                        <entry><literal role="type">String</literal></entry>
-                        <entry>Path to Git binary</entry>
-                        <entry>/usr/bin/git</entry>
-                        <entry>No</entry>
-                    </row>
-                    <row>
-                        <entry><literal>repository</literal></entry>
-                        <entry><literal role="type">String</literal></entry>
-                        <entry>The (possibly remote) repository to clone from.</entry>
-                        <entry>n/a</entry>
-                        <entry>Yes</entry>
-                    </row>
-                    <row>
-                        <entry><literal>targetPath</literal></entry>
-                        <entry><literal role="type">String</literal></entry>
-                        <entry>The name of a new directory to clone into. Cloning into an existing
-                            directory is only allowed if the directory is empty.</entry>
-                        <entry>n/a</entry>
-                        <entry>Yes</entry>
-                    </row>
-                    <row>
-                        <entry><literal>bare</literal></entry>
-                        <entry><literal role="type">Boolean</literal></entry>
-                        <entry>Create bare repository. See --bare option of <link
-                                xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-clone.html"
-                                >git-clone</link>.</entry>
-                        <entry><literal>false</literal></entry>
-                        <entry>No</entry>
-                    </row>
-                    <row>
-                        <entry><literal>depth</literal></entry>
-                        <entry><literal role="type">Integer</literal></entry>
-                        <entry>Create a shallow clone with a history truncated to the specified number of revisions.
-                            See --depth option of <link
-                                xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-clone.html"
-                                >git-clone</link>.</entry>
-                        <entry><literal>0</literal></entry>
-                        <entry>No</entry>
-                    </row>
-                </tbody>
-            </tgroup>
-        </table>
-        <sect2>
-            <title>Example</title>
-            <programlisting language="xml">&lt;property name="repo.dir" value="./relative/path/to/repo" />
-&lt;resolvepath propertyName="repo.dir.resolved" file="${repo.dir}" />
-
-&lt;!-- Clone repository -->
-&lt;gitclone
-    repository="git://github.com/path/to/repo/repo.git"
-    targetPath="${repo.dir.resolved}" />
-
-&lt;!-- Clone bare repository -->
-&lt;gitclone
-    repository="git://github.com/path/to/repo/repo.git"
-    targetPath="${repo.dir.resolved}"
-    bare="true" /></programlisting>
-        </sect2>
-    </sect1>
-    <sect1 role="taskdef" xml:id="GitGcTask">
-        <title>GitGcTask</title>
-        <para>Cleanup unnecessary files and optimize the local repository.</para>
-
-        <table>
-            <title>Attributes</title>
-            <tgroup cols="5">
-                <colspec colname="name" colnum="1" colwidth="1.5*"/>
-                <colspec colname="type" colnum="2" colwidth="0.8*"/>
-                <colspec colname="description" colnum="3" colwidth="3.5*"/>
-                <colspec colname="default" colnum="4" colwidth="0.8*"/>
-                <colspec colname="required" colnum="5" colwidth="1.2*"/>
-                <thead>
-                    <row>
-                        <entry>Name</entry>
-                        <entry>Type</entry>
-                        <entry>Description</entry>
-                        <entry>Default</entry>
-                        <entry>Required</entry>
-                    </row>
-                </thead>
-                <tbody>
-                    <row>
-                        <entry><literal>gitPath</literal></entry>
-                        <entry><literal role="type">String</literal></entry>
-                        <entry>Path to Git binary.</entry>
-                        <entry>/usr/bin/git</entry>
-                        <entry>No</entry>
-                    </row>
-                    <row>
-                        <entry><literal>repository</literal></entry>
-                        <entry><literal role="type">String</literal></entry>
-                        <entry>The repository to cleanup.</entry>
-                        <entry>n/a</entry>
-                        <entry>Yes</entry>
-                    </row>
-                    <row>
-                        <entry><literal>aggressive</literal></entry>
-                        <entry><literal role="type">Boolean</literal></entry>
-                        <entry>This option will cause git gc to more aggressively optimize the
-                            repository at the expense of taking much more time. See --aggressive
-                            option of <link
-                                xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-gc.html"
-                                >git-gc</link>.</entry>
-                        <entry><literal>false</literal></entry>
-                        <entry>No</entry>
-                    </row>
-                    <row>
-                        <entry><literal>auto</literal></entry>
-                        <entry><literal role="type">Boolean</literal></entry>
-                        <entry>With this option, git gc checks whether any housekeeping is required;
-                            if not, it exits without performing any work. See --auto option of <link
-                                xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-gc.html"
-                                >git-gc</link>.</entry>
-                        <entry><literal>false</literal></entry>
-                        <entry>No</entry>
-                    </row>
-                    <row>
-                        <entry><literal>noprune</literal></entry>
-                        <entry><literal role="type">Boolean</literal></entry>
-                        <entry>Do not prune any loose objects. See --no-prune option of <link
-                                xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-gc.html"
-                                >git-gc</link>.</entry>
-                        <entry><literal>false</literal></entry>
-                        <entry>No</entry>
-                    </row>
-                    <row>
-                        <entry><literal>prune</literal></entry>
-                        <entry><literal role="type">String</literal></entry>
-                        <entry>Prune loose objects older than date. See --prune option of <link
-                                xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-gc.html"
-                                >git-gc</link>.</entry>
-                        <entry>2.weeks.ago</entry>
-                        <entry>No</entry>
-                    </row>
-                </tbody>
-            </tgroup>
-        </table>
-        <sect2>
-            <title>Example</title>
-            <programlisting language="xml">&lt;property name="repo.dir" value="./relative/path/to/repo" />
-&lt;resolvepath propertyName="repo.dir.resolved" file="${repo.dir}" />
-
-&lt;!-- Clone repository -->
-&lt;gitclone
-    repository="git://github.com/path/to/repo/repo.git"
-    targetPath="${repo.dir.resolved}" />
-
-&lt;!-- Cleanup repository-->
-&lt;gitgc
-    repository="${repo.dir.resolved}"
-    aggressive="true"
-    prune="1.week.ago" /></programlisting>
-        </sect2>
-    </sect1>
     <sect1 role="taskdef" xml:id="GitBranchTask">
         <title>GitBranchTask</title>
         <para> Create, move or delete repository branches. See official <link
@@ -1722,6 +1486,330 @@ Note that you can omit both startpoint and track attributes in this case
     move="true" /></programlisting>
         </sect2>
     </sect1>
+    <sect1 role="taskdef" xml:id="GitCheckoutTask">
+        <title>GitCheckoutTask</title>
+        <para> Checkout a branch or paths to the working tree. See official <link
+                xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-checkout.html"
+        >documentation</link>.</para>
+
+        <table>
+            <title>Attributes</title>
+            <tgroup cols="5">
+                <colspec colname="name" colnum="1" colwidth="1.5*"/>
+                <colspec colname="type" colnum="2" colwidth="0.8*"/>
+                <colspec colname="description" colnum="3" colwidth="3.5*"/>
+                <colspec colname="default" colnum="4" colwidth="0.8*"/>
+                <colspec colname="required" colnum="5" colwidth="1.2*"/>
+                <thead>
+                    <row>
+                        <entry>Name</entry>
+                        <entry>Type</entry>
+                        <entry>Description</entry>
+                        <entry>Default</entry>
+                        <entry>Required</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry><literal>gitPath</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>Path to Git binary</entry>
+                        <entry>/usr/bin/git</entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>repository</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>Path to Git repository</entry>
+                        <entry>n/a</entry>
+                        <entry>Yes</entry>
+                    </row>
+                    <row>
+                        <entry><literal>branchname</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>Branch to checkout. See &lt;branch> in <link
+                                xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-checkout.html"
+                        >git-checkout</link>.</entry>
+                        <entry>origin</entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>startpoint</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>The name of a commit at which to start the new branch; Defaults to
+                            HEAD. See &lt;start_point> in <link
+                                    xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-checkout.html"
+                            >git-checkout</link>.</entry>
+                        <entry/>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>create</literal></entry>
+                        <entry><literal role="type">Boolean</literal></entry>
+                        <entry>Create a new branch named &lt;branchname> and start it at
+                            &lt;startpoint></entry>
+                        <entry><literal>false</literal></entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>forcecreate</literal></entry>
+                        <entry><literal role="type">Boolean</literal></entry>
+                        <entry>Creates the branch &lt;branchname> and start it at &lt;startpoint>;
+                            if it already exists, then reset it to &lt;startpoint>. This is
+                            equivalent to running "git branch" with "-f".</entry>
+                        <entry><literal>false</literal></entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>merge</literal></entry>
+                        <entry><literal role="type">Boolean</literal></entry>
+                        <entry>See --merge in <link
+                                xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-checkout.html"
+                        >git-checkout</link>.</entry>
+                        <entry><literal>false</literal></entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>track</literal></entry>
+                        <entry><literal role="type">Boolean</literal></entry>
+                        <entry>See --track in <link
+                                xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-checkout.html"
+                        >git-checkout</link>.</entry>
+                        <entry><literal>false</literal></entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>notrack</literal></entry>
+                        <entry><literal role="type">Boolean</literal></entry>
+                        <entry>See --no-track in <link
+                                xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-checkout.html"
+                        >git-checkout</link>.</entry>
+                        <entry><literal>false</literal></entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>quiet</literal></entry>
+                        <entry><literal role="type">Boolean</literal></entry>
+                        <entry>Quiet, suppress feedback messages. See --quiet in <link
+                                xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-checkout.html"
+                        >git-checkout</link>.</entry>
+                        <entry><literal>false</literal></entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>force</literal></entry>
+                        <entry><literal role="type">Boolean</literal></entry>
+                        <entry>When switching branches, proceed even if the index or the working
+                            tree differs from HEAD. This is used to throw away local changes. See
+                            --force in <link
+                                    xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-checkout.html"
+                            >git-checkout</link>.</entry>
+                        <entry><literal>false</literal></entry>
+                        <entry>No</entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <sect2>
+            <title>Example</title>
+            <programlisting language="xml">&lt;property name="repo.dir" value="./relative/path/to/repo" />
+                &lt;resolvepath propertyName="repo.dir.resolved" file="${repo.dir}" />
+
+                &lt;!-- clone repository -->
+                &lt;gitclone
+                repository="git://github.com/path/to/repo/repo.git"
+                targetPath="${repo.dir.resolved}" />
+
+                &lt;!-- create and switch to "mybranch" branch -->
+                &lt;gitcheckout
+                repository="${repo.dir.resolved}"
+                branchname="mybranch" quiet="true" create="true" />
+
+                &lt;!-- get back to "master" branch -->
+                &lt;gitcheckout
+                repository="${repo.dir.resolved}"
+                branchname="master" quiet="true" />
+
+                &lt;!-- create (force) already created branch -->
+                &lt;gitcheckout
+                repository="${repo.dir.resolved}"
+                branchname="mybranch" quiet="true"
+                forceCreate="true" /></programlisting>
+        </sect2>
+    </sect1>
+    <sect1 role="taskdef" xml:id="GitCloneTask">
+        <title>GitCloneTask</title>
+        <para>Clone a repository into a new directory.</para>
+
+        <table>
+            <title>Attributes</title>
+            <tgroup cols="5">
+                <colspec colname="name" colnum="1" colwidth="1.5*"/>
+                <colspec colname="type" colnum="2" colwidth="0.8*"/>
+                <colspec colname="description" colnum="3" colwidth="3.5*"/>
+                <colspec colname="default" colnum="4" colwidth="0.8*"/>
+                <colspec colname="required" colnum="5" colwidth="1.2*"/>
+                <thead>
+                    <row>
+                        <entry>Name</entry>
+                        <entry>Type</entry>
+                        <entry>Description</entry>
+                        <entry>Default</entry>
+                        <entry>Required</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry><literal>gitPath</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>Path to Git binary</entry>
+                        <entry>/usr/bin/git</entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>repository</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>The (possibly remote) repository to clone from.</entry>
+                        <entry>n/a</entry>
+                        <entry>Yes</entry>
+                    </row>
+                    <row>
+                        <entry><literal>targetPath</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>The name of a new directory to clone into. Cloning into an existing
+                            directory is only allowed if the directory is empty.</entry>
+                        <entry>n/a</entry>
+                        <entry>Yes</entry>
+                    </row>
+                    <row>
+                        <entry><literal>bare</literal></entry>
+                        <entry><literal role="type">Boolean</literal></entry>
+                        <entry>Create bare repository. See --bare option of <link
+                                xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-clone.html"
+                        >git-clone</link>.</entry>
+                        <entry><literal>false</literal></entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>depth</literal></entry>
+                        <entry><literal role="type">Integer</literal></entry>
+                        <entry>Create a shallow clone with a history truncated to the specified number of revisions.
+                            See --depth option of <link
+                                    xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-clone.html"
+                            >git-clone</link>.</entry>
+                        <entry><literal>0</literal></entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>singleBranch</literal></entry>
+                        <entry><literal role="type">Boolean</literal></entry>
+                        <entry>Clone only one branch. See --single-branch option of <link
+                                xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-clone.html"
+                        >git-clone</link>.</entry>
+                        <entry><literal>false</literal></entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>branch</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>Checkout <literal>branch</literal> instead of the remote's HEAD.</entry>
+                        <entry>n/a</entry>
+                        <entry>Yes</entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <sect2>
+            <title>Example</title>
+            <programlisting language="xml">&lt;property name="repo.dir" value="./relative/path/to/repo" />
+                &lt;resolvepath propertyName="repo.dir.resolved" file="${repo.dir}" />
+
+                &lt;!-- Clone repository -->
+                &lt;gitclone
+                repository="git://github.com/path/to/repo/repo.git"
+                targetPath="${repo.dir.resolved}" />
+
+                &lt;!-- Clone bare repository -->
+                &lt;gitclone
+                repository="git://github.com/path/to/repo/repo.git"
+                targetPath="${repo.dir.resolved}"
+                bare="true" /></programlisting>
+        </sect2>
+    </sect1>
+    <sect1 role="taskdef" xml:id="GitCommitTask">
+        <title>GitCommitTask</title>
+        <para> Record changes to the repository. See official <link
+                xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-commit.html"
+        >documentation</link>.</para>
+
+        <table>
+            <title>Attributes</title>
+            <tgroup cols="5">
+                <colspec colname="name" colnum="1" colwidth="1.5*"/>
+                <colspec colname="type" colnum="2" colwidth="0.8*"/>
+                <colspec colname="description" colnum="3" colwidth="3.5*"/>
+                <colspec colname="default" colnum="4" colwidth="0.8*"/>
+                <colspec colname="required" colnum="5" colwidth="1.2*"/>
+                <thead>
+                    <row>
+                        <entry>Name</entry>
+                        <entry>Type</entry>
+                        <entry>Description</entry>
+                        <entry>Default</entry>
+                        <entry>Required</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry><literal>gitPath</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>Path to Git binary</entry>
+                        <entry>/usr/bin/git</entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>repository</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>Path to Git repository</entry>
+                        <entry>n/a</entry>
+                        <entry>Yes</entry>
+                    </row>
+                    <row>
+                        <entry><literal>message</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>Commit message</entry>
+                        <entry>n/a</entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>allFiles</literal></entry>
+                        <entry><literal role="type">Boolean</literal></entry>
+                        <entry>Whether to automatically stage files that have been modified and deleted
+                            (see --all in <link
+                                    xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-commit.html"
+                            >git-commit</link>)</entry>
+                        <entry>n/a</entry>
+                        <entry>No</entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <sect2>
+            <title>Example</title>
+            <programlisting language="xml">&lt;!-- commit all modified / deleted files -->;
+                &lt;gitcommit
+                repository="/path/to/repo"
+                message="Commit message" allFiles="true" />;</programlisting>
+        </sect2>
+        <sect2 role="nestedtags">
+            <title>Supported Nested Tags</title>
+            <itemizedlist>
+                <listitem>
+                    <para><literal><link linkend="FileSet">fileset</link></literal></para>
+                </listitem>
+            </itemizedlist>
+        </sect2>
+    </sect1>
     <sect1 role="taskdef" xml:id="GitFetchTask">
         <title>GitFetchTask</title>
         <para> Download objects and refs from another repository. See official <link
@@ -1880,11 +1968,104 @@ Note that you can omit both startpoint and track attributes in this case
     quiet="true" /></programlisting>
         </sect2>
     </sect1>
-    <sect1 role="taskdef" xml:id="GitCheckoutTask">
-        <title>GitCheckoutTask</title>
-        <para> Checkout a branch or paths to the working tree. See official <link
-                xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-checkout.html"
-                >documentation</link>.</para>
+    <sect1 role="taskdef" xml:id="GitGcTask">
+        <title>GitGcTask</title>
+        <para>Cleanup unnecessary files and optimize the local repository.</para>
+
+        <table>
+            <title>Attributes</title>
+            <tgroup cols="5">
+                <colspec colname="name" colnum="1" colwidth="1.5*"/>
+                <colspec colname="type" colnum="2" colwidth="0.8*"/>
+                <colspec colname="description" colnum="3" colwidth="3.5*"/>
+                <colspec colname="default" colnum="4" colwidth="0.8*"/>
+                <colspec colname="required" colnum="5" colwidth="1.2*"/>
+                <thead>
+                    <row>
+                        <entry>Name</entry>
+                        <entry>Type</entry>
+                        <entry>Description</entry>
+                        <entry>Default</entry>
+                        <entry>Required</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry><literal>gitPath</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>Path to Git binary.</entry>
+                        <entry>/usr/bin/git</entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>repository</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>The repository to cleanup.</entry>
+                        <entry>n/a</entry>
+                        <entry>Yes</entry>
+                    </row>
+                    <row>
+                        <entry><literal>aggressive</literal></entry>
+                        <entry><literal role="type">Boolean</literal></entry>
+                        <entry>This option will cause git gc to more aggressively optimize the
+                            repository at the expense of taking much more time. See --aggressive
+                            option of <link
+                                    xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-gc.html"
+                            >git-gc</link>.</entry>
+                        <entry><literal>false</literal></entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>auto</literal></entry>
+                        <entry><literal role="type">Boolean</literal></entry>
+                        <entry>With this option, git gc checks whether any housekeeping is required;
+                            if not, it exits without performing any work. See --auto option of <link
+                                    xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-gc.html"
+                            >git-gc</link>.</entry>
+                        <entry><literal>false</literal></entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>noprune</literal></entry>
+                        <entry><literal role="type">Boolean</literal></entry>
+                        <entry>Do not prune any loose objects. See --no-prune option of <link
+                                xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-gc.html"
+                        >git-gc</link>.</entry>
+                        <entry><literal>false</literal></entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>prune</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>Prune loose objects older than date. See --prune option of <link
+                                xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-gc.html"
+                        >git-gc</link>.</entry>
+                        <entry>2.weeks.ago</entry>
+                        <entry>No</entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <sect2>
+            <title>Example</title>
+            <programlisting language="xml">&lt;property name="repo.dir" value="./relative/path/to/repo" />
+                &lt;resolvepath propertyName="repo.dir.resolved" file="${repo.dir}" />
+
+                &lt;!-- Clone repository -->
+                &lt;gitclone
+                repository="git://github.com/path/to/repo/repo.git"
+                targetPath="${repo.dir.resolved}" />
+
+                &lt;!-- Cleanup repository-->
+                &lt;gitgc
+                repository="${repo.dir.resolved}"
+                aggressive="true"
+                prune="1.week.ago" /></programlisting>
+        </sect2>
+    </sect1>
+    <sect1 role="taskdef" xml:id="GitInitTask">
+        <title>GitInitTask</title>
+        <para>Create an empty git repository or reinitialize an existing one.</para>
 
         <table>
             <title>Attributes</title>
@@ -1919,85 +2100,11 @@ Note that you can omit both startpoint and track attributes in this case
                         <entry>Yes</entry>
                     </row>
                     <row>
-                        <entry><literal>branchname</literal></entry>
-                        <entry><literal role="type">String</literal></entry>
-                        <entry>Branch to checkout. See &lt;branch> in <link
-                                xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-checkout.html"
-                                >git-checkout</link>.</entry>
-                        <entry>origin</entry>
-                        <entry>No</entry>
-                    </row>
-                    <row>
-                        <entry><literal>startpoint</literal></entry>
-                        <entry><literal role="type">String</literal></entry>
-                        <entry>The name of a commit at which to start the new branch; Defaults to
-                            HEAD. See &lt;start_point> in <link
-                                xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-checkout.html"
-                                >git-checkout</link>.</entry>
-                        <entry/>
-                        <entry>No</entry>
-                    </row>
-                    <row>
-                        <entry><literal>create</literal></entry>
+                        <entry><literal>bare</literal></entry>
                         <entry><literal role="type">Boolean</literal></entry>
-                        <entry>Create a new branch named &lt;branchname> and start it at
-                            &lt;startpoint></entry>
-                        <entry><literal>false</literal></entry>
-                        <entry>No</entry>
-                    </row>
-                    <row>
-                        <entry><literal>forcecreate</literal></entry>
-                        <entry><literal role="type">Boolean</literal></entry>
-                        <entry>Creates the branch &lt;branchname> and start it at &lt;startpoint>;
-                            if it already exists, then reset it to &lt;startpoint>. This is
-                            equivalent to running "git branch" with "-f".</entry>
-                        <entry><literal>false</literal></entry>
-                        <entry>No</entry>
-                    </row>
-                    <row>
-                        <entry><literal>merge</literal></entry>
-                        <entry><literal role="type">Boolean</literal></entry>
-                        <entry>See --merge in <link
-                                xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-checkout.html"
-                                >git-checkout</link>.</entry>
-                        <entry><literal>false</literal></entry>
-                        <entry>No</entry>
-                    </row>
-                    <row>
-                        <entry><literal>track</literal></entry>
-                        <entry><literal role="type">Boolean</literal></entry>
-                        <entry>See --track in <link
-                                xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-checkout.html"
-                                >git-checkout</link>.</entry>
-                        <entry><literal>false</literal></entry>
-                        <entry>No</entry>
-                    </row>
-                    <row>
-                        <entry><literal>notrack</literal></entry>
-                        <entry><literal role="type">Boolean</literal></entry>
-                        <entry>See --no-track in <link
-                                xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-checkout.html"
-                                >git-checkout</link>.</entry>
-                        <entry><literal>false</literal></entry>
-                        <entry>No</entry>
-                    </row>
-                    <row>
-                        <entry><literal>quiet</literal></entry>
-                        <entry><literal role="type">Boolean</literal></entry>
-                        <entry>Quiet, suppress feedback messages. See --quiet in <link
-                                xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-checkout.html"
-                                >git-checkout</link>.</entry>
-                        <entry><literal>false</literal></entry>
-                        <entry>No</entry>
-                    </row>
-                    <row>
-                        <entry><literal>force</literal></entry>
-                        <entry><literal role="type">Boolean</literal></entry>
-                        <entry>When switching branches, proceed even if the index or the working
-                            tree differs from HEAD. This is used to throw away local changes. See
-                            --force in <link
-                                xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-checkout.html"
-                                >git-checkout</link>.</entry>
+                        <entry>Create bare repository. See --bare option of <link
+                                xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-init.html"
+                                role="extern">git-init</link>.</entry>
                         <entry><literal>false</literal></entry>
                         <entry>No</entry>
                     </row>
@@ -2007,35 +2114,20 @@ Note that you can omit both startpoint and track attributes in this case
         <sect2>
             <title>Example</title>
             <programlisting language="xml">&lt;property name="repo.dir" value="./relative/path/to/repo" />
-&lt;resolvepath propertyName="repo.dir.resolved" file="${repo.dir}" />
+                &lt;resolvepath propertyName="repo.dir.resolved" file="${repo.dir}" />
 
-&lt;!-- clone repository -->
-&lt;gitclone
-    repository="git://github.com/path/to/repo/repo.git"
-    targetPath="${repo.dir.resolved}" />
+                &lt;!-- Initialize normal repository -->
+                &lt;gitinit repository="${repo.dir.resolved}" />
 
-&lt;!-- create and switch to "mybranch" branch -->
-&lt;gitcheckout
-    repository="${repo.dir.resolved}"
-    branchname="mybranch" quiet="true" create="true" />
-
-&lt;!-- get back to "master" branch -->
-&lt;gitcheckout
-    repository="${repo.dir.resolved}"
-    branchname="master" quiet="true" />
-
-&lt;!-- create (force) already created branch -->
-&lt;gitcheckout
-    repository="${repo.dir.resolved}"
-    branchname="mybranch" quiet="true"
-    forceCreate="true" /></programlisting>
+                &lt;!-- Initialize bare repository -->
+                &lt;gitinit bare="true" repository="${repo.dir.resolved}" /></programlisting>
         </sect2>
     </sect1>
-    <sect1 role="taskdef" xml:id="GitCommitTask">
-        <title>GitCommitTask</title>
-        <para> Record changes to the repository. See official <link
-                xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-commit.html"
-                >documentation</link>.</para>
+    <sect1 role="taskdef" xml:id="GitLogTask">
+        <title>GitLogTask</title>
+        <para> Show commit logs. See official <link
+                xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-log.html"
+        >documentation</link>.</para>
 
         <table>
             <title>Attributes</title>
@@ -2070,20 +2162,82 @@ Note that you can omit both startpoint and track attributes in this case
                         <entry>Yes</entry>
                     </row>
                     <row>
-                        <entry><literal>message</literal></entry>
+                        <entry><literal>paths</literal></entry>
                         <entry><literal role="type">String</literal></entry>
-                        <entry>Commit message</entry>
+                        <entry>&lt;paentry> arguments to git-log. Accepts one or more paths
+                            delimited by PATH_SEPARATOR</entry>
                         <entry>n/a</entry>
                         <entry>No</entry>
                     </row>
                     <row>
-                        <entry><literal>allFiles</literal></entry>
-                        <entry><literal role="type">Boolean</literal></entry>
-                        <entry>Whether to automatically stage files that have been modified and deleted
-                    (see --all in <link
-                                xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-commit.html"
-                            >git-commit</link>)</entry>
+                        <entry><literal>outputProperty</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>Property name to set with output value from git-log</entry>
                         <entry>n/a</entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>format</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>Commit format. See --format of git-log. Can be one of
+                            <literal>oneline</literal>, <literal>short</literal>,
+                            <literal>medium</literal>, <literal>full</literal>,
+                            <literal>fuller</literal>, <literal>email</literal>,
+                            <literal>raw</literal> and
+                            <literal>format:&lt;string></literal></entry>
+                        <entry>medium</entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>date</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>Date format. See --date of git-log.</entry>
+                        <entry>n/a</entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>since</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>&lt;since> argument to git-log.</entry>
+                        <entry>n/a</entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>until</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>&lt;until> argument to git-log.</entry>
+                        <entry>n/a</entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>stat</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>Generate a diffstat. See --stat of git-log</entry>
+                        <entry>n/a</entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>nameStatus</literal></entry>
+                        <entry><literal role="type">Boolean</literal></entry>
+                        <entry>Names + status of changed files. See --name-status of
+                            git-log.</entry>
+                        <entry><literal>false</literal></entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>maxCount</literal></entry>
+                        <entry><literal role="type">Integer</literal></entry>
+                        <entry>Number of commits to show. See -&lt;n>|-n|--max-count of
+                            git-log.</entry>
+                        <entry>n/a</entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>noMerges</literal></entry>
+                        <entry><literal role="type">Boolean</literal></entry>
+                        <entry>Don't show commits with more than one parent. See --no-merges of
+                            git-log.</entry>
+                        <entry><literal>false</literal></entry>
                         <entry>No</entry>
                     </row>
                 </tbody>
@@ -2091,18 +2245,24 @@ Note that you can omit both startpoint and track attributes in this case
         </table>
         <sect2>
             <title>Example</title>
-            <programlisting language="xml">&lt;!-- commit all modified / deleted files -->;
-&lt;gitcommit
-    repository="/path/to/repo"
-    message="Commit message" allFiles="true" />;</programlisting>
-        </sect2>
-        <sect2 role="nestedtags">
-            <title>Supported Nested Tags</title>
-            <itemizedlist>
-                <listitem>
-                    <para><literal><link linkend="FileSet">fileset</link></literal></para>
-                </listitem>
-            </itemizedlist>
+            <programlisting language="xml">&lt;property name="repo.dir" value="./relative/path/to/repo" />
+                &lt;resolvepath propertyName="repo.dir.resolved" file="${repo.dir}" />
+
+                &lt;!-- clone repository -->
+                &lt;gitclone
+                repository="git://github.com/path/to/repo/repo.git"
+                targetPath="${repo.dir.resolved}" />
+                <!-- write git-log output to "logs" variable -->
+                &lt;gitlog
+                paths="${repo.dir.resolved}"
+                format="oneline"
+                maxCount="2"
+                stat="true"
+                noMerges="false"
+                since="Sun Jan 23 23:55:42 2011 +0300"
+                until="Mon Jan 24 09:59:33 2011 +0300"
+                outputProperty="logs"
+                repository="${repo.dir.resolved}" /></programlisting>
         </sect2>
     </sect1>
     <sect1 role="taskdef" xml:id="GitMergeTask">
@@ -2789,147 +2949,147 @@ Note that you can omit both startpoint and track attributes in this case
     pattern="marked" /></programlisting>
         </sect2>
     </sect1>
-    <sect1 role="taskdef" xml:id="GitLogTask">
-        <title>GitLogTask</title>
-        <para> Show commit logs. See official <link
-                xlink:href="http://www.kernel.org/pub/software/scm/git/docs/git-log.html"
-                >documentation</link>.</para>
-
-        <table>
-            <title>Attributes</title>
-            <tgroup cols="5">
-                <colspec colname="name" colnum="1" colwidth="1.5*"/>
-                <colspec colname="type" colnum="2" colwidth="0.8*"/>
-                <colspec colname="description" colnum="3" colwidth="3.5*"/>
-                <colspec colname="default" colnum="4" colwidth="0.8*"/>
-                <colspec colname="required" colnum="5" colwidth="1.2*"/>
-                <thead>
-                    <row>
-                        <entry>Name</entry>
-                        <entry>Type</entry>
-                        <entry>Description</entry>
-                        <entry>Default</entry>
-                        <entry>Required</entry>
-                    </row>
-                </thead>
-                <tbody>
-                    <row>
-                        <entry><literal>gitPath</literal></entry>
-                        <entry><literal role="type">String</literal></entry>
-                        <entry>Path to Git binary</entry>
-                        <entry>/usr/bin/git</entry>
-                        <entry>No</entry>
-                    </row>
-                    <row>
-                        <entry><literal>repository</literal></entry>
-                        <entry><literal role="type">String</literal></entry>
-                        <entry>Path to Git repository</entry>
-                        <entry>n/a</entry>
-                        <entry>Yes</entry>
-                    </row>
-                    <row>
-                        <entry><literal>paths</literal></entry>
-                        <entry><literal role="type">String</literal></entry>
-                        <entry>&lt;paentry> arguments to git-log. Accepts one or more paths
-                            delimited by PATH_SEPARATOR</entry>
-                        <entry>n/a</entry>
-                        <entry>No</entry>
-                    </row>
-                    <row>
-                        <entry><literal>outputProperty</literal></entry>
-                        <entry><literal role="type">String</literal></entry>
-                        <entry>Property name to set with output value from git-log</entry>
-                        <entry>n/a</entry>
-                        <entry>No</entry>
-                    </row>
-                    <row>
-                        <entry><literal>format</literal></entry>
-                        <entry><literal role="type">String</literal></entry>
-                        <entry>Commit format. See --format of git-log. Can be one of
-                                <literal>oneline</literal>, <literal>short</literal>,
-                                <literal>medium</literal>, <literal>full</literal>,
-                                <literal>fuller</literal>, <literal>email</literal>,
-                                <literal>raw</literal> and
-                            <literal>format:&lt;string></literal></entry>
-                        <entry>medium</entry>
-                        <entry>No</entry>
-                    </row>
-                    <row>
-                        <entry><literal>date</literal></entry>
-                        <entry><literal role="type">String</literal></entry>
-                        <entry>Date format. See --date of git-log.</entry>
-                        <entry>n/a</entry>
-                        <entry>No</entry>
-                    </row>
-                    <row>
-                        <entry><literal>since</literal></entry>
-                        <entry><literal role="type">String</literal></entry>
-                        <entry>&lt;since> argument to git-log.</entry>
-                        <entry>n/a</entry>
-                        <entry>No</entry>
-                    </row>
-                    <row>
-                        <entry><literal>until</literal></entry>
-                        <entry><literal role="type">String</literal></entry>
-                        <entry>&lt;until> argument to git-log.</entry>
-                        <entry>HEAD</entry>
-                        <entry>No</entry>
-                    </row>
-                    <row>
-                        <entry><literal>stat</literal></entry>
-                        <entry><literal role="type">String</literal></entry>
-                        <entry>Generate a diffstat. See --stat of git-log</entry>
-                        <entry>n/a</entry>
-                        <entry>No</entry>
-                    </row>
-                    <row>
-                        <entry><literal>nameStatus</literal></entry>
-                        <entry><literal role="type">Boolean</literal></entry>
-                        <entry>Names + status of changed files. See --name-status of
-                            git-log.</entry>
-                        <entry><literal>false</literal></entry>
-                        <entry>No</entry>
-                    </row>
-                    <row>
-                        <entry><literal>maxCount</literal></entry>
-                        <entry><literal role="type">Integer</literal></entry>
-                        <entry>Number of commits to show. See -&lt;n>|-n|--max-count of
-                            git-log.</entry>
-                        <entry>n/a</entry>
-                        <entry>No</entry>
-                    </row>
-                    <row>
-                        <entry><literal>noMerges</literal></entry>
-                        <entry><literal role="type">Boolean</literal></entry>
-                        <entry>Don't show commits with more than one parent. See --no-merges of
-                            git-log.</entry>
-                        <entry><literal>false</literal></entry>
-                        <entry>No</entry>
-                    </row>
-                </tbody>
-            </tgroup>
-        </table>
-        <sect2>
-            <title>Example</title>
-            <programlisting language="xml">&lt;property name="repo.dir" value="./relative/path/to/repo" />
-&lt;resolvepath propertyName="repo.dir.resolved" file="${repo.dir}" />
-
-&lt;!-- clone repository -->
-&lt;gitclone
-    repository="git://github.com/path/to/repo/repo.git"
-    targetPath="${repo.dir.resolved}" />
-<!-- write git-log output to "logs" variable -->
-&lt;gitlog
-    paths="${repo.dir.resolved}"
-    format="oneline"
-    maxCount="2"
-    stat="true"
-    noMerges="false"
-    since="Sun Jan 23 23:55:42 2011 +0300"
-    until="Mon Jan 24 09:59:33 2011 +0300"
-    outputProperty="logs"
-    repository="${repo.dir.resolved}" /></programlisting>
-        </sect2>
+    <sect1 role="taskdef" xml:id="GitDescribeTask">
+    <title>GitDescribeTask</title>
+    <para>This task finds the most recent tag that is reachable from a commit.
+        If the tag points to the commit, then only the tag is shown.
+        Otherwise, it suffixes the tag name with the number of additional
+        commits on top of the tagged object and the abbreviated object name
+        of the most recent commit.
+    </para>
+    <table>
+        <title>Attributes</title>
+        <tgroup cols="5">
+            <colspec colname="name" colnum="1" colwidth="1.5*"/>
+            <colspec colname="type" colnum="2" colwidth="0.8*"/>
+            <colspec colname="description" colnum="3" colwidth="3.5*"/>
+            <colspec colname="default" colnum="4" colwidth="0.8*"/>
+            <colspec colname="required" colnum="5" colwidth="1.2*"/>
+            <thead>
+                <row>
+                    <entry>Name</entry>
+                    <entry>Type</entry>
+                    <entry>Description</entry>
+                    <entry>Default</entry>
+                    <entry>Required</entry>
+                </row>
+            </thead>
+            <tbody>
+                <row>
+                    <entry><literal>gitPath</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Path to Git binary</entry>
+                    <entry>/usr/bin/git</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>repository</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Path to Git repository</entry>
+                    <entry>n/a</entry>
+                    <entry>Yes</entry>
+                </row>
+                <row>
+                    <entry><literal>outputProperty</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Property name to set with output value from git-describe.</entry>
+                    <entry>n/a</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>all</literal></entry>
+                    <entry><literal role="type">Boolean</literal></entry>
+                    <entry>Instead of using only the annotated tags, use any
+                        ref found in refs/ namespace. This option enables
+                        matching any known branch, remote-tracking branch,
+                        or lightweight tag.</entry>
+                    <entry>false</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>tags</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Instead of using only the annotated tags, use any
+                        tag found in refs/tags namespace. This option enables
+                        matching a lightweight (non-annotated) tag.</entry>
+                    <entry>false</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>contains</literal></entry>
+                    <entry><literal role="type">Boolean</literal></entry>
+                    <entry>Instead of finding the tag that predates the commit,
+                        find the tag that comes after the commit, and thus
+                        contains it. Automatically implies --tags.</entry>
+                    <entry>false</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>long</literal></entry>
+                    <entry><literal role="type">Boolean</literal></entry>
+                    <entry>Always output the long format (the tag, the number
+                        of commits and the abbreviated commit name) even when
+                        it matches a tag.</entry>
+                    <entry>false</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>always</literal></entry>
+                    <entry><literal role="type">Boolean</literal></entry>
+                    <entry>Show uniquely abbreviated commit object as fallback.</entry>
+                    <entry>false</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>abbrev</literal></entry>
+                    <entry><literal role="type">Integer</literal></entry>
+                    <entry>Instead of using the default 7 hexadecimal
+                        digits as the abbreviated object name, use n digits,
+                        or as many digits as needed to form a unique object name.
+                        An n of 0 will suppress long format, only showing
+                        the closest tag.</entry>
+                    <entry>n/a</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>match</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Only consider tags matching the given glob(7)
+                        pattern, excluding the "refs/tags/" prefix.
+                        This can be used to avoid leaking private tags from
+                        the repository.</entry>
+                    <entry>n/a</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>committish</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Commit-ish object names to describe. Defaults to HEAD if omitted.</entry>
+                    <entry>HEAD</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>canditates</literal></entry>
+                    <entry><literal role="type">Integer</literal></entry>
+                    <entry>Instead of considering only the 10 most recent tags
+                        as candidates to describe the input commit-ish consider
+                        up to n candidates. Increasing n above 10 will take
+                        slightly longer but may produce a more accurate result.
+                        An n of 0 will cause only exact matches to be output.</entry>
+                    <entry>n/a</entry>
+                    <entry>No</entry>
+                </row>
+            </tbody>
+        </tgroup>
+    </table>
+    <sect2>
+        <title>Example</title>
+        <programlisting language="xml">&lt;gitdescribe repository="${repo.dir}"
+    tags="true"
+    abbrev="0"
+    match="*-*-*.*"
+    outputProperty="mostRecentTag" /></programlisting>
+    </sect2>
     </sect1>
     <sect1 role="taskdef" xml:id="GrowlNotifyTask">
         <title>GrowlNotifyTask</title>
@@ -3185,6 +3345,629 @@ Note that you can omit both startpoint and track attributes in this case
     &lt;/target&gt;
 
 &lt;/project&gt;</programlisting>
+        </sect2>
+    </sect1>
+
+    <sect1 role="taskdef" xml:id="HgAddTask">
+        <title>HgAddTask</title>
+        <para>Add files to Mercurial repository on the next commit.
+        This is available for PHP 5.4 and higher.</para>
+
+    <table>
+        <title>Attributes</title>
+        <tgroup cols="5">
+            <colspec colname="name" colnum="1" colwidth="1.5*"/>
+            <colspec colname="type" colnum="2" colwidth="0.8*"/>
+            <colspec colname="description" colnum="3" colwidth="3.5*"/>
+            <colspec colname="default" colnum="4" colwidth="0.8*"/>
+            <colspec colname="required" colnum="5" colwidth="1.2*"/>
+            <thead>
+                <row>
+                    <entry>Name</entry>
+                    <entry>Type</entry>
+                    <entry>Description</entry>
+                    <entry>Default</entry>
+                    <entry>Required</entry>
+                </row>
+            </thead>
+            <tbody>
+                <row>
+                    <entry><literal>repository</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Path to Mercurial repository.</entry>
+                    <entry>n/a</entry>
+                    <entry>Yes</entry>
+                </row>
+            </tbody>
+        </tgroup>
+    </table>
+        <sect2>
+            <title>Example</title>
+            <programlisting language="xml">&lt;property name="repo.dir" value="./repo.directory" />
+&lt;resolvepath propertyName="repo.dir.resolved" file="${repo.dir}" />
+&lt;hgadd repository="${repo.dir.resolved}">
+    &lt;fileset dir="."/>
+&lt;/hgadd></programlisting>
+        </sect2>
+        <sect2 role="nestedtags">
+            <title>Supported Nested Tags</title>
+            <itemizedlist>
+                <listitem>
+                    <para><literal><link linkend="FileSet">fileset</link></literal></para>
+                </listitem>
+            </itemizedlist>
+        </sect2>
+    </sect1>
+    <sect1 role="taskdef" xml:id="HgArchiveTask">
+        <title>HgArchiveTask</title>
+        <para>Create an unversioned archive of a Mercurial repository revision.
+        This is available for PHP 5.4 and higher.</para>
+    <table>
+        <title>Attributes</title>
+        <tgroup cols="5">
+            <colspec colname="name" colnum="1" colwidth="1.5*"/>
+            <colspec colname="type" colnum="2" colwidth="0.8*"/>
+            <colspec colname="description" colnum="3" colwidth="3.5*"/>
+            <colspec colname="default" colnum="4" colwidth="0.8*"/>
+            <colspec colname="required" colnum="5" colwidth="1.2*"/>
+            <thead>
+                <row>
+                    <entry>Name</entry>
+                    <entry>Type</entry>
+                    <entry>Description</entry>
+                    <entry>Default</entry>
+                    <entry>Required</entry>
+                </row>
+            </thead>
+            <tbody>
+                <row>
+                    <entry><literal>destination</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Name of archive to create.</entry>
+                    <entry>n/a</entry>
+                    <entry>Yes</entry>
+                </row>
+                <row>
+                    <entry><literal>revision</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Revision to distribute in the archive.</entry>
+                    <entry>n/a</entry>
+                    <entry>No</entry>
+                </row>
+            </tbody>
+        </tgroup>
+    </table>
+        <sect2>
+            <title>Example</title>
+            <programlisting language="xml">&lt;property name="version" value="v0_1_2"/>
+&lt;hgarchive destination="${version}.zip" />
+&lt;hgarchive destination="${version}.tgz" /></programlisting>
+        </sect2>
+    </sect1>
+    <sect1 role="taskdef" xml:id="HgCloneTask">
+        <title>HgCloneTask</title>
+        <para>Make a copy of an existing Mercurial repository.
+        This is available for PHP 5.4 and higher.</para>
+    <table>
+        <title>Attributes</title>
+        <tgroup cols="5">
+            <colspec colname="name" colnum="1" colwidth="1.5*"/>
+            <colspec colname="type" colnum="2" colwidth="0.8*"/>
+            <colspec colname="description" colnum="3" colwidth="3.5*"/>
+            <colspec colname="default" colnum="4" colwidth="0.8*"/>
+            <colspec colname="required" colnum="5" colwidth="1.2*"/>
+            <thead>
+                <row>
+                    <entry>Name</entry>
+                    <entry>Type</entry>
+                    <entry>Description</entry>
+                    <entry>Default</entry>
+                    <entry>Required</entry>
+                </row>
+            </thead>
+            <tbody>
+                <row>
+                    <entry><literal>insecure</literal></entry>
+                    <entry><literal role="type">Boolean</literal></entry>
+                    <entry>Do not verify server certificate.</entry>
+                    <entry>false</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>repository</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Path to Mercurial repository.</entry>
+                    <entry>n/a</entry>
+                    <entry>Yes</entry>
+                </row>
+                <row>
+                    <entry><literal>targetPath</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Directory to clone into.</entry>
+                    <entry>n/a</entry>
+                    <entry>Yes</entry>
+                </row>
+                <row>
+                    <entry><literal>quiet</literal></entry>
+                    <entry><literal role="type">Boolean</literal></entry>
+                    <entry>Work silently unless an error occurs.</entry>
+                    <entry><literal>false</literal></entry>
+                    <entry>No</entry>
+                </row>
+            </tbody>
+        </tgroup>
+    </table>
+        <sect2>
+            <title>Example</title>
+            <programlisting language="xml">&lt;property name="repo.dir" value="./repo.directory" />
+&lt;property name="repo.url" value="https://bitbucket.org/spaetz/ceyx-mapcss" />
+&lt;resolvepath propertyName="repo.dir.resolved" file="${repo.dir}" />
+&lt;hgclone repository="${repo.url}" quiet="false" insecure="true" targetPath="${repo.dir.resolved}"/> </programlisting>
+        </sect2>
+    </sect1>
+    <sect1 role="taskdef" xml:id="HgCommitTask">
+        <title>HgCommitTask</title>
+        <para>Commit changes to a Mercurial repository.
+        This is available for PHP 5.4 and higher.</para>
+    <table>
+        <title>Attributes</title>
+        <tgroup cols="5">
+            <colspec colname="name" colnum="1" colwidth="1.5*"/>
+            <colspec colname="type" colnum="2" colwidth="0.8*"/>
+            <colspec colname="description" colnum="3" colwidth="3.5*"/>
+            <colspec colname="default" colnum="4" colwidth="0.8*"/>
+            <colspec colname="required" colnum="5" colwidth="1.2*"/>
+            <thead>
+                <row>
+                    <entry>Name</entry>
+                    <entry>Type</entry>
+                    <entry>Description</entry>
+                    <entry>Default</entry>
+                    <entry>Required</entry>
+                </row>
+            </thead>
+            <tbody>
+                <row>
+                    <entry><literal>message</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Commit message.</entry>
+                    <entry>n/a</entry>
+                    <entry>Yes</entry>
+                </row>
+                <row>
+                    <entry><literal>quiet</literal></entry>
+                    <entry><literal role="type">Boolean</literal></entry>
+                    <entry>Work silently unless an error occurs.</entry>
+                    <entry><literal>false</literal></entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>repository</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Path to Mercurial repository.</entry>
+                    <entry>n/a</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>user</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>User to record as the committer.</entry>
+                    <entry>n/a</entry>
+                    <entry>No</entry>
+                </row>
+            </tbody>
+        </tgroup>
+    </table>
+        <sect2>
+            <title>Example</title>
+            <programlisting language="xml">&lt;property name="repo.dir" value="./repo.directory" />
+&lt;resolvepath propertyName="repo.dir.resolved" file="${repo.dir}" />
+&lt;hgcommit message="[ci skip] Compress .js files." user="phingbot" repository="${repo.dir.resolved}"/> </programlisting>
+        </sect2>
+    </sect1>
+    <sect1 role="taskdef" xml:id="HgInitTask">
+        <title>HgInitTask</title>
+        <para>Create a new Mercurial repository.
+        This is available for PHP 5.4 and higher.</para>
+    <table>
+        <title>Attributes</title>
+        <tgroup cols="5">
+            <colspec colname="name" colnum="1" colwidth="1.5*"/>
+            <colspec colname="type" colnum="2" colwidth="0.8*"/>
+            <colspec colname="description" colnum="3" colwidth="3.5*"/>
+            <colspec colname="default" colnum="4" colwidth="0.8*"/>
+            <colspec colname="required" colnum="5" colwidth="1.2*"/>
+            <thead>
+                <row>
+                    <entry>Name</entry>
+                    <entry>Type</entry>
+                    <entry>Description</entry>
+                    <entry>Default</entry>
+                    <entry>Required</entry>
+                </row>
+            </thead>
+            <tbody>
+                <row>
+                    <entry><literal>insecure</literal></entry>
+                    <entry><literal role="type">Boolean</literal></entry>
+                    <entry>Do not verify server certificate.</entry>
+                    <entry>false</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>quiet</literal></entry>
+                    <entry><literal role="type">Boolean</literal></entry>
+                    <entry>Work silently unless an error occurs.</entry>
+                    <entry><literal>false</literal></entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>repository</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Path to Mercurial repository.</entry>
+                    <entry>n/a</entry>
+                    <entry>No</entry>
+                </row>
+            </tbody>
+        </tgroup>
+    </table>
+        <sect2>
+            <title>Example</title>
+            <programlisting language="xml">&lt;property name="repo.dir" value="./repo.directory" />
+&lt;resolvepath propertyName="repo.dir.resolved" file="${repo.dir}" />
+&lt;hginit repository="${repo.dir.resolved}"/> </programlisting>
+        </sect2>
+    </sect1>
+    <sect1 role="taskdef" xml:id="HgLogTask">
+        <title>HgLogTask</title>
+        <para>Show revision history of entire Mercurial repository or files, or limit to a number of revisions. Optionally store the history to a phing property.
+        This is available for PHP 5.4 and higher.</para>
+    <table>
+        <title>Attributes</title>
+        <tgroup cols="5">
+            <colspec colname="name" colnum="1" colwidth="1.5*"/>
+            <colspec colname="type" colnum="2" colwidth="0.8*"/>
+            <colspec colname="description" colnum="3" colwidth="3.5*"/>
+            <colspec colname="default" colnum="4" colwidth="0.8*"/>
+            <colspec colname="required" colnum="5" colwidth="1.2*"/>
+            <thead>
+                <row>
+                    <entry>Name</entry>
+                    <entry>Type</entry>
+                    <entry>Description</entry>
+                    <entry>Default</entry>
+                    <entry>Required</entry>
+                </row>
+            </thead>
+            <tbody>
+                <row>
+                    <entry><literal>format</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Display with template, e.g. "{rev}\n", "{branch}" etc.</entry>
+                    <entry>n/a</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>maxCount</literal></entry>
+                    <entry><literal role="type">Integer</literal></entry>
+                    <entry>Number of commits to show/limit.</entry>
+                    <entry>n/a</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>outputProperty</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Property name to set output value to from the execution.</entry>
+                    <entry>n/a</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>repository</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Path to Mercurial repository.</entry>
+                    <entry>n/a</entry>
+                    <entry>Yes</entry>
+                </row>
+                <row>
+                    <entry><literal>revision</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Show the specified revision or range.</entry>
+                    <entry>n/a</entry>
+                    <entry>Yes</entry>
+                </row>
+            </tbody>
+        </tgroup>
+    </table>
+        <sect2>
+            <title>Example</title>
+            <programlisting language="xml">&lt;property name="repo.dir" value="./repo.directory" />
+&lt;resolvepath propertyName="repo.dir.resolved" file="${repo.dir}" />
+&lt;hglog maxCount="1" format="{files}\n" outputproperty="hgfiles" repository="${repo.dir.resolved}"/> </programlisting>
+        </sect2>
+    </sect1>
+    <sect1 role="taskdef" xml:id="HgPullTask">
+        <title>HgPullTask</title>
+        <para>Pull changes from a specified Mercurial repository to a local one.
+        This is available for PHP 5.4 and higher.</para>
+        <table>
+            <title>Attributes</title>
+            <tgroup cols="5">
+                <colspec colname="name" colnum="1" colwidth="1.5*"/>
+                <colspec colname="type" colnum="2" colwidth="0.8*"/>
+                <colspec colname="description" colnum="3" colwidth="3.5*"/>
+                <colspec colname="default" colnum="4" colwidth="0.8*"/>
+                <colspec colname="required" colnum="5" colwidth="1.2*"/>
+                <thead>
+                    <row>
+                        <entry>Name</entry>
+                        <entry>Type</entry>
+                        <entry>Description</entry>
+                        <entry>Default</entry>
+                        <entry>Required</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry><literal>insecure</literal></entry>
+                        <entry><literal role="type">Boolean</literal></entry>
+                        <entry>Do not verify server certificate.</entry>
+                        <entry>false</entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>quiet</literal></entry>
+                        <entry><literal role="type">Boolean</literal></entry>
+                        <entry>Work silently unless an error occurs.</entry>
+                        <entry><literal>false</literal></entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>repository</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>Path to Mercurial repository.</entry>
+                        <entry>n/a</entry>
+                        <entry>No</entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <sect2>
+            <title>Example</title>
+            <programlisting language="xml">&lt;hgpull quiet="false" insecure="true" repository="${repo.dir}"/> </programlisting>
+        </sect2>
+    </sect1>
+    <sect1 role="taskdef" xml:id="HgPushTask">
+        <title>HgPushTask</title>
+        <para>Push changes from the local Mercurial repository to the specified destination.
+        This is available for PHP 5.4 and higher.</para>
+    <table>
+        <title>Attributes</title>
+        <tgroup cols="5">
+            <colspec colname="name" colnum="1" colwidth="1.5*"/>
+            <colspec colname="type" colnum="2" colwidth="0.8*"/>
+            <colspec colname="description" colnum="3" colwidth="3.5*"/>
+            <colspec colname="default" colnum="4" colwidth="0.8*"/>
+            <colspec colname="required" colnum="5" colwidth="1.2*"/>
+            <thead>
+                <row>
+                    <entry>Name</entry>
+                    <entry>Type</entry>
+                    <entry>Description</entry>
+                    <entry>Default</entry>
+                    <entry>Required</entry>
+                </row>
+            </thead>
+            <tbody>
+                <row>
+                    <entry><literal>insecure</literal></entry>
+                    <entry><literal role="type">Boolean</literal></entry>
+                    <entry>Do not verify server certificate.</entry>
+                    <entry>false</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>quiet</literal></entry>
+                    <entry><literal role="type">Boolean</literal></entry>
+                    <entry>Work silently unless an error occurs.</entry>
+                    <entry><literal>false</literal></entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>repository</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Path to Mercurial repository.</entry>
+                    <entry>n/a</entry>
+                    <entry>No</entry>
+                </row>
+            </tbody>
+        </tgroup>
+    </table>
+        <sect2>
+            <title>Example</title>
+            <programlisting language="xml">&lt;property name="repo.dir" value="./repo.directory" />
+&lt;hgpush haltonerror="true" repository="{repo.dir.resolved}"/> </programlisting>
+        </sect2>
+    </sect1>
+    <sect1 role="taskdef" xml:id="HgRevertTask">
+        <title>HgRevertTask</title>
+        <para>Revert files to their checkout state from the Mercurial repository.
+        This is available for PHP 5.4 and higher.</para>
+    <table>
+        <title>Attributes</title>
+        <tgroup cols="5">
+            <colspec colname="name" colnum="1" colwidth="1.5*"/>
+            <colspec colname="type" colnum="2" colwidth="0.8*"/>
+            <colspec colname="description" colnum="3" colwidth="3.5*"/>
+            <colspec colname="default" colnum="4" colwidth="0.8*"/>
+            <colspec colname="required" colnum="5" colwidth="1.2*"/>
+            <thead>
+                <row>
+                    <entry>Name</entry>
+                    <entry>Type</entry>
+                    <entry>Description</entry>
+                    <entry>Default</entry>
+                    <entry>Required</entry>
+                </row>
+            </thead>
+            <tbody>
+                <row>
+                    <entry><literal>all</literal></entry>
+                    <entry><literal role="type">Boolean</literal></entry>
+                    <entry>Revert all Changes when no other details are given.</entry>
+                    <entry>false</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>name</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Name of file to revert.</entry>
+                    <entry>n/a</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>quiet</literal></entry>
+                    <entry><literal role="type">Boolean</literal></entry>
+                    <entry>Work silently unless an error occurs.</entry>
+                    <entry><literal>false</literal></entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>revision</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Revision to revert to.</entry>
+                    <entry>n/a</entry>
+                    <entry>No</entry>
+                </row>
+            </tbody>
+        </tgroup>
+    </table>
+        <sect2>
+            <title>Example</title>
+            <programlisting language="xml">&lt;hgrevert all="true"/> </programlisting>
+        </sect2>
+    </sect1>
+    <sect1 role="taskdef" xml:id="HgTagTask">
+        <title>HgTagTask</title>
+        <para>Add a tag for the current or specified revision of the local Mercurial repository.
+        This is available for PHP 5.4 and higher.</para>
+    <table>
+        <title>Attributes</title>
+        <tgroup cols="5">
+            <colspec colname="name" colnum="1" colwidth="1.5*"/>
+            <colspec colname="type" colnum="2" colwidth="0.8*"/>
+            <colspec colname="description" colnum="3" colwidth="3.5*"/>
+            <colspec colname="default" colnum="4" colwidth="0.8*"/>
+            <colspec colname="required" colnum="5" colwidth="1.2*"/>
+            <thead>
+                <row>
+                    <entry>Name</entry>
+                    <entry>Type</entry>
+                    <entry>Description</entry>
+                    <entry>Default</entry>
+                    <entry>Required</entry>
+                </row>
+            </thead>
+            <tbody>
+                <row>
+                    <entry><literal>message</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Message to add/edit tag with.</entry>
+                    <entry>n/a</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>name</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Name of tag.</entry>
+                    <entry>n/a</entry>
+                    <entry>Yes</entry>
+                </row>
+                <row>
+                    <entry><literal>repository</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Path to Mercurial repository.</entry>
+                    <entry>n/a</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>revision</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Revision to tag.</entry>
+                    <entry>n/a</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>user</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>User to record as the committer.</entry>
+                    <entry>n/a</entry>
+                    <entry>No</entry>
+                </row>
+            </tbody>
+        </tgroup>
+    </table>
+        <sect2>
+            <title>Example</title>
+            <programlisting language="xml">&lt;hgtag user="phingbot" message="tagging new release" name="v0.1.2"/> </programlisting>
+        </sect2>
+    </sect1>
+    <sect1 role="taskdef" xml:id="HgUpdateTask">
+        <title>HgUpdateTask</title>
+        <para>Update the Mercurial repository's working directory or switch revisions.
+        This is available for PHP 5.4 and higher.</para>
+    <table>
+        <title>Attributes</title>
+        <tgroup cols="5">
+            <colspec colname="name" colnum="1" colwidth="1.5*"/>
+            <colspec colname="type" colnum="2" colwidth="0.8*"/>
+            <colspec colname="description" colnum="3" colwidth="3.5*"/>
+            <colspec colname="default" colnum="4" colwidth="0.8*"/>
+            <colspec colname="required" colnum="5" colwidth="1.2*"/>
+            <thead>
+                <row>
+                    <entry>Name</entry>
+                    <entry>Type</entry>
+                    <entry>Description</entry>
+                    <entry>Default</entry>
+                    <entry>Required</entry>
+                </row>
+            </thead>
+            <tbody>
+                <row>
+                    <entry><literal>branch</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>A specific branch to pull.</entry>
+                    <entry>n/a</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>clean</literal></entry>
+                    <entry><literal role="type">Boolean</literal></entry>
+                    <entry>Discard uncommitted changes.</entry>
+                    <entry>false</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>quiet</literal></entry>
+                    <entry><literal role="type">Boolean</literal></entry>
+                    <entry>Work silently unless an error occurs.</entry>
+                    <entry><literal>false</literal></entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>repository</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Path to Mercurial repository.</entry>
+                    <entry>n/a</entry>
+                    <entry>Yes</entry>
+                </row>
+            </tbody>
+        </tgroup>
+    </table>
+        <sect2>
+            <title>Example</title>
+            <programlisting language="xml">&lt;property name="repo.dir" value="./repo.directory" />
+&lt;hgupdate repository="${repo.dir.resolved}" branch="dev"/> </programlisting>
         </sect2>
     </sect1>
     <sect1 role="taskdef" xml:id="HttpGetTask">
@@ -3773,14 +4556,14 @@ Note that you can omit both startpoint and track attributes in this case
                                 <entry><literal role="type">String</literal></entry>
                                 <entry>Name of the key/property.</entry>
                                 <entry>n/a</entry>
-                                <entry>yes</entry>
+                                <entry>Yes</entry>
                             </row>
                             <row>
                                 <entry><literal>operation</literal></entry>
                                 <entry><literal role="type">String</literal></entry>
                                 <entry>The operation to perform on the existing value, which must be numeric. Possible values are "+" and "-", which add and subtract 1, respectively from the existing value. If the value doesn't already exist, the set is not performed, triggering an error.</entry>
                                 <entry>n/a</entry>
-                                <entry>No, if operation is specified.</entry>
+                                <entry>No</entry>
                             </row>
                             <row>
                                 <entry><literal>value</literal></entry>
@@ -4230,7 +5013,7 @@ Note that you can omit both startpoint and track attributes in this case
                         <entry><literal role="type">String</literal></entry>
                         <entry>Single file to perform check on.</entry>
                         <entry>n/a</entry>
-                        <entry>No</entry>
+                        <entry>No, unless no <literal>fileset</literal> elements are present</entry>
                     </row>
                     <row>
                         <entry><literal>haltOnError</literal></entry>
@@ -4260,6 +5043,13 @@ Note that you can omit both startpoint and track attributes in this case
                         <entry>n/a</entry>
                         <entry>No</entry>
                     </row>
+                    <row>
+                        <entry><literal>config</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>JSHint config path.</entry>
+                        <entry>n/a</entry>
+                        <entry>No</entry>
+                    </row>
                 </tbody>
             </tgroup>
         </table>
@@ -4276,6 +5066,14 @@ Note that you can omit both startpoint and track attributes in this case
                 &lt;exclude name="js-cache/**"/>
             &lt;/fileset>
         &lt;/jshint></programlisting>
+        </sect2>
+        <sect2 role="nestedtags">
+            <title>Supported Nested Tags</title>
+            <itemizedlist>
+                <listitem>
+                    <para><literal><link linkend="FileSet">fileset</link></literal></para>
+                </listitem>
+            </itemizedlist>
         </sect2>
     </sect1>
     <sect1 role="taskdef" xml:id="JslLintTask">
@@ -4317,7 +5115,7 @@ Note that you can omit both startpoint and track attributes in this case
                         <entry><literal role="type">String</literal></entry>
                         <entry>Path to source file</entry>
                         <entry>n/a</entry>
-                        <entry>No</entry>
+                        <entry>No, unless no <literal>fileset</literal> elements are present</entry>
                     </row>
                     <row>
                         <entry><literal>haltonfailure</literal></entry>
@@ -5628,54 +6426,6 @@ Note that you can omit both startpoint and track attributes in this case
         </sect2>
     </sect1>
 
-    <sect1 role="taskdef" xml:id="PackageAsPathTask">
-        <title>PackageAsPathTask</title>
-        <para>
-            Converts dot-notation packages to relative paths and stores
-            it in a property.</para>
-
-        <table>
-            <title>Attributes</title>
-            <tgroup cols="5">
-                <colspec colname="name" colnum="1" colwidth="1.5*"/>
-                <colspec colname="type" colnum="2" colwidth="0.8*"/>
-                <colspec colname="description" colnum="3" colwidth="3.5*"/>
-                <colspec colname="default" colnum="4" colwidth="0.8*"/>
-                <colspec colname="required" colnum="5" colwidth="1.2*"/>
-                <thead>
-                    <row>
-                        <entry>Name</entry>
-                        <entry>Type</entry>
-                        <entry>Description</entry>
-                        <entry>Default</entry>
-                        <entry>Required</entry>
-                    </row>
-                </thead>
-                <tbody>
-                    <row>
-                        <entry><literal>package</literal></entry>
-                        <entry><literal role="type">String</literal></entry>
-                        <entry>The package to convert.</entry>
-                        <entry>n/a</entry>
-                        <entry>Yes</entry>
-                    </row>
-                    <row>
-                        <entry><literal>name</literal></entry>
-                        <entry><literal role="type">String</literal></entry>
-                        <entry>The property to store the path in.</entry>
-                        <entry>n/a</entry>
-                        <entry>Yes</entry>
-                    </row>
-                </tbody>
-            </tgroup>
-        </table>
-        <sect2>
-            <title>Example</title>
-            <para>Sample build command:</para>
-            <programlisting language="xml">&lt;packageaspath package="phing.classes" name="path"/></programlisting>
-        </sect2>
-    </sect1>
-
     <sect1 role="taskdef" xml:id="NotifySendTask">
         <title>NotifySendTask</title>
         <para>This is a wrapper for notify-send, for displaying desktop notifications locally.</para>
@@ -5723,6 +6473,53 @@ Note that you can omit both startpoint and track attributes in this case
         </table>
     </sect1>
 
+    <sect1 role="taskdef" xml:id="PackageAsPathTask">
+        <title>PackageAsPathTask</title>
+        <para>
+            Converts dot-notation packages to relative paths and stores
+            it in a property.</para>
+
+        <table>
+            <title>Attributes</title>
+            <tgroup cols="5">
+                <colspec colname="name" colnum="1" colwidth="1.5*"/>
+                <colspec colname="type" colnum="2" colwidth="0.8*"/>
+                <colspec colname="description" colnum="3" colwidth="3.5*"/>
+                <colspec colname="default" colnum="4" colwidth="0.8*"/>
+                <colspec colname="required" colnum="5" colwidth="1.2*"/>
+                <thead>
+                    <row>
+                        <entry>Name</entry>
+                        <entry>Type</entry>
+                        <entry>Description</entry>
+                        <entry>Default</entry>
+                        <entry>Required</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry><literal>package</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>The package to convert.</entry>
+                        <entry>n/a</entry>
+                        <entry>Yes</entry>
+                    </row>
+                    <row>
+                        <entry><literal>name</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>The property to store the path in.</entry>
+                        <entry>n/a</entry>
+                        <entry>Yes</entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <sect2>
+            <title>Example</title>
+            <para>Sample build command:</para>
+            <programlisting language="xml">&lt;packageaspath package="phing.classes" name="path"/></programlisting>
+        </sect2>
+    </sect1>
     <sect1 role="taskdef" xml:id="ParallelTask">
         <title>ParallelTask</title>
         <para>Executes nested tasks in parallel.</para>
@@ -5900,6 +6697,77 @@ Note that you can omit both startpoint and track attributes in this case
                 folder.</para>
         </sect2>
     </sect1>
+    <sect1 role="taskdef" xml:id="PathToFileSetTask">
+        <title>PathToFileSetTask</title>
+        <para>Coverts a path to a fileset. This is useful if you have a path but need to use a fileset as input
+            in a phing task.</para>
+
+        <table>
+            <title>Attributes</title>
+            <tgroup cols="5">
+                <colspec colname="name" colnum="1" colwidth="1.5*"/>
+                <colspec colname="type" colnum="2" colwidth="0.8*"/>
+                <colspec colname="description" colnum="3" colwidth="3.5*"/>
+                <colspec colname="default" colnum="4" colwidth="0.8*"/>
+                <colspec colname="required" colnum="5" colwidth="1.2*"/>
+                <thead>
+                    <row>
+                        <entry>Name</entry>
+                        <entry>Type</entry>
+                        <entry>Description</entry>
+                        <entry>Default</entry>
+                        <entry>Required</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry><literal>dir</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>The root of the directory tree of this FileSet.</entry>
+                        <entry><literal>n/a</literal></entry>
+                        <entry>Yes</entry>
+                    </row>
+                    <row>
+                        <entry><literal>pathrefid</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>The reference to the path to convert from.</entry>
+                        <entry><literal>n/a</literal></entry>
+                        <entry>Yes</entry>
+                    </row>
+                    <row>
+                        <entry><literal>ignorenonrelative</literal></entry>
+                        <entry><literal role="type">Boolean</literal></entry>
+                        <entry>This boolean controls what will happen if any of the files in the path are not in the
+                            directory for the fileset. If this is "true" the files are ignored, if this is "false"
+                            a build exception is thrown. (Note: if files are not present no check is made).</entry>
+                        <entry>false</entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>name</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>This is the identifier of the fileset to create. This fileset will contain the files that
+                            are relative to the directory root. Any files that are not present will not be placed in the
+                            set.</entry>
+                        <entry>n/a</entry>
+                        <entry>Yes</entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <sect2>
+            <title>Examples</title>
+            <programlisting language="xml">&lt;path id="modified.sources.path" dir="C:\Path\to\phing\classes\phing\" />
+                &lt;pathtofileset name="modified.sources.fileset"
+                pathrefid="modified.sources.path"
+                dir="." />
+
+                &lt;copy todir="C:\Path\to\phing\docs\api">
+                &lt;mapper type="glob" from="*.php" to="*.php.bak" />
+                &lt;fileset refid="modified.sources.fileset" />
+                &lt;/copy></programlisting>
+        </sect2>
+    </sect1>
     <sect1 role="taskdef" xml:id="PDOSQLExecTask">
         <title>PDOSQLExecTask</title>
         <para> The <literal>PDOSQLExecTask</literal> executes SQL statements using PDO.</para>
@@ -6012,7 +6880,7 @@ Note that you can omit both startpoint and track attributes in this case
       &lt;/fileset>
 &lt;/pdosqlexec></programlisting>
 
-            <programlisting language="xml">&lt;pdosqlexec url="mysql:host=localhost;dbname=test" 
+            <programlisting language="xml">&lt;pdosqlexec url="mysql:host=localhost;dbname=test"
   userid="username" password="password">
   &lt;transaction src="path/to/sqlfile.sql"/>
   &lt;formatter type="plain" outfile="path/to/output.txt"/>
@@ -6255,7 +7123,7 @@ Note that you can omit both startpoint and track attributes in this case
         </table>
         <sect2>
             <title>Example</title>
-            <programlisting language="xml">&lt;pearpkg name="phing" dir="${build.src.dir}" 
+            <programlisting language="xml">&lt;pearpkg name="phing" dir="${build.src.dir}"
             destFile="${build.base.dir}/package.xml">
 &lt;fileset dir=".">
   &lt;include name="**"/>
@@ -7758,7 +8626,7 @@ Note that you can omit both startpoint and track attributes in this case
         </table>
         <sect2>
             <title>Examples</title>
-                <programlisting language="xml">&lt;target name="-measure-and-log" 
+                <programlisting language="xml">&lt;target name="-measure-and-log"
     description="Measures and logs the size of the project" hidden="true">
     &lt;tstamp>
     &lt;format property="check.date.time" pattern="%Y%m%d-%H%M%S" locale="en_US"/>
@@ -7772,7 +8640,7 @@ Note that you can omit both startpoint and track attributes in this case
     &lt;/phploc>
 &lt;/target></programlisting>
 <para>Checks the size of the project living in ${project.basedir} and writes the result as a txt report to ${project.basedir}/phploc-reports/${check.date.time}-report.txt.</para>
-<programlisting language="xml">&lt;target name="project-size-and-tests" 
+<programlisting language="xml">&lt;target name="project-size-and-tests"
 description="Measures the size of the project and count it's tests">
     &lt;phploc countTests="true">
     &lt;fileset dir=".">
@@ -8452,10 +9320,6 @@ description="Measures the size of the project and count it's tests">
             <emphasis role="bold">NB:</emphasis> if you have installed the
             PHPUnit PHAR, make sure you set the
             <literal>pharlocation</literal> attribute!</para>
-        <para>
-            <emphasis role="bold">NB:</emphasis> the identifiers <literal>phpunit2</literal>
-            (PHPUnit2Task) and <literal>phpunit3</literal> (PHPUnit3Task) have been deprecated! </para>
-
         <table>
             <title>Attributes</title>
             <tgroup cols="5">
@@ -8805,10 +9669,6 @@ description="Measures the size of the project and count it's tests">
     <sect1 role="taskdef" xml:id="PHPUnitReport">
         <title>PHPUnitReport</title>
         <para>This task transforms PHPUnit xml reports to HTML using XSLT.</para>
-        <para>
-            <emphasis role="bold">NB:</emphasis> the identifiers <literal>phpunit2report</literal>
-            (PHPUnit2Report) and <literal>phpunit3report</literal> (PHPUnit3Report)have been
-            deprecated! </para>
 
         <table>
             <title>Attributes</title>
@@ -8890,8 +9750,8 @@ description="Measures the size of the project and count it's tests">
                 listed under the "default" package.</para>
         </sect2>
     </sect1>
-    <sect1 role="taskdef" xml:id="RegexTask">
-        <title>RegexTask</title>
+    <sect1 role="taskdef" xml:id="PropertyRegexTask">
+        <title>PropertyRegexTask</title>
         <para> Performs regular expression operations on an subject string, and sets the results to a property.
             There are two different operations that can be performed:
             <itemizedlist>
@@ -9047,6 +9907,67 @@ description="Measures the size of the project and count it's tests">
     defaultvalue="test2"/>
 
 &lt;echo message="${pack.name}"/></programlisting>
+        </sect2>
+    </sect1>
+    <sect1 role="taskdef" xml:id="ReplaceRegexpTask">
+        <title>ReplaceRegexpTask</title>
+        <para>Replaces the occurrences of a given regular expression with a substitution pattern
+            in a selected file or set of files.</para>
+        <table>
+            <tgroup cols="5">
+                <colspec colname="name" colnum="1" colwidth="1.5*"/>
+                <colspec colname="type" colnum="2" colwidth="0.8*"/>
+                <colspec colname="description" colnum="3" colwidth="3.5*"/>
+                <colspec colname="default" colnum="4" colwidth="0.8*"/>
+                <colspec colname="required" colnum="5" colwidth="1.2*"/>
+                <thead>
+                    <row>
+                        <entry>Name</entry>
+                        <entry>Type</entry>
+                        <entry>Description</entry>
+                        <entry>Default</entry>
+                        <entry>Required</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry><literal>file</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>File to apply regular expression on</entry>
+                        <entry>n/a</entry>
+                        <entry>Yes (or <literal>fileset</literal>)</entry>
+                    </row>
+                    <row>
+                        <entry><literal>match</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>Regular expression match pattern</entry>
+                        <entry>n/a</entry>
+                        <entry>Yes (or <literal>pattern</literal>)</entry>
+                    </row>
+                    <row>
+                        <entry><literal>pattern</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>Regular expression match pattern</entry>
+                        <entry>n/a</entry>
+                        <entry>Yes</entry>
+                    </row>
+                    <row>
+                        <entry><literal>replace</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>The replacement string</entry>
+                        <entry>n/a</entry>
+                        <entry>Yes</entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <sect2 role="nestedtags">
+            <title>Supported Nested Tags</title>
+            <itemizedlist>
+                <listitem>
+                    <para><literal><link linkend="FileSet">fileset</link></literal></para>
+                </listitem>
+            </itemizedlist>
         </sect2>
     </sect1>
     <sect1 role="taskdef" xml:id="rSTTask">
@@ -9405,7 +10326,7 @@ description="Measures the size of the project and count it's tests">
         <sect2>
             <title>Example</title>
             <para>Uploading a file</para>
-            <programlisting language="xml">&lt;s3put source="/path/to/file.txt" object="file.txt" bucket="mybucket" 
+            <programlisting language="xml">&lt;s3put source="/path/to/file.txt" object="file.txt" bucket="mybucket"
 key="AmazonKey" secret="AmazonSecret" /></programlisting>
             <para>You can also define "bucket, key, secret" outside of the task call:</para>
             <programlisting language="xml">&lt;property name="amazon.key" value="my_key" />
@@ -9503,7 +10424,7 @@ key="AmazonKey" secret="AmazonSecret" /></programlisting>
         <sect2>
             <title>Example</title>
             <para>Downloading an object</para>
-            <programlisting language="xml">&lt;s3get object="file.txt" target="${project.basedir}" bucket="mybucket" 
+            <programlisting language="xml">&lt;s3get object="file.txt" target="${project.basedir}" bucket="mybucket"
 key="AmazonKey" secret="AmazonSecret" /></programlisting>
             <para>You can also define "bucket, key, secret" outside of the task call:</para>
             <programlisting language="xml">&lt;property name="amazon.key" value="my_key" />
@@ -9514,6 +10435,241 @@ key="AmazonKey" secret="AmazonSecret" /></programlisting>
         </sect2>
 
     </sect1>
+
+    <sect1 role="taskdef" xml:id="SassTask">
+        <title>SassTask</title>
+        <para>The <literal>SassTask</literal> converts SCSS or Sass files to CSS using either the
+        <link xlink:href="http://sass-lang.com/documentation/file.SASS_REFERENCE.html#using_sass" role="extern">'sass' gem</link>
+        or the <link xlink:href="http://leafo.github.io/scssphp/" role="extern">scssphp package</link>.</para>
+    <table>
+        <title>Attributes</title>
+        <tgroup cols="5">
+            <colspec colname="name" colnum="1" colwidth="1.5*"/>
+            <colspec colname="type" colnum="2" colwidth="0.8*"/>
+            <colspec colname="description" colnum="3" colwidth="3.5*"/>
+            <colspec colname="default" colnum="4" colwidth="0.8*"/>
+            <colspec colname="required" colnum="5" colwidth="1.2*"/>
+            <thead>
+                <row>
+                    <entry>Name</entry>
+                    <entry>Type</entry>
+                    <entry>Description</entry>
+                    <entry>Default</entry>
+                    <entry>Required</entry>
+                </row>
+            </thead>
+            <tbody>
+                <row>
+                    <entry><literal>check</literal></entry>
+                    <entry><literal role="type">Boolean</literal></entry>
+                    <entry>Whether to just check the syntax of the input files.</entry>
+                    <entry>False</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>compact</literal></entry>
+                    <entry><literal role="type">Boolean</literal></entry>
+                    <entry>Set the style to compact.</entry>
+                    <entry>False</entry>
+                    <entry>No</entry>
+                </row>
+
+                <row>
+                    <entry><literal>compressed</literal></entry>
+                    <entry><literal role="type">Boolean</literal></entry>
+                    <entry>Set the style to compressed.</entry>
+                    <entry>False</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>crunched</literal></entry>
+                    <entry><literal role="type">Boolean</literal></entry>
+                    <entry>Set the style to crunched. Supported by scssphp, not sass.</entry>
+                    <entry>False</entry>
+                    <entry>No</entry>
+                </row>
+
+                <row>
+                    <entry><literal>expand</literal></entry>
+                    <entry><literal role="type">Boolean</literal></entry>
+                    <entry>Set the style to expanded.</entry>
+                    <entry>False</entry>
+                    <entry>No</entry>
+                </row>
+
+                <row>
+                    <entry><literal>encoding</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Default encoding for input files. Supported by scssphp.</entry>
+                    <entry>utf-8</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>executable</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Location/name of the sass executable, if required.</entry>
+                    <entry>sass</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>extfilter</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Extension to filter against.</entry>
+                    <entry>n/a</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>failonerror</literal></entry>
+                    <entry><literal role="type">Boolean</literal></entry>
+                    <entry>Whether to fail/halt if an error occurs.</entry>
+                    <entry><literal>False</literal></entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>file</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Name of single file to process.</entry>
+                    <entry><literal>N/A</literal></entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>flags</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Additional flags to set for sass executable.</entry>
+                    <entry>n/a</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>input</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Name of single file to process. Synonym for file.</entry>
+                    <entry><literal>N/A</literal></entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>keepsubdirectories</literal></entry>
+                    <entry><literal role="type">Boolean</literal></entry>
+                    <entry>Whether to keep the directory structure when compiling.</entry>
+                    <entry>True</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>linenumbers</literal></entry>
+                    <entry><literal role="type">Boolean</literal></entry>
+                    <entry>Whether to annotate generated CSS with source file and line numbers.</entry>
+                    <entry>False</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>nested</literal></entry>
+                    <entry><literal role="type">Boolean</literal></entry>
+                    <entry>Set the style to expanded.</entry>
+                    <entry>true</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>newext</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Extension for newly created files.</entry>
+                    <entry>css</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>nocache</literal></entry>
+                    <entry><literal role="type">Boolean</literal></entry>
+                    <entry>Whether to cache parsed sass files.</entry>
+                    <entry>n/a</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>output</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Corresponding output file for 'file'/'input' parameter.
+If not specified and outputpath is, then the generated file is placed there, with the filename based on the input file.
+If neither is specified, then the generated file is placed into the directory that the input file is in.
+                    </entry>
+                    <entry><literal>N/A</literal></entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>outputpath</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Where to place the generated CSS files.</entry>
+                    <entry>n/a</entry>
+                    <entry>Yes</entry>
+                </row>
+                <row>
+                    <entry><literal>path</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Specify sass import path. e.g. --load-path ...</entry>
+                    <entry>n/a</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>removeoldext</literal></entry>
+                    <entry><literal role="type">Boolean</literal></entry>
+                    <entry>Whether to strip existing extension off the output filename.</entry>
+                    <entry>True</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>style</literal></entry>
+                    <entry><literal role="type">String</literal></entry>
+                    <entry>Name of style to output. Must be one of 'nested', 'compact', 'compressed', 'crunched' or 'expanded'. 'Helper' attributes may also be used. 'crunched' is supported by scssphp only.</entry>
+                    <entry>nested</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>trace</literal></entry>
+                    <entry><literal role="type">Boolean</literal></entry>
+                    <entry>Whether to show a full stack trace on error.</entry>
+                    <entry>False</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>unixnewlines</literal></entry>
+                    <entry><literal role="type">Boolean</literal></entry>
+                    <entry>Use Unix-style newlines in written files.</entry>
+                    <entry>True</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>useSass</literal></entry>
+                    <entry><literal role="type">Boolean</literal></entry>
+                    <entry>Whether to use the 'sass' command line tool. Takes precedence over scssphp if both are available and enabled.</entry>
+                    <entry>True</entry>
+                    <entry>No</entry>
+                </row>
+                <row>
+                    <entry><literal>useScssphp</literal></entry>
+                    <entry><literal role="type">Boolean</literal></entry>
+                    <entry>Whether to use the 'scssphp' PHP package.</entry>
+                    <entry>True</entry>
+                    <entry>No</entry>
+                </row>
+            </tbody>
+        </tgroup>
+    </table>
+    <para>The useSass and useScssphp attributes can be used to indicate which compiler should be used, which would be useful if both are available.
+    If both are available and enabled, then the 'sass' compiler is used rather than the scssphp library.
+    </para>
+        <sect2>
+            <title>Example</title>
+            <programlisting language="xml">
+&lt;sass style="compact" trace="yes" unixnewlines="yes" outputpath="${compiled.dir.resolved}">
+    &lt;fileset dir="."/>
+&lt;/sass></programlisting>
+        </sect2>
+        <sect2 role="nestedtags">
+            <title>Supported Nested Tags</title>
+            <itemizedlist>
+                <listitem>
+                    <para><literal><link linkend="FileSet">fileset</link></literal></para>
+                </listitem>
+            </itemizedlist>
+        </sect2>
+    </sect1>
+
     <sect1 role="taskdef" xml:id="ScpTask">
         <title>ScpTask</title>
         <para> The <literal>ScpTask</literal> copies files to and from a remote host using scp. This
@@ -9717,6 +10873,318 @@ host="webserver" todir="/www/htdocs/project/">
                     </table>
                 </listitem>
             </itemizedlist>
+        </sect2>
+    </sect1>
+    <sect1 role="taskdef" xml:id="SmartyTask">
+        <title>SmartyTask</title>
+        <para>A task for generating output by using Smarty.</para>
+
+        <table>
+            <title>Attributes</title>
+                <tgroup cols="5">
+                    <colspec colname="name" colnum="1" colwidth="1.5*"/>
+                    <colspec colname="type" colnum="2" colwidth="0.8*"/>
+                    <colspec colname="description" colnum="3" colwidth="3.5*"/>
+                    <colspec colname="default" colnum="4" colwidth="0.8*"/>
+                    <colspec colname="required" colnum="5" colwidth="1.2*"/>
+                    <thead>
+                        <row>
+                            <entry>Name</entry>
+                            <entry>Type</entry>
+                            <entry>Description</entry>
+                            <entry>Default</entry>
+                            <entry>Required</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry><literal>controlTemplate</literal></entry>
+                            <entry><literal role="type">String</literal></entry>
+                            <entry>The control template used to generate the output.</entry>
+                            <entry>none</entry>
+                            <entry>Yes</entry>
+                        </row>
+                        <row>
+                            <entry><literal>templatePath</literal></entry>
+                            <entry><literal role="type">String</literal></entry>
+                            <entry>The path where Smarty will look for templates.</entry>
+                            <entry>none</entry>
+                            <entry>Yes</entry>
+                        </row>
+                        <row>
+                            <entry><literal>outputDirectory</literal></entry>
+                            <entry><literal role="type">String</literal></entry>
+                            <entry>The output directory, will be created if it doesn't exist.</entry>
+                            <entry>none</entry>
+                            <entry>Yes</entry>
+                        </row>
+                        <row>
+                            <entry><literal>compilePath</literal></entry>
+                            <entry><literal role="type">String</literal></entry>
+                            <entry>The path Smarty uses as a "cache" for compiled templates.</entry>
+                            <entry>none</entry>
+                            <entry>No</entry>
+                        </row>
+                        <row>
+                            <entry><literal>forceCompile</literal></entry>
+                            <entry><literal role="type">Boolean</literal></entry>
+                            <entry>Whether Smarty should always recompile templates.</entry>
+                            <entry>false</entry>
+                            <entry>No</entry>
+                        </row>
+                        <row>
+                            <entry><literal>configPath</literal></entry>
+                            <entry><literal role="type">String</literal></entry>
+                            <entry>The path where Smarty will look for config files.</entry>
+                            <entry>none</entry>
+                            <entry>No</entry>
+                        </row>
+                        <row>
+                            <entry><literal>leftDelimiter</literal></entry>
+                            <entry><literal role="type">String</literal></entry>
+                            <entry>The template left delimiter.</entry>
+                            <entry>none</entry>
+                            <entry>No</entry>
+                        </row>
+                        <row>
+                            <entry><literal>rightDelimiter</literal></entry>
+                            <entry><literal role="type">String</literal></entry>
+                            <entry>The template right delimiter.</entry>
+                            <entry>none</entry>
+                            <entry>No</entry>
+                        </row>
+                        <row>
+                            <entry><literal>contextProperties</literal></entry>
+                            <entry><literal role="type">String</literal></entry>
+                            <entry>The path to a property file that will be fed into the initial template context.</entry>
+                            <entry>none</entry>
+                            <entry>No</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+        </table>
+    </sect1>
+    <sect1 role="taskdef" xml:id="SonarTask">
+        <title>SonarTask</title>
+        <para>This task runs <link xlink:href="http://www.sonarqube.org/" role="extern">SonarQube Scanner</link>, a
+            tool for code analysis and <emphasis>continuous inspection</emphasis>.</para>
+
+        <table>
+            <title>Attributes</title>
+            <tgroup cols="5">
+                <colspec colname="name" colnum="1" colwidth="1.5*"/>
+                <colspec colname="type" colnum="2" colwidth="0.8*"/>
+                <colspec colname="description" colnum="3" colwidth="3.5*"/>
+                <colspec colname="default" colnum="4" colwidth="0.8*"/>
+                <colspec colname="required" colnum="5" colwidth="1.2*"/>
+                <thead>
+                    <row>
+                        <entry>Name</entry>
+                        <entry>Type</entry>
+                        <entry>Description</entry>
+                        <entry>Default</entry>
+                        <entry>Required</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry><literal>executable</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>Fully-qualified path of SonarQube Scanner executable. If executable is in <emphasis>PATH</emphasis> environment variable, the executable name is sufficient.</entry>
+                        <entry>n/a</entry>
+                        <entry>Yes</entry>
+                    </row>
+                    <row>
+                        <entry><literal>configuration</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>Path of configuration file. The file format is that of a properties file (as used by Java), i.e. a list of key-value pairs <literal>&lt;key&gt;=&lt;value&gt;</literal>.</entry>
+                        <entry>n/a</entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>errors</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>Sets errors flag of SonarQube Scanner. Allowed values are "<literal>true</literal>", "<literal>false</literal>", "<literal>yes</literal>", "<literal>no</literal>", "<literal>1</literal>", and "<literal>0</literal>".</entry>
+                        <entry><literal role="type">false</literal></entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>debug</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>Sets debug flag of SonarQube Scanner. Allowed values are "<literal>true</literal>", "<literal>false</literal>", "<literal>yes</literal>", "<literal>no</literal>", "<literal>1</literal>", and "<literal>0</literal>".</entry>
+                        <entry><literal role="type">false</literal></entry>
+                        <entry>No</entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <sect2>
+            <title>Examples</title>
+                <sect3><title>Minimal Example</title>
+                    <para>This example assumes that the SonarQube Scanner is called <emphasis>sonarqube-scanner</emphasis> and is available on the <emphasis>PATH</emphasis>.</para>
+                    <programlisting language="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;project name="sonar-minimal-example" default="sonar"&gt;
+    &lt;taskdef name="sonar" classname="phing.tasks.ext.sonar.SonarTask" /&gt;
+
+    &lt;sonar executable="sonarqube-scanner"&gt;
+        &lt;property name="sonar.projectKey"     value="my-unique-project-key" /&gt;
+        &lt;property name="sonar.projectName"    value="Foo Project" /&gt;
+        &lt;property name="sonar.projectVersion" value="0.1.0" /&gt;
+        &lt;property name="sonar.sources"        value="src" /&gt;
+    &lt;/sonar&gt;
+&lt;/project&gt;</programlisting>
+                </sect3>
+                <sect3><title>Full Example</title>
+                    <para>This example consists of two files &#x2013; <emphasis>build.xml</emphasis> and <emphasis>sonar-project.properties</emphasis>.</para>
+                    <para>The <emphasis>build.xml</emphasis>:</para>
+                    <programlisting language="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;project name="sonar-full-example" default="sonar"&gt;
+    &lt;taskdef name="sonar" classname="phing.tasks.ext.sonar.SonarTask" /&gt;
+
+    &lt;sonar
+      executable="path/to/sonarqube-scanner"
+      errors="true"
+      debug="true"
+      configuration="path/to/sonar-project.properties"
+    &gt;
+        &lt;!-- Assume that mandatory SonarQube parameters are defined in configuration file! --&gt;
+        &lt;property name="sonar.log.level" value="DEBUG" /&gt;
+    &lt;/sonar&gt;
+&lt;/project&gt;</programlisting>
+                    <para>The configuration file <emphasis>path/to/sonar-project.properties</emphasis>:</para>
+                    <programlisting>sonar.projectKey     = my-unique-project-key
+sonar.projectName    = Foo Project
+sonar.projectVersion = 0.1.0
+sonar.sources        = src</programlisting>
+                </sect3>
+        </sect2>
+        <sect2 role="nestedtags">
+            <title>Supported Nested Tags</title>
+            <itemizedlist>
+                <listitem>
+                    <para><literal>property</literal>
+                    </para>
+					<para>Analysis parameters of SonarQube Scanner can be defined in a configuration file or via nested <literal>property</literal> elements. If both a configuration file and property elements are provided, the properties are merged. Values from <literal>property</literal> elements overwrite values from the configuration file if their property keys are equal.</para>
+
+                    <table>
+                        <title>Attributes</title>
+                        <tgroup cols="5">
+                            <colspec colname="name" colnum="1" colwidth="1.5*"/>
+                            <colspec colname="type" colnum="2" colwidth="0.8*"/>
+                            <colspec colname="description" colnum="3" colwidth="3.5*"/>
+                            <colspec colname="default" colnum="4" colwidth="0.8*"/>
+                            <colspec colname="required" colnum="5" colwidth="1.2*"/>
+                            <thead>
+                                <row>
+                                    <entry>Name</entry>
+                                    <entry>Type</entry>
+                                    <entry>Description</entry>
+                                    <entry>Default</entry>
+                                    <entry>Required</entry>
+                                </row>
+                            </thead>
+                            <tbody>
+                                <row>
+                                    <entry><literal>name</literal></entry>
+                                    <entry><literal role="type">String</literal></entry>
+                                    <entry>Name of property.</entry>
+                                    <entry>n/a</entry>
+                                    <entry>Yes</entry>
+                                </row>
+                                <row>
+                                    <entry><literal>value</literal></entry>
+                                    <entry><literal role="type">String</literal></entry>
+                                    <entry>Value of property.</entry>
+                                    <entry>n/a</entry>
+                                    <entry>Yes</entry>
+                                </row>
+                            </tbody>
+                        </tgroup>
+                    </table>
+                </listitem>
+            </itemizedlist>
+        </sect2>
+    </sect1>
+    <sect1 role="taskdef" xml:id="SortList">
+        <title>SortList</title>
+        <para>Sort a delimited list of items in their natural string order.
+            Note that the <literal>value</literal> and <literal>refid</literal>
+            attributes are mutually exclusive, and the value attribute takes
+            precedence if both are specified.
+        </para>
+        <table>
+            <title>Attributes</title>
+            <tgroup cols="5">
+                <colspec colname="name" colnum="1" colwidth="1.5*"/>
+                <colspec colname="type" colnum="2" colwidth="0.8*"/>
+                <colspec colname="description" colnum="3" colwidth="3.5*"/>
+                <colspec colname="default" colnum="4" colwidth="0.8*"/>
+                <colspec colname="required" colnum="5" colwidth="1.2*"/>
+                <thead>
+                    <row>
+                        <entry>Name</entry>
+                        <entry>Type</entry>
+                        <entry>Description</entry>
+                        <entry>Default</entry>
+                        <entry>Required</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry><literal>property</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>The name of the property to set.</entry>
+                        <entry>n/a</entry>
+                        <entry>Yes</entry>
+                    </row>
+                    <row>
+                        <entry><literal>overwrite</literal></entry>
+                        <entry><literal role="type">Boolean</literal></entry>
+                        <entry>If the property is already set, should we change it's value.</entry>
+                        <entry>false</entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>value</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>The list of values to process, with the delimiter character,
+                            indicated by the "delimiter" attribute, separating each value.</entry>
+                        <entry>n/a</entry>
+                        <entry>Yes, unless "refid" is specified.</entry>
+                    </row>
+                    <row>
+                        <entry><literal>refid</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>The id of where the list of values to sort is stored.</entry>
+                        <entry>n/a</entry>
+                        <entry>Yes, unless "value" is specified.</entry>
+                    </row>
+                    <row>
+                        <entry><literal>delimiter</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>The delimiter string that separates the values in the
+                            "list" attribute.</entry>
+                        <entry>,</entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>flags</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>Sort flags depending on the php version and one of:
+                            SORT_REGULAR, SORT_NUMERIC, SORT_STRING, SORT_LOCALE_STRING,
+                            SORT_NATURAL, SORT_FLAG_CASE</entry>
+                        <entry>n/a</entry>
+                        <entry>No</entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <sect2>
+            <title>Example</title>
+            <programlisting language="xml">&lt;property id="test" name="my.list" value="z;y;X;w;v;U;t" />
+                &lt;sortlist property="my.sorted.list" refid="test"
+                delimiter=";"
+                flags="SORT_NATURAL|SORT_FLAG_CASE" /></programlisting>
         </sect2>
     </sect1>
     <sect1 role="taskdef" xml:id="SshTask">
@@ -10632,10 +12100,10 @@ host="webserver" command="ls" /></programlisting>
         </table>
         <sect2>
             <title>Example</title>
-            <programlisting language="xml">&lt;svnlist svnpath="/usr/bin/svn" 
+            <programlisting language="xml">&lt;svnlist svnpath="/usr/bin/svn"
          workingcopy="/home/user/svnwc" propertyname="svn.list"/></programlisting>
-            <programlisting language="xml">&lt;svnlist svnpath="/usr/bin/svn" 
-         repositoryurl="http://svn.example.com/myrepo/tags" 
+            <programlisting language="xml">&lt;svnlist svnpath="/usr/bin/svn"
+         repositoryurl="http://svn.example.com/myrepo/tags"
          orderDescending="true" limit="10" /></programlisting>
             <para>The latter example could produce a list of your tags like this:</para>
             <programlisting language="xml">revision | author | date         | item
@@ -10724,9 +12192,9 @@ host="webserver" command="ls" /></programlisting>
         </table>
         <sect2>
             <title>Example</title>
-            <programlisting language="xml">&lt;svnlog svnpath="/usr/bin/svn" 
+            <programlisting language="xml">&lt;svnlog svnpath="/usr/bin/svn"
             workingcopy="/home/user/svnwc" propertyname="svn.log"/></programlisting>
-            <programlisting language="xml">&lt;svnlog svnpath="/usr/bin/svn" 
+            <programlisting language="xml">&lt;svnlog svnpath="/usr/bin/svn"
             repositoryurl="http://svn.example.com/myrepo/trunk" limit="10" /></programlisting>
             <para>The latter example could produce a history of the latest revisions in the
                 trunk:</para>
@@ -11039,6 +12507,20 @@ host="webserver" command="ls" /></programlisting>
                         <entry>true</entry>
                         <entry>No</entry>
                     </row>
+                    <row>
+                        <entry>propertyName</entry>
+                        <entry>String</entry>
+                        <entry>The name of the property to store the application output in</entry>
+                        <entry>n/a</entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry>checkReturn</entry>
+                        <entry>Boolean</entry>
+                        <entry>Whether to check the return code.</entry>
+                        <entry>false</entry>
+                        <entry>No</entry>
+                    </row>
                 </tbody>
             </tgroup>
         </table>
@@ -11145,6 +12627,13 @@ host="webserver" command="ls" /></programlisting>
                         <entry><literal role="type">Boolean</literal></entry>
                         <entry>Whether to override the symlink if it exists but points to a
                             different location</entry>
+                        <entry><literal>false</literal></entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>relative</literal></entry>
+                        <entry><literal role="type">Boolean</literal></entry>
+                        <entry>Whether to create relative symlinks</entry>
                         <entry><literal>false</literal></entry>
                         <entry>No</entry>
                     </row>
@@ -11505,6 +12994,108 @@ host="webserver" command="ls" /></programlisting>
             </itemizedlist>
         </sect2>
     </sect1>
+    <sect1 role="taskdef" xml:id="Variable">
+        <title>Variable</title>
+        <para> DESCRIPTION OF TASK.
+            The Variable task provides a mutable property to Phing and works much
+            like variable assignment in PHP. This task is similar to the standard
+            Phing Property task, except that THESE PROPERTIES ARE MUTABLE.
+            While this goes against the standard Phing use of properties,
+            occasionally it is useful to be able to change a property value within
+            the build. In general, use of this task is DISCOURAGED, and the standard
+            Phing Property should be used if possible. Having said that, in real
+            life I use this a lot.</para>
+        <para>
+            Variables can be set individually or loaded from a standard properties
+            file. A 'feature' of variables is that they can override properties,
+            but properties cannot override variables.
+            So if an already established property exists, its value can be reassigned
+            by use of this task.</para>
+        <table>
+            <title>Attributes</title>
+            <tgroup cols="5">
+                <colspec colname="name" colnum="1" colwidth="1.5*"/>
+                <colspec colname="type" colnum="2" colwidth="0.8*"/>
+                <colspec colname="description" colnum="3" colwidth="3.5*"/>
+                <colspec colname="default" colnum="4" colwidth="0.8*"/>
+                <colspec colname="required" colnum="5" colwidth="1.2*"/>
+                <thead>
+                    <row>
+                        <entry>Name</entry>
+                        <entry>Type</entry>
+                        <entry>Description</entry>
+                        <entry>Default</entry>
+                        <entry>Required</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry><literal>name</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>The name of the property to set.</entry>
+                        <entry>None</entry>
+                        <entry>Yes, unless 'file' is used.</entry>
+                    </row>
+                    <row>
+                        <entry><literal>value</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>The value of the property.</entry>
+                        <entry>""</entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>unset</literal></entry>
+                        <entry><literal role="type">Boolean</literal></entry>
+                        <entry>Removes the property from the project as if it had never been set.</entry>
+                        <entry>false</entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>file</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>The name of a standard properties file to load variables from.</entry>
+                        <entry>None</entry>
+                        <entry>No</entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <sect2>
+            <title>Example</title>
+            <programlisting language="xml">&lt;var name="x" value="6"/>
+&lt;echo>x = ${x}&lt;/echo>   &lt;!-- print: 6 -->
+
+&lt;var name="x" value="12"/>
+&lt;echo>x = ${x}&lt;/echo>   &lt;!-- print: 12 -->
+
+&lt;var name="x" value="6 + ${x}"/>
+&lt;echo>x = ${x}&lt;/echo>   &lt;!-- print: 6 + 12 -->
+
+&lt;var name="str" value="I "/>
+&lt;var name="str" value="${str} am "/>
+&lt;var name="str" value="${str} a "/>
+&lt;var name="str" value="${str} string."/>
+&lt;echo>${str}&lt;/echo>     &lt;!-- print: I am a string. -->
+
+&lt;var name="x" value="6"/>
+&lt;echo>x = ${x}&lt;/echo>   &lt;!-- print: 6 -->
+
+&lt;property name="x" value="12"/>
+&lt;echo>x = ${x}&lt;/echo>   &lt;!-- print: 6 (property can't override) -->
+
+&lt;var name="x" value="blue"/>
+&lt;tstamp>
+&lt;format property="x" pattern="%A"/>
+&lt;/tstamp>
+&lt;echo>Today is ${x}.&lt;/echo> &lt;!-- print: Today is blue. -->
+
+&lt;var name="x" value="" unset="true"/>
+&lt;tstamp>
+&lt;format property="x" pattern="%A"/>
+&lt;/tstamp>
+&lt;echo>Today is ${x}.&lt;/echo> &lt;!-- print: Today is Friday. --></programlisting>
+        </sect2>
+    </sect1>
     <sect1 role="taskdef" xml:id="VersionTask">
         <title>VersionTask</title>
         <para> The <literal>VersionTask</literal> increments a three-part version number from a
@@ -11541,15 +13132,29 @@ host="webserver" command="ls" /></programlisting>
                         <entry><literal>file</literal></entry>
                         <entry><literal role="type">String</literal></entry>
                         <entry>File containing three-part version number to increment</entry>
-                        <entry>n/a</entry>
-                        <entry>Yes</entry>
+                        <entry><literal>build.version</literal></entry>
+                        <entry>No</entry>
                     </row>
                     <row>
                         <entry><literal>property</literal></entry>
                         <entry><literal role="type">String</literal></entry>
                         <entry>Property which contains the resulting version number</entry>
-                        <entry>n/a</entry>
-                        <entry>Yes</entry>
+                        <entry><literal>build.version</literal></entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>propFile</literal></entry>
+                        <entry><literal role="type">Boolean</literal></entry>
+                        <entry>Set to true, if version should be saved as property file.</entry>
+                        <entry><literal>false</literal></entry>
+                        <entry>No</entry>
+                    </row>
+                    <row>
+                        <entry><literal>startingVersion</literal></entry>
+                        <entry><literal role="type">String</literal></entry>
+                        <entry>Starting version string, if version file does not exist.</entry>
+                        <entry><literal>0.0.0</literal></entry>
+                        <entry>No</entry>
                     </row>
                 </tbody>
             </tgroup>
@@ -11721,7 +13326,7 @@ host="webserver" command="ls" /></programlisting>
   &lt;include name="chapter*.xml"/>
   &lt;include name="appendix*.xml"/>
 &lt;/fileset>
-&lt;property name="docbook.relaxng" 
+&lt;property name="docbook.relaxng"
     value="/usr/share/xml/docbook/schema/rng/5.0/docbookxi.rng"/>
 
 &lt;xmllint schema="${docbook.relaxng}" useRNG="yes">
@@ -11914,9 +13519,6 @@ a2.a3.a4=false</programlisting>
   &lt;/fileset>
 &lt;/zendcodeanalyzer></programlisting>
             <para>Analyze a set of PHP source files and disable a few warnings.</para>
-            <para>
-                <emphasis role="bold">NOTE:</emphasis> the <literal>analyze</literal> tag has been
-                deprecated as of Phing 2.4.</para>
         </sect2>
         <sect2 role="nestedtags">
             <title>Supported Nested Tags</title>
@@ -12460,7 +14062,7 @@ a2.a3.a4=false</programlisting>
                     </row>
                     <row>
                         <entry><literal>lint</literal></entry>
-                        <entry><literal role="type">String</literal></entry>
+                        <entry><literal role="type">Boolean</literal></entry>
                         <entry>Performs a PHP lint test on the deployment scripts before creating the package.</entry>
                         <entry>false</entry>
                         <entry>No</entry>

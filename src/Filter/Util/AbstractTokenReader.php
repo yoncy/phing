@@ -69,5 +69,4 @@ abstract class AbstractTokenReader
      * @return string
      */
     abstract public function readToken();
-
 }

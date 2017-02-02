@@ -160,7 +160,7 @@ class PropertyPrompt extends Task
 
     /**
      * Returns text of the prompt.
-     * @return java.lang.String
+     * @return string
      */
     public function getPromptText()
     {

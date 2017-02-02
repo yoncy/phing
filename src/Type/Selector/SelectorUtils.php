@@ -41,7 +41,6 @@ use Phing\Util\StringHelper;
  */
 class SelectorUtils
 {
-
     private static $instance;
 
     /**
@@ -148,14 +147,14 @@ class SelectorUtils
         $rePattern = preg_quote($pattern, '/');
         $dirSep = preg_quote(DIRECTORY_SEPARATOR, '/');
         $trailingDirSep = '((' . $dirSep . ')?|(' . $dirSep . ').+)';
-        $patternReplacements = array(
+        $patternReplacements = [
             $dirSep . '\*\*' . $dirSep => $dirSep . '.*' . $trailingDirSep,
             $dirSep . '\*\*' => $trailingDirSep,
-            '\*\*' . $dirSep => '.*' . $trailingDirSep,
+            '\*\*' . $dirSep => '(.*' . $dirSep . ')?',
             '\*\*' => '.*',
             '\*' => '[^' . $dirSep . ']*',
             '\?' => '[^' . $dirSep . ']'
-        );
+        ];
         $rePattern = str_replace(array_keys($patternReplacements), array_values($patternReplacements), $rePattern);
         $rePattern = '/^' . $rePattern . '$/' . ($isCaseSensitive ? '' : 'i');
 
@@ -182,7 +181,7 @@ class SelectorUtils
     public static function match($pattern, $str, $isCaseSensitive = true)
     {
         $rePattern = preg_quote($pattern, '/');
-        $rePattern = str_replace(array("\*", "\?"), array('.*', '.'), $rePattern);
+        $rePattern = str_replace(["\*", "\?"], ['.*', '.'], $rePattern);
         $rePattern = '/^' . $rePattern . '$/' . ($isCaseSensitive ? '' : 'i');
 
         return (bool)preg_match($rePattern, $str);
@@ -215,5 +214,18 @@ class SelectorUtils
         }
 
         return false;
+    }
+
+    /**
+     * @param string $string
+     * @return string
+     */
+    public static function removeWhitespace($string)
+    {
+        return preg_replace(
+            "/(\t|\n|\v|\f|\r| |\xC2\x85|\xc2\xa0|\xe1\xa0\x8e|\xe2\x80[\x80-\x8D]|\xe2\x80\xa8|\xe2\x80\xa9|\xe2\x80\xaF|\xe2\x81\x9f|\xe2\x81\xa0|\xe3\x80\x80|\xef\xbb\xbf)+/",
+            '',
+            $string
+        );
     }
 }

@@ -50,10 +50,10 @@ class SizeSelector extends AbstractExtendSelector
     const WHEN_KEY = "when";
 
     /** @var array $sizeComparisons */
-    private static $sizeComparisons = array("less", "more", "equal");
+    private static $sizeComparisons = ["less", "more", "equal"];
 
     /** @var array $byteUnits */
-    private static $byteUnits = array(
+    private static $byteUnits = [
         "K",
         "k",
         "kilo",
@@ -91,7 +91,7 @@ class SizeSelector extends AbstractExtendSelector
         "ti",
         "tebi",
         "TEBI"
-    );
+    ];
 
     /**
      * @return string

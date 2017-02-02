@@ -30,7 +30,10 @@ use Phing\Type\Mapper;
  */
 abstract class ContainerMapper implements FileNameMapperInterface
 {
-    private $mappers = array();
+    /**
+     * @var Mapper[]
+     */
+    private $mappers = [];
 
     /**
      * Add a <code>Mapper</code>.
@@ -90,8 +93,8 @@ abstract class ContainerMapper implements FileNameMapperInterface
     }
 
     /**
-     * Get the <code>List</code> of <code>FileNameMapper</code>s.
-     * @return FileNameMapperInterface[]
+     * Get the <code>List</code> of <code>Mapper</code>s.
+     * @return Mapper[]
      */
     public function getMappers()
     {

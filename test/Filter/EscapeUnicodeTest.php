@@ -28,7 +28,6 @@ use Phing\Test\Helper\AbstractBuildFileTest;
  */
 class EscapeUnicodeTest extends AbstractBuildFileTest
 {
-
     protected $fu;
 
     public function setUp()

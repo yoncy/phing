@@ -44,7 +44,7 @@ class Register
 {
 
     /** Slots that have been registered */
-    private static $slots = array();
+    private static $slots = [];
 
     /**
      * Returns RegisterSlot for specified key.

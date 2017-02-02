@@ -17,7 +17,6 @@ class NotifySendTest extends AbstractBuildFileTest
     {
         $this->configureProject(PHING_TEST_BASE . "/etc/tasks/ext/NotifySendTaskTest.xml");
         $this->object = new NotifySend();
-
     }
 
     public function testEmptyMessage()
@@ -33,7 +32,6 @@ class NotifySendTest extends AbstractBuildFileTest
         $this->assertEquals("Test", $this->object->getTitle());
         $this->object->setTitle("Test Again");
         $this->assertEquals("Test Again", $this->object->getTitle());
-
     }
 
     public function testSettingMsg()

@@ -152,7 +152,6 @@ class ContainsRegexpSelector extends AbstractExtendSelector
      */
     public function isSelected(File $basedir, $filename, File $file)
     {
-
         $this->validate();
 
         if ($file->isDirectory()) {
@@ -189,5 +188,4 @@ class ContainsRegexpSelector extends AbstractExtendSelector
             throw new BuildException("Could not read file " . $filename);
         }
     }
-
 }

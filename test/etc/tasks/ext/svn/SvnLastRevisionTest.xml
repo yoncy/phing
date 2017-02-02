@@ -8,7 +8,7 @@
     </target>
 
     <target name="getLastRevision" description="Get the last revision of the
-    repository (should be 1560)">
+    repository (should be 3537)">
         <svnlastrevision
             lastChanged="true"
             repositoryurl="${repo.url}"

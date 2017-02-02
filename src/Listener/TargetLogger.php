@@ -36,7 +36,6 @@ use Phing\Project;
  */
 class TargetLogger extends AnsiColorLogger
 {
-
     private $targetName = null;
     private $targetStartTime;
 
@@ -62,6 +61,5 @@ class TargetLogger extends AnsiColorLogger
         $event->setMessage($msg, Project::MSG_INFO);
         $this->messageLogged($event);
         $this->targetName = null;
-
     }
 }

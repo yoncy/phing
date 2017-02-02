@@ -33,7 +33,6 @@ use Phing\Exception\BuildException;
  */
 class InputRequest
 {
-
     protected $prompt;
     protected $input;
     protected $defaultValue;

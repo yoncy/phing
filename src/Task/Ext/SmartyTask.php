@@ -23,6 +23,7 @@ namespace Phing\Task\Ext;
 
 use Exception;
 use Phing\Exception\BuildException;
+use Phing\Io\BufferedReader;
 use Phing\Io\File;
 use Phing\Io\FileReader;
 use Phing\Io\FileWriter;
@@ -64,7 +65,7 @@ class SmartyTask extends Task
      * Variables that are assigned to the context on parse/compile.
      * @var array
      */
-    protected $properties = array();
+    protected $properties = [];
 
     /**
      * This is the control template that governs the output.
@@ -75,7 +76,7 @@ class SmartyTask extends Task
     protected $controlTemplate;
 
     /**
-     * This is where Velocity will look for templates
+     * This is where Smarty will look for templates
      * using the file template loader.
      * @var string
      */
@@ -209,7 +210,7 @@ class SmartyTask extends Task
     }
 
     /**
-     * [REQUIRED] Set the path where Velocity will look
+     * [REQUIRED] Set the path where Smarty will look
      * for templates using the file template
      * loader.
      * @param $templatePath
@@ -238,7 +239,7 @@ class SmartyTask extends Task
     }
 
     /**
-     * Get the path where Velocity will look
+     * Get the path where Smarty will look
      * for templates using the file template
      * loader.
      * @return string
@@ -407,7 +408,6 @@ class SmartyTask extends Task
      */
     public function setContextProperties($file)
     {
-
         $sources = explode(",", $file);
         $this->contextProperties = new Properties();
 
@@ -427,14 +427,9 @@ class SmartyTask extends Task
                 $fullPath = $this->project->resolveFile($sources[$i]);
                 $this->log("Using contextProperties file: " . $fullPath->__toString());
                 $source->load($fullPath);
-
             } catch (Exception $e) {
-
-                throw new BuildException(
-                    "Context properties file " . $sources[$i] .
-                    " could not be found in the file system!"
-                );
-
+                throw new BuildException("Context properties file " . $sources[$i] .
+                    " could not be found in the file system!");
             }
 
             $keys = $source->keys();
@@ -477,11 +472,11 @@ class SmartyTask extends Task
     }
 
     /**
-     * Execute the input script with Velocity
+     * Execute the input script with Smarty
      *
      * @throws \Phing\Exception\BuildException
      *                        BuildExceptions are thrown when required attributes are missing.
-     *                        Exceptions thrown by Velocity are rethrown as BuildExceptions.
+     *                        Exceptions thrown by Smarty are rethrown as BuildExceptions.
      */
     public function main()
     {
@@ -509,7 +504,7 @@ class SmartyTask extends Task
         // Setup Smarty runtime.
 
         // Smarty uses one object to store properties and to store
-        // the context for the template (unlike Velocity).  We setup this object, calling it
+        // the context for the template (unlike Smarty).  We setup this object, calling it
         // $this->context, and then initControlContext simply zeros out
         // any assigned variables.
         //
@@ -586,9 +581,7 @@ class SmartyTask extends Task
         // control context so they are available
         // in the control/worker templates.
         if ($this->contextProperties !== null) {
-
             foreach ($this->contextProperties->keys() as $property) {
-
                 $value = $this->contextProperties->getProperty($property);
 
                 // Special exception (from Texen)
@@ -606,13 +599,12 @@ class SmartyTask extends Task
                     $f = new File($this->project->resolveFile($value)->getCanonicalPath());
                     if ($f->exists()) {
                         try {
-                            $fr = new FileReader($f);
-                            $fr->readInto($value);
+                            $br = new BufferedReader(new FileReader($f));
+                            $value = $br->read();
                         } catch (Exception $e) {
                             throw $e;
                         }
                     }
-
                 } // if ends with file.contents
 
                 if (StringHelper::isBoolean($value)) {
@@ -620,9 +612,7 @@ class SmartyTask extends Task
                 }
 
                 $c->assign($property, $value);
-
             } // foreach property
-
         } // if contextProperties !== null
 
         try {

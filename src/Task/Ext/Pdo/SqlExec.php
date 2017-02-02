@@ -31,6 +31,7 @@ use Phing\Io\File;
 use Phing\Io\IOException;
 use Phing\Io\LogWriter;
 use Phing\Project;
+use Phing\Task\Ext\Pdo\Transaction;
 use Phing\Type\FileList;
 use Phing\Type\FileSet;
 
@@ -91,21 +92,21 @@ class SqlExec extends AbstractPdoTask
 
     /**
      * Files to load
-     * @var array FileSet[]
+     * @var FileSet[]
      */
-    private $filesets = array();
+    private $filesets = [];
 
     /**
      * Files to load
-     * @var array FileList[]
+     * @var FileList[]
      */
-    private $filelists = array();
+    private $filelists = [];
 
     /**
      * Formatter elements.
-     * @var array PDOSQLExecFormatterElement[]
+     * @var FormatterElement[]
      */
-    private $formatters = array();
+    private $formatters = [];
 
     /**
      * SQL statement
@@ -128,7 +129,7 @@ class SqlExec extends AbstractPdoTask
     /**
      * SQL transactions to perform
      */
-    private $transactions = array();
+    private $transactions = [];
 
     /**
      * SQL Statement delimiter (for parsing files)
@@ -213,7 +214,7 @@ class SqlExec extends AbstractPdoTask
      */
     public function createTransaction()
     {
-        $t = new \Phing\Task\Ext\Pdo\Transaction($this);
+        $t = new Transaction($this);
         $this->transactions[] = $t;
 
         return $t;
@@ -222,8 +223,7 @@ class SqlExec extends AbstractPdoTask
     /**
      * Set the file encoding to use on the SQL files read in
      *
-     * @param the $encoding
-     * @internal param the $encoding encoding to use on the files
+     * @param string $encoding the encoding to use on the files
      */
     public function setEncoding($encoding)
     {
@@ -323,10 +323,10 @@ class SqlExec extends AbstractPdoTask
         // Initialize the formatters here.  This ensures that any parameters passed to the formatter
         // element get passed along to the actual formatter object
         foreach ($this->formatters as $fe) {
-            $fe->prepare();
+            $fe->prepare($this->getLocation());
         }
 
-        $savedTransaction = array();
+        $savedTransaction = [];
         for ($i = 0, $size = count($this->transactions); $i < $size; $i++) {
             $savedTransaction[] = clone $this->transactions[$i];
         }
@@ -343,12 +343,11 @@ class SqlExec extends AbstractPdoTask
                 throw new BuildException(
                     "Source file or fileset/filelist, "
                     . "transactions or sql statement "
-                    . "must be set!", $this->location
-                );
+                    . "must be set!", $this->getLocation());
             }
 
             if ($this->srcFile !== null && !$this->srcFile->exists()) {
-                throw new BuildException("Source file does not exist!", $this->location);
+                throw new BuildException("Source file does not exist!", $this->getLocation());
             }
 
             // deal with the filesets
@@ -383,7 +382,6 @@ class SqlExec extends AbstractPdoTask
             $this->conn = $this->getConnection();
 
             try {
-
                 $this->statement = null;
 
                 // Initialize the formatters.
@@ -415,7 +413,7 @@ class SqlExec extends AbstractPdoTask
                     }
                 }
                 $this->closeConnection();
-                throw new BuildException($e->getMessage(), $this->location);
+                throw new BuildException($e->getMessage(), $this->getLocation());
             } catch (PDOException $e) {
                 if (!$this->isAutocommit() && $this->conn !== null && $this->onError == "abort") {
                     try {
@@ -424,7 +422,7 @@ class SqlExec extends AbstractPdoTask
                     }
                 }
                 $this->closeConnection();
-                throw new BuildException($e->getMessage(), $this->location);
+                throw new BuildException($e->getMessage(), $this->getLocation());
             }
 
             // Close the formatters.
@@ -434,7 +432,6 @@ class SqlExec extends AbstractPdoTask
                 $this->goodSql . " of " . $this->totalSql .
                 " SQL statements executed successfully"
             );
-
         } catch (Exception $e) {
             $this->transactions = $savedTransaction;
             $this->sqlCommand = $savedSqlCommand;
@@ -454,7 +451,6 @@ class SqlExec extends AbstractPdoTask
      */
     public function runStatements(AbstractReader $reader)
     {
-
         if (self::DELIM_NONE == $this->delimiterType) {
             $splitter = new DummyQuerySplitter($this, $reader);
         } elseif (self::DELIM_NORMAL == $this->delimiterType && 0 === strpos($this->getUrl(), 'pgsql:')) {
@@ -468,7 +464,6 @@ class SqlExec extends AbstractPdoTask
                 $this->log("SQL: " . $query, Project::MSG_VERBOSE);
                 $this->execSQL($query);
             }
-
         } catch (PDOException $e) {
             throw $e;
         }
@@ -521,7 +516,6 @@ class SqlExec extends AbstractPdoTask
             $this->statement = null;
 
             $this->goodSql++;
-
         } catch (PDOException $e) {
             $this->log("Failed to execute: " . $sql, Project::MSG_ERR);
             if ($this->onError != "continue") {
@@ -539,7 +533,7 @@ class SqlExec extends AbstractPdoTask
      */
     protected function getConfiguredFormatters()
     {
-        $formatters = array();
+        $formatters = [];
         foreach ($this->formatters as $fe) {
             $formatters[] = $fe->getFormatter();
         }
@@ -556,7 +550,6 @@ class SqlExec extends AbstractPdoTask
         foreach ($formatters as $formatter) {
             $formatter->initialize();
         }
-
     }
 
     /**
@@ -577,9 +570,7 @@ class SqlExec extends AbstractPdoTask
      */
     protected function processResults()
     {
-
         try {
-
             $this->log("Processing new result set.", Project::MSG_VERBOSE);
 
             $formatters = $this->getConfiguredFormatters();
@@ -589,7 +580,6 @@ class SqlExec extends AbstractPdoTask
                     $formatter->processRow($row);
                 }
             }
-
         } catch (Exception $x) {
             $this->log("Error processing reults: " . $x->getMessage(), Project::MSG_ERR);
             foreach ($formatters as $formatter) {
@@ -597,7 +587,6 @@ class SqlExec extends AbstractPdoTask
             }
             throw $x;
         }
-
     }
 
     /**

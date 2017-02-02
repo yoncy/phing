@@ -81,7 +81,12 @@ class Crap4jResultFormatter extends AbstractResultFormatter
     {
         $coverage = $this->result->getCodeCoverage();
         if (!empty($coverage)) {
-            $crap = new PHP_CodeCoverage_Report_Crap4j();
+            if (class_exists('PHP_CodeCoverage_Report_Crap4j')) {
+                $crap = new PHP_CodeCoverage_Report_Crap4j();
+            } elseif (class_exists('\SebastianBergmann\CodeCoverage\Report\Crap4j')) {
+                $crapClass = '\SebastianBergmann\CodeCoverage\Report\Crap4j';
+                $crap = new $crapClass();
+            }
             $contents = $crap->process($coverage);
             if ($this->out) {
                 $this->out->write($contents);

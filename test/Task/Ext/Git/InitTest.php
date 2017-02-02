@@ -31,7 +31,6 @@ use Phing\Test\Helper\GitTestsHelper;
  */
 class InitTest extends AbstractBuildFileTest
 {
-
     public function setUp()
     {
         // the pear git package hardcodes the path to git to /usr/bin/git and will therefore
@@ -95,5 +94,4 @@ class InitTest extends AbstractBuildFileTest
             '"repository" is required parameter'
         );
     }
-
 }

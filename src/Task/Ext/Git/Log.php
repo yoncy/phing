@@ -77,13 +77,13 @@ class Log extends AbstractGitTask
      * <since> argument to git-log
      * @var string
      */
-    private $sinceCommit;
+    private $since;
 
     /**
      * <until> argument to git-log
      * @var string
      */
-    private $untilCommit = 'HEAD';
+    private $until;
 
     /**
      * <path> arguments to git-log
@@ -126,7 +126,10 @@ class Log extends AbstractGitTask
         if (null !== $this->getSince()) {
             $command->setOption('since', $this->getSince());
         }
-        $command->setOption('until', $this->getUntil());
+        
+        if (null !== $this->getUntil()) {
+            $command->setOption('until', $this->getUntil());
+        }
 
         $command->addDoubleDash(true);
         if (null !== $this->getPaths()) {
@@ -273,7 +276,7 @@ class Log extends AbstractGitTask
      */
     public function setSince($since)
     {
-        $this->sinceCommit = $since;
+        $this->since = $since;
     }
 
     /**
@@ -281,7 +284,7 @@ class Log extends AbstractGitTask
      */
     public function getSince()
     {
-        return $this->sinceCommit;
+        return $this->since;
     }
 
     /**
@@ -297,7 +300,7 @@ class Log extends AbstractGitTask
      */
     public function setUntil($until)
     {
-        $this->untilCommit = $until;
+        $this->until = $until;
     }
 
     /**
@@ -305,7 +308,7 @@ class Log extends AbstractGitTask
      */
     public function getUntil()
     {
-        return $this->untilCommit;
+        return $this->until;
     }
 
     /**
@@ -339,5 +342,4 @@ class Log extends AbstractGitTask
     {
         $this->outputProperty = $prop;
     }
-
 }

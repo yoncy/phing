@@ -39,14 +39,13 @@ use Phing\Util\DataStore;
  */
 class PhpLint extends Task
 {
-
     protected $file; // the source file (from xml attribute)
-    protected $filesets = array(); // all fileset objects assigned to this task
+    protected $filesets = []; // all fileset objects assigned to this task
 
     protected $errorProperty;
     protected $haltOnFailure = false;
     protected $hasErrors = false;
-    protected $badFiles = array();
+    protected $badFiles = [];
     protected $interpreter = ''; // php interpreter to use for linting
 
     protected $logLevel = Project::MSG_VERBOSE;
@@ -269,7 +268,7 @@ class PhpLint extends Task
             }
         }
 
-        $messages = array();
+        $messages = [];
         $errorCount = 0;
 
         exec($command . '"' . $file . '" 2>&1', $messages);
@@ -288,7 +287,7 @@ class PhpLint extends Task
                 $this->log($message, Project::MSG_ERR);
 
                 if (!isset($this->badFiles[$file])) {
-                    $this->badFiles[$file] = array();
+                    $this->badFiles[$file] = [];
                 }
 
                 array_push($this->badFiles[$file], $message);

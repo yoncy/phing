@@ -104,7 +104,6 @@ class PearPackageScannerTest extends AbstractBuildFileTest
                 'File does not exist: ' . $file . ' at ' . $fullpath
             );
         }
-
     }
 
     /**
@@ -161,9 +160,9 @@ class PearPackageScannerTest extends AbstractBuildFileTest
 
         $this->assertEquals(
             $arFiles,
-            array(
-                'Console/Table.php'
-            )
+            [
+                'Console' . DIRECTORY_SEPARATOR . 'Table.php'
+            ]
         );
     }
 
@@ -176,10 +175,6 @@ class PearPackageScannerTest extends AbstractBuildFileTest
      */
     public function testScanInstallAs()
     {
-        if (version_compare(PHP_VERSION, '5.3.0', '<')) {
-            return $this->markTestSkipped('Test works on PHP 5.3 only');
-        }
-
         $pkgInfoFile = __DIR__ . '/../../etc/types/'
             . 'packageInfo_Services_Linkback-0.2.0.ser.dat';
 
@@ -201,5 +196,4 @@ class PearPackageScannerTest extends AbstractBuildFileTest
             $arFiles
         );
     }
-
 }

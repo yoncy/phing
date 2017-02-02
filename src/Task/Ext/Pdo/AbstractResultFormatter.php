@@ -71,7 +71,6 @@ abstract class AbstractResultFormatter
      */
     public function initialize()
     {
-
     }
 
     /**

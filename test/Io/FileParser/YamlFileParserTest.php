@@ -55,7 +55,7 @@ class YamlFileParserTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         if (!class_exists('\Symfony\Component\Yaml\Parser')) {
-            $this->markTestSkipped('Yaml is not installed.');
+            $this->markTestSkipped('Yaml parser is not installed.');
             exit;
         }
         $this->yamlFileStub = PHING_TEST_BASE . "/etc/system/io/config.yml";

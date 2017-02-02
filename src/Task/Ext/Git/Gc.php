@@ -182,5 +182,4 @@ class Gc extends AbstractGitTask
     {
         $this->prune = $date;
     }
-
 }

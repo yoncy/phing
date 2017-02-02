@@ -27,7 +27,6 @@ use Phing\Test\Helper\AbstractBuildFileTest;
 
 class MkdirTest extends AbstractBuildFileTest
 {
-
     public function setUp()
     {
         $this->configureProject(PHING_TEST_BASE . "/etc/tasks/system/MkdirTest.xml");

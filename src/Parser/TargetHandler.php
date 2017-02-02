@@ -55,6 +55,11 @@ class TargetHandler extends AbstractHandler
     private $configurator;
 
     /**
+     * @var PhingXMLContext
+     */
+    private $context;
+
+    /**
      * Constructs a new TargetHandler
      *
      * @param AbstractSaxParser $parser
@@ -124,7 +129,7 @@ class TargetHandler extends AbstractHandler
                     $id = (string)$value;
                     break;
                 case "hidden":
-                    $isHidden = ($value == 'true' || $value == '1') ? true : false;
+                    $isHidden = ($value === 'true' || $value === '1') ? true : false;
                     break;
                 case "description":
                     $description = (string)$value;
@@ -202,15 +207,11 @@ class TargetHandler extends AbstractHandler
      * Checks for nested tags within the current one. Creates and calls
      * handlers respectively.
      *
-     * @param  string  the tag that comes in
-     * @param  array   attributes the tag carries
+     * @param  string $name the tag that comes in
+     * @param  array  $attrs  attributes the tag carries
      */
     public function startElement($name, $attrs)
     {
-        // shorthands
-        $project = $this->configurator->project;
-        $types = $project->getDataTypeDefinitions();
-
         $tmp = new ElementHandler($this->parser, $this, $this->configurator, null, null, $this->target);
         $tmp->init($name, $attrs);
     }

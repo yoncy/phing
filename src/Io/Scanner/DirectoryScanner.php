@@ -20,6 +20,7 @@
  */
 namespace Phing\Io\Scanner;
 
+use Phing\Type\Selector\FileSelectorInterface;
 use Phing\Util\StringHelper;
 use Phing\Io\File;
 use Phing\Type\Selector\SelectorUtils;
@@ -121,7 +122,7 @@ class DirectoryScanner implements SelectorScannerInterface
 {
 
     /** default set of excludes */
-    protected $DEFAULTEXCLUDES = array(
+    protected $DEFAULTEXCLUDES = [
         "**/*~",
         "**/#*#",
         "**/.#*",
@@ -143,18 +144,38 @@ class DirectoryScanner implements SelectorScannerInterface
         "**/.gitattributes",
         "**/.gitignore",
         "**/.gitmodules",
-    );
+        "**/.hg",
+        "**/.hg/**",
+        "**/.hgignore",
+        "**/.hgsub",
+        "**/.hgsubstate",
+        "**/.hgtags",
+        "**/.bzr",
+        "**/.bzr/**",
+        "**/.bzrignore",
+    ];
 
-    /** The base directory which should be scanned. */
+    /**
+     * The base directory which should be scanned.
+     * @var string
+     */
     protected $basedir;
 
-    /** The patterns for the files that should be included. */
+    /**
+     * The patterns for the files that should be included.
+     * @var string[]
+     */
     protected $includes = null;
 
-    /** The patterns for the files that should be excluded. */
+    /** The patterns for the files that should be excluded.
+     * @var string[]
+     */
     protected $excludes = null;
 
-    /** Whether to expand/dereference symbolic links, default is false */
+    /**
+     * Whether to expand/dereference symbolic links, default is false
+     * @var bool
+     */
     protected $expandSymbolicLinks = false;
 
     /**
@@ -193,7 +214,7 @@ class DirectoryScanner implements SelectorScannerInterface
     /** Should the file system be treated as a case sensitive one? */
     protected $isCaseSensitive = true;
 
-    /** Selectors */
+    /** @var FileSelectorInterface[] Selectors */
     protected $selectors = null;
 
     protected $filesDeselected;
@@ -211,12 +232,9 @@ class DirectoryScanner implements SelectorScannerInterface
      *
      * pattern=**\a and str=b will yield true.
      *
-     * @param string $pattern
-     * @param string $str
-     * @param bool $isCaseSensitive
-     * @internal param the $pattern pattern to match against
-     * @internal param the $str string (path) to match
-     * @internal param must $isCaseSensitive matches be case sensitive?
+     * @param string $pattern the pattern to match against
+     * @param string $str the string (path) to match
+     * @param bool $isCaseSensitive must matches be case sensitive?
      * @return boolean true if matches, otherwise false
      */
     public function matchPatternStart($pattern, $str, $isCaseSensitive = true)
@@ -262,7 +280,7 @@ class DirectoryScanner implements SelectorScannerInterface
      * Sets the basedir for scanning. This is the directory that is scanned
      * recursively.
      *
-     * @param basedir the (non-null) basedir for scanning
+     * @param string $_basedir the (non-null) basedir for scanning
      */
     public function setBasedir($_basedir)
     {
@@ -297,10 +315,9 @@ class DirectoryScanner implements SelectorScannerInterface
      *
      * When a pattern ends with a '/' or '\', "**" is appended.
      *
-     * @param array $_includes
-     * @internal param list $includes of include patterns
+     * @param array $_includes list of include patterns
      */
-    public function setIncludes($patterns = array())
+    public function setIncludes($patterns = [])
     {
         $this->includes = null;
         $this->appendPatterns($this->includes, $patterns);
@@ -313,11 +330,9 @@ class DirectoryScanner implements SelectorScannerInterface
      *
      * When a pattern ends with a '/' or '\', "**" is appended.
      *
-     * @param array $_excludes
-     * @internal param list $excludes of exclude patterns
+     * @param array $_excludes list of exclude patterns
      */
-
-    public function setExcludes($patterns = array())
+    public function setExcludes($patterns = [])
     {
         $this->excludes = null;
         $this->appendPatterns($this->excludes, $patterns);
@@ -340,27 +355,26 @@ class DirectoryScanner implements SelectorScannerInterface
      */
     public function scan()
     {
-
         if ((empty($this->basedir)) || (!@is_dir($this->basedir))) {
             return false;
         }
 
         if ($this->includes === null) {
             // No includes supplied, so set it to 'matches all'
-            $this->includes = array("**");
+            $this->includes = ["**"];
         }
         if (is_null($this->excludes)) {
-            $this->excludes = array();
+            $this->excludes = [];
         }
 
-        $this->filesIncluded = array();
-        $this->filesNotIncluded = array();
-        $this->filesExcluded = array();
-        $this->dirsIncluded = array();
-        $this->dirsNotIncluded = array();
-        $this->dirsExcluded = array();
-        $this->dirsDeselected = array();
-        $this->filesDeselected = array();
+        $this->filesIncluded = [];
+        $this->filesNotIncluded = [];
+        $this->filesExcluded = [];
+        $this->dirsIncluded = [];
+        $this->dirsNotIncluded = [];
+        $this->dirsExcluded = [];
+        $this->dirsDeselected = [];
+        $this->filesDeselected = [];
 
         if ($this->isIncluded("")) {
             if (!$this->isExcluded("")) {
@@ -388,7 +402,6 @@ class DirectoryScanner implements SelectorScannerInterface
      */
     protected function slowScan()
     {
-
         if ($this->haveSlowResults) {
             return;
         }
@@ -413,18 +426,17 @@ class DirectoryScanner implements SelectorScannerInterface
     }
 
     /**
-     * Lists contens of a given directory and returns array with entries
+     * Lists contents of a given directory and returns array with entries
      *
-     * @param   src String. Source path and name file to copy.
+     * @param string $_dir directory to list contents for
      *
      * @return array directory entries
      * @author  Albert Lash, alash@plateauinnovation.com
      */
-
     public function listDir($_dir)
     {
         $d = dir($_dir);
-        $list = array();
+        $list = [];
         while (($entry = $d->read()) !== false) {
             if ($entry != "." && $entry != "..") {
                 $list[] = $entry;
@@ -441,12 +453,10 @@ class DirectoryScanner implements SelectorScannerInterface
      * matching of includes and excludes. When a directory is found, it is
      * scanned recursively.
      *
-     * @param $_rootdir
-     * @param $_vpath
-     * @param $_fast
-     * @internal param the $dir directory to scan
-     * @internal param the $vpath path relative to the basedir (needed to prevent
-     *              problems with an absolute path when using dir)
+     * @param string $_rootdir the directory to scan
+     * @param string $_vpath the path relative to the basedir (needed to prevent
+     *                       problems with an absolute path when using dir)
+     * @param bool $_fast
      *
      * @see #filesIncluded
      * @see #filesNotIncluded
@@ -457,7 +467,6 @@ class DirectoryScanner implements SelectorScannerInterface
      */
     private function scandir($_rootdir, $_vpath, $_fast)
     {
-
         if (!is_readable($_rootdir)) {
             return;
         }
@@ -465,7 +474,6 @@ class DirectoryScanner implements SelectorScannerInterface
         $newfiles = self::listDir($_rootdir);
 
         for ($i = 0, $_i = count($newfiles); $i < $_i; $i++) {
-
             $file = $_rootdir . DIRECTORY_SEPARATOR . $newfiles[$i];
             $name = $_vpath . $newfiles[$i];
 
@@ -520,7 +528,6 @@ class DirectoryScanner implements SelectorScannerInterface
                     if (!$_fast) {
                         $this->scandir($file, $name . DIRECTORY_SEPARATOR, $_fast);
                     }
-
                 } elseif (@is_file($file)) {
                     if ($this->isIncluded($name)) {
                         if (!$this->isExcluded($name)) {
@@ -546,8 +553,7 @@ class DirectoryScanner implements SelectorScannerInterface
     /**
      * Tests whether a name matches against at least one include pattern.
      *
-     * @param $_name
-     * @internal param the $name name to match
+     * @param string $_name the name to match
      * @return bool <code>true</code> when the name matches against at least one
      */
     protected function isIncluded($_name)
@@ -609,7 +615,7 @@ class DirectoryScanner implements SelectorScannerInterface
      * patterns, and matched none of the exclude patterns.
      * The names are relative to the basedir.
      *
-     * @return the names of the files
+     * @return array names of the files
      */
     public function getIncludedFiles()
     {
@@ -620,7 +626,7 @@ class DirectoryScanner implements SelectorScannerInterface
      * Get the names of the files that matched at none of the include patterns.
      * The names are relative to the basedir.
      *
-     * @return the names of the files
+     * @return array the names of the files
      */
     public function getNotIncludedFiles()
     {
@@ -634,7 +640,7 @@ class DirectoryScanner implements SelectorScannerInterface
      * patterns, an matched also at least one of the exclude patterns.
      * The names are relative to the basedir.
      *
-     * @return the names of the files
+     * @return array the names of the files
      */
 
     public function getExcludedFiles()
@@ -651,7 +657,7 @@ class DirectoryScanner implements SelectorScannerInterface
      * <p>The names are relative to the base directory. This involves
      * performing a slow scan if one has not already been completed.</p>
      *
-     * @return the names of the files which were deselected.
+     * @return array the names of the files which were deselected.
      *
      * @see #slowScan
      */
@@ -667,7 +673,7 @@ class DirectoryScanner implements SelectorScannerInterface
      * patterns, an matched none of the exclude patterns.
      * The names are relative to the basedir.
      *
-     * @return the names of the directories
+     * @return array the names of the directories
      */
 
     public function getIncludedDirectories()
@@ -680,7 +686,7 @@ class DirectoryScanner implements SelectorScannerInterface
      * patterns.
      * The names are relative to the basedir.
      *
-     * @return the names of the directories
+     * @return array the names of the directories
      */
     public function getNotIncludedDirectories()
     {
@@ -696,7 +702,7 @@ class DirectoryScanner implements SelectorScannerInterface
      * <p>The names are relative to the base directory. This involves
      * performing a slow scan if one has not already been completed.</p>
      *
-     * @return the names of the directories which were deselected.
+     * @return array the names of the directories which were deselected.
      *
      * @see #slowScan
      */
@@ -712,7 +718,7 @@ class DirectoryScanner implements SelectorScannerInterface
      * patterns, an matched also at least one of the exclude patterns.
      * The names are relative to the basedir.
      *
-     * @return the names of the directories
+     * @return array the names of the directories
      */
     public function getExcludedDirectories()
     {
@@ -733,8 +739,7 @@ class DirectoryScanner implements SelectorScannerInterface
     /**
      * Sets the selectors that will select the filelist.
      *
-     * @param specifies $selectors
-     * @internal param specifies $selectors the selectors to be invoked on a scan
+     * @param array $selectors the selectors to be invoked on a scan
      */
     public function setSelectors($selectors)
     {
@@ -785,7 +790,7 @@ class DirectoryScanner implements SelectorScannerInterface
      *
      * @param string $p The path to normalize
      *
-     * @return The normalized path
+     * @return string The normalized path
      */
     protected function normalizePath($p)
     {
@@ -821,5 +826,4 @@ class DirectoryScanner implements SelectorScannerInterface
             $where = array_merge($where, $this->normalizePatterns($what));
         }
     }
-
 }

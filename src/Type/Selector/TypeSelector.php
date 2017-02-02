@@ -35,14 +35,13 @@ use Phing\Project;
  */
 class TypeSelector extends AbstractExtendSelector
 {
-
     private $type;
 
     /** Key to used for parameterized custom selector */
     const TYPE_KEY = "type";
 
     /** Valid types */
-    private static $types = array('file', 'dir', 'link');
+    private static $types = ['file', 'dir', 'link'];
 
     /**
      * @return string A string describing this object
@@ -131,5 +130,4 @@ class TypeSelector extends AbstractExtendSelector
             return $this->type === 'file';
         }
     }
-
 }

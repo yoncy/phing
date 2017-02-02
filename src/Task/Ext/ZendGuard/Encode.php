@@ -41,8 +41,7 @@ class Encode extends AbstractMatching
     /**
      * @var FileSet[]
      */
-    protected $filesets = array();
-
+    protected $filesets = [];
     protected $encodeCommand;
 
     /**
@@ -517,7 +516,6 @@ class Encode extends AbstractMatching
         $command .= " ";
 
         $this->encodeCommand = $command;
-
     }
 
     /**
@@ -540,5 +538,4 @@ class Encode extends AbstractMatching
 
         return true;
     }
-
 }

@@ -55,9 +55,6 @@ class PharDataTaskTest extends AbstractBuildFileTest
         $this->expectBuildException(__FUNCTION__, 'basedir attribute must be set');
     }
 
-    /**
-     * @requires PHP 5.3.2
-     */
     public function testGenerateTar()
     {
         $this->executeTarget(__FUNCTION__);
@@ -65,9 +62,6 @@ class PharDataTaskTest extends AbstractBuildFileTest
         $this->assertNotFalse($manifestFile);
     }
 
-    /**
-     * @requires PHP 5.3.2
-     */
     public function testGenerateTarGz()
     {
         $this->executeTarget(__FUNCTION__);
@@ -75,9 +69,6 @@ class PharDataTaskTest extends AbstractBuildFileTest
         $this->assertNotFalse($manifestFile);
     }
 
-    /**
-     * @requires PHP 5.3.2
-     */
     public function testGenerateTarBz2()
     {
         $this->executeTarget(__FUNCTION__);
@@ -85,9 +76,6 @@ class PharDataTaskTest extends AbstractBuildFileTest
         $this->assertNotFalse($manifestFile);
     }
 
-    /**
-     * @requires PHP 5.3.2
-     */
     public function testGenerateZip()
     {
         $this->executeTarget(__FUNCTION__);
@@ -95,9 +83,6 @@ class PharDataTaskTest extends AbstractBuildFileTest
         $this->assertNotFalse($manifestFile);
     }
 
-    /**
-     * @requires PHP 5.3.2
-     */
     public function testGenerateZipGz()
     {
         $this->executeTarget(__FUNCTION__);
@@ -105,9 +90,6 @@ class PharDataTaskTest extends AbstractBuildFileTest
         $this->assertNotFalse($manifestFile);
     }
 
-    /**
-     * @requires PHP 5.3.2
-     */
     public function testGenerateZipBz2()
     {
         $this->executeTarget(__FUNCTION__);

@@ -123,13 +123,13 @@ class Pull extends AbstractGitTask
      * Valid merge strategies
      * @var array
      */
-    private $validStrategies = array(
+    private $validStrategies = [
         'octopus',
         'ours',
         'recursive',
         'resolve',
         'subtree'
-    );
+    ];
 
     /**
      * The main entry point for the task
@@ -207,7 +207,6 @@ class Pull extends AbstractGitTask
 
         $this->log('git-pull: complete', Project::MSG_INFO);
         $this->log('git-pull output: ' . trim($output), Project::MSG_INFO);
-
     }
 
     /**
@@ -489,5 +488,4 @@ class Pull extends AbstractGitTask
     {
         return $this->getForce();
     }
-
 }

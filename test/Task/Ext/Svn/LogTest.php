@@ -38,7 +38,7 @@ class LogTest extends AbstractSvnTest
         $this->executeTarget('getLog');
         $this->assertPropertyEquals(
             'svn.log',
-            "1560 | michiel.rook  | 2012-04-06T18:33:25.000000Z  | Update changelog for maintenance release\n"
+            "3537 | michiel.rook  | 2012-04-06T18:33:25.000000Z  | Update changelog for maintenance release\n"
         );
     }
 }

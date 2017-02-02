@@ -12,9 +12,9 @@ use Phing\Type\CommandLine;
  */
 class CommandLineArgument
 {
-
-    private $parts = array();
+    private $parts = [];
     private $outer;
+    public $escape = false;
 
     /**
      * @param CommandLine $outer
@@ -22,6 +22,14 @@ class CommandLineArgument
     public function __construct(CommandLine $outer)
     {
         $this->outer = $outer;
+    }
+
+    /**
+     * @param bool $escape
+     */
+    public function setEscape($escape)
+    {
+        $this->escape = $escape;
     }
 
     /**

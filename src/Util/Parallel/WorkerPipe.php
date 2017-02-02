@@ -93,11 +93,11 @@ class WorkerPipe
         fwrite(
             $pipe,
             serialize(
-                array(
+                [
                     $this->worker->getResult(),
                     $this->worker->getError(),
                     $this->worker->getReturnCode()
-                )
+                ]
             )
         );
         fclose($pipe);
@@ -112,13 +112,12 @@ class WorkerPipe
     {
         $pipe = @fopen($this->path, 'r+');
 
-        if (!$pipe) {
-            $arguments = $this->worker->getArguments();
-            return array(
+        if (! $pipe) {
+            return [
                 '',
                 'Worker died unexpectedly',
                 255
-            );
+            ];
         }
 
         $result = unserialize(fread($pipe, filesize($this->path)));

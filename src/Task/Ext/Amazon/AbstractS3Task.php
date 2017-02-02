@@ -26,7 +26,6 @@ use Services_Amazon_S3;
 use Services_Amazon_S3_Resource_Bucket;
 use Services_Amazon_S3_Resource_Object;
 
-
 /**
  * Abstract Service_Amazon_S3 class.
  *

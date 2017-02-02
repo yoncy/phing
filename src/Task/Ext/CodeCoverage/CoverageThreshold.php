@@ -356,7 +356,7 @@ class CoverageThreshold extends Task
                 $classStatementsCovered = count(
                     array_filter(
                         $coverageInformation,
-                        array($this, 'filterCovered')
+                        [$this, 'filterCovered']
                     )
                 );
 

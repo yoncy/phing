@@ -23,6 +23,7 @@
 namespace Phing\Type\Selector;
 
 use Exception;
+use Phing\Exception\BuildException;
 use Phing\Io\File;
 use Phing\Phing;
 use Phing\Type\Parameter;
@@ -40,10 +41,9 @@ use Phing\Type\Parameter;
  */
 class ExtendSelector extends AbstractSelector
 {
-
     private $classname;
     private $dynselector;
-    private $parameters = array();
+    private $parameters = [];
 
     /**
      * Sets the classname of the custom selector.
@@ -125,12 +125,11 @@ class ExtendSelector extends AbstractSelector
      * @param File $basedir
      * @param string $filename The filename
      * @param File $file
-     * @return \whether
-     * @throws \Phing\Exception\BuildException
+     * @return bool
+     * @throws BuildException
      */
     public function isSelected(File $basedir, $filename, File $file)
     {
-
         $this->validate();
 
         if (count($this->parameters) > 0 && $this->dynselector instanceof ExtendFileSelectorInterface) {
@@ -140,5 +139,4 @@ class ExtendSelector extends AbstractSelector
 
         return $this->dynselector->isSelected($basedir, $filename, $file);
     }
-
 }

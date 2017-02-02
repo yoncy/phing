@@ -77,7 +77,7 @@ class VersionCompare implements ConditionInterface
      */
     public function setOperator($operator)
     {
-        $allowed = array('<', 'lt', '<=', 'le', '>', 'gt', '>=', 'ge', '==', '=', 'eq', '!=', '<>', 'ne');
+        $allowed = ['<', 'lt', '<=', 'le', '>', 'gt', '>=', 'ge', '==', '=', 'eq', '!=', '<>', 'ne'];
         if (!in_array($operator, $allowed)) { // allowed operators for php's version_comapare()
             throw new BuildException(
                 sprintf(

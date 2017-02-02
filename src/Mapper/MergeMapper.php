@@ -53,7 +53,7 @@ class MergeMapper implements FileNameMapperInterface
             throw new BuildException("MergeMapper error, to attribute not set");
         }
 
-        return array($this->mergedFile);
+        return [$this->mergedFile];
     }
 
     /**
@@ -75,5 +75,4 @@ class MergeMapper implements FileNameMapperInterface
     public function setFrom($from)
     {
     }
-
 }

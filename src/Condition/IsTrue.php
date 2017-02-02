@@ -44,7 +44,7 @@ class IsTrue extends AbstractProjectComponent implements ConditionInterface
      */
     public function setValue($value)
     {
-        $this->value = $value;
+        $this->value = (bool) $value;
     }
 
     /**
@@ -59,5 +59,4 @@ class IsTrue extends AbstractProjectComponent implements ConditionInterface
 
         return $this->value;
     }
-
 }

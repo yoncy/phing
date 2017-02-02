@@ -71,7 +71,7 @@ use Phing\Type\Reference;
  */
 class Path extends DataType
 {
-    private $elements = array();
+    private $elements = [];
 
     /**
      * Constructor for internally instantiated objects sets project.
@@ -278,12 +278,12 @@ class Path extends DataType
     {
         if (!$this->checked) {
             // make sure we don't have a circular reference here
-            $stk = array();
+            $stk = [];
             array_push($stk, $this);
             $this->dieOnCircularReference($stk, $this->project);
         }
 
-        $result = array();
+        $result = [];
         for ($i = 0, $elSize = count($this->elements); $i < $elSize; $i++) {
             $o = $this->elements[$i];
             if ($o instanceof Reference) {
@@ -327,6 +327,15 @@ class Path extends DataType
                     $d = new File($dir, $dstr);
                     $result[] = $d->getAbsolutePath();
                 }
+            } elseif ($o instanceof FileSet) {
+                $fs = $o;
+                $ds = $fs->getDirectoryScanner($this->getProject());
+                $filestrs = $ds->getIncludedFiles();
+                $dir = $fs->getDir($this->getProject());
+                foreach ($filestrs as $fstr) {
+                    $d = new PhingFile($dir, $fstr);
+                    $result[] = $d->getAbsolutePath();
+                }
             } elseif ($o instanceof FileList) {
                 $fl = $o;
                 $dirstrs = $fl->getFiles($this->project);
@@ -350,7 +359,6 @@ class Path extends DataType
      */
     public function __toString()
     {
-
         $list = $this->listPaths();
 
         // empty path return empty string
@@ -371,7 +379,7 @@ class Path extends DataType
      */
     public static function translatePath(Project $project, $source)
     {
-        $result = array();
+        $result = [];
         if ($source == null) {
             return "";
         }
@@ -478,14 +486,12 @@ class Path extends DataType
      */
     public function dieOnCircularReference(&$stk, Project $p)
     {
-
         if ($this->checked) {
             return;
         }
 
         // elements can contain strings, FileSets, Reference, etc.
         foreach ($this->elements as $o) {
-
             if ($o instanceof Reference) {
                 $o = $o->getReferencedObject($p);
             }

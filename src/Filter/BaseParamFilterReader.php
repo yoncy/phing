@@ -39,7 +39,7 @@ class BaseParamFilterReader extends BaseFilterReader implements ParameterizableI
      *
      * @var array $_parameters
      */
-    protected $_parameters = array();
+    protected $_parameters = [];
 
     /**
      * Sets the parameters used by this filter, and sets

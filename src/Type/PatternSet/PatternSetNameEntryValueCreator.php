@@ -24,7 +24,6 @@ use Phing\Type\PatternSet;
 
 class PatternSetNameEntryValueCreator extends PatternSet\PatternSetNameEntryCreatorBase
 {
-
     public function apply()
     {
         foreach (explode(",", $this->name) as $n) {

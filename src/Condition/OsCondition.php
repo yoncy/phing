@@ -35,7 +35,6 @@ use Phing\Util\StringHelper;
  */
 class OsCondition implements ConditionInterface
 {
-
     private $family;
 
     /**
@@ -73,5 +72,4 @@ class OsCondition implements ConditionInterface
 
         return false;
     }
-
 }

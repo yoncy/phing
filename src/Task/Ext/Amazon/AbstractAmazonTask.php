@@ -47,7 +47,7 @@ abstract class AbstractAmazonTask extends Task
      *
      * @var array
      */
-    protected $_options = array();
+    protected $_options = [];
 
     /**
      * @param $var

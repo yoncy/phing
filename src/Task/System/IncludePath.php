@@ -115,7 +115,7 @@ class IncludePath extends Task
      */
     public function setMode($mode)
     {
-        if (!in_array($mode, array('append', 'prepend', 'replace'))) {
+        if (!in_array($mode, ['append', 'prepend', 'replace'])) {
             throw new BuildException("Illegal mode: needs to be either append, prepend or replace");
         }
 
@@ -150,7 +150,7 @@ class IncludePath extends Task
      */
     private function updateIncludePath($new_parts, $curr_parts)
     {
-        $includePath = array();
+        $includePath = [];
         $verb = "";
 
         switch ($this->mode) {

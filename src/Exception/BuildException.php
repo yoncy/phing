@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  *  $Id$
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
@@ -23,6 +23,7 @@ namespace Phing\Exception;
 
 use Phing\Parser\Location;
 use Exception;
+use RuntimeException;
 
 /**
  * BuildException is for when things go wrong in a build execution.
@@ -31,7 +32,7 @@ use Exception;
  * @version  $Id$
  * @package  phing
  */
-class BuildException extends Exception
+class BuildException extends RuntimeException
 {
 
     /**
@@ -59,9 +60,8 @@ class BuildException extends Exception
      * @param Location|Exception|null $p2
      * @param \Phing\Parser\Location|null $p3
      */
-    public function __construct($p1, $p2 = null, $p3 = null)
+    public function __construct($p1 = "", $p2 = null, $p3 = null)
     {
-
         $cause = null;
         $loc = null;
         $msg = "";
@@ -131,5 +131,4 @@ class BuildException extends Exception
         $this->location = $loc;
         $this->message = $loc->toString() . ': ' . $this->message;
     }
-
 }

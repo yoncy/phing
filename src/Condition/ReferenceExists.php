@@ -33,7 +33,6 @@ use Phing\UnknownElement;
  */
 class ReferenceExists extends AbstractProjectComponent implements ConditionInterface
 {
-
     private $refid;
 
     /**
@@ -60,5 +59,4 @@ class ReferenceExists extends AbstractProjectComponent implements ConditionInter
 
         return !($refs[$this->refid] instanceof UnknownElement) && isset($refs[$this->refid]);
     }
-
 }

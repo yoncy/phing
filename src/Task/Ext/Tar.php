@@ -44,23 +44,24 @@ use Phing\Type\TarFileSet;
  */
 class Tar extends AbstractMatching
 {
-
     const TAR_NAMELEN = 100;
 
     const WARN = "warn";
     const FAIL = "fail";
     const OMIT = "omit";
 
+    /** @var File */
     private $tarFile;
+
+    /** @var File */
     private $baseDir;
+
     private $includeEmpty = true; // Whether to include empty dirs in the TAR
 
     private $longFileMode = "warn";
 
-    /**
-     * @var TarFileSet
-     */
-    private $filesets = array();
+    /** @var TarFileSet[] */
+    private $filesets = [];
 
     /**
      * Indicates whether the user has been warned about long files already.
@@ -275,7 +276,7 @@ class Tar extends AbstractMatching
                     );
                 }
                 $fsBasedir = $fs->getDir($this->project);
-                $filesToTar = array();
+                $filesToTar = [];
                 for ($i = 0, $fcount = count($files); $i < $fcount; $i++) {
                     $f = new File($fsBasedir, $files[$i]);
                     $filesToTar[] = $f->getAbsolutePath();
@@ -287,8 +288,6 @@ class Tar extends AbstractMatching
                     throw new BuildException($tar->error_object->getMessage());
                 }
             }
-
-
         } catch (IOException $ioe) {
             $msg = "Problem creating TAR: " . $ioe->getMessage();
             $this->filesets = $savedFileSets;
@@ -314,7 +313,7 @@ class Tar extends AbstractMatching
     }
 
     /**
-     * @return array
+     * @return bool
      * @throws BuildException
      */
     private function isArchiveUpToDate()

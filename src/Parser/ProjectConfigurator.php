@@ -47,6 +47,7 @@ use Phing\Io\File;
  */
 class ProjectConfigurator
 {
+    const PARSING_CONTEXT_REFERENCE = "phing.parsing.context";
 
     public $project;
     public $locator;
@@ -163,18 +164,18 @@ class ProjectConfigurator
      * Creates the ExpatParser, sets root handler and kick off parsing
      * process.
      *
-     * @throws \Phing\Exception\BuildException if there is any kind of execption during
+     * @throws BuildException if there is any kind of exception during
      *                        the parsing process
      */
     protected function parse()
     {
         try {
             // get parse context
-            $ctx = $this->project->getReference("phing.parsing.context");
+            $ctx = $this->project->getReference(self::PARSING_CONTEXT_REFERENCE);
             if (null == $ctx) {
                 // make a new context and register it with project
                 $ctx = new XmlContext($this->project);
-                $this->project->addReference("phing.parsing.context", $ctx);
+                $this->project->addReference(self::PARSING_CONTEXT_REFERENCE, $ctx);
             }
 
             //record this parse with context
@@ -187,7 +188,7 @@ class ProjectConfigurator
                 $newCurrent = new Target();
                 $newCurrent->setProject($this->project);
                 $newCurrent->setName('');
-                $ctx->setCurrentTargets(array());
+                $ctx->setCurrentTargets([]);
                 $ctx->setImplicitTarget($newCurrent);
 
                 // this is an imported file
@@ -199,11 +200,10 @@ class ProjectConfigurator
                 $ctx->setImplicitTarget($currentImplicit);
                 $ctx->setCurrentTargets($currentTargets);
             } else {
-                $ctx->setCurrentTargets(array());
+                $ctx->setCurrentTargets([]);
                 $this->_parse($ctx);
                 $ctx->getImplicitTarget()->main();
             }
-
         } catch (Exception $exc) {
             //throw new BuildException("Error reading project file", $exc);
             throw $exc;
@@ -257,7 +257,6 @@ class ProjectConfigurator
      */
     public static function configure($target, $attrs, Project $project)
     {
-
         if ($target instanceof TaskAdapter) {
             $target = $target->getProxy();
         }
@@ -328,8 +327,8 @@ class ProjectConfigurator
      * Scan Attributes for the id attribute and maybe add a reference to
      * project.
      *
-     * @param object the element's object
-     * @param array  the element's attributes
+     * @param object $target the element's object
+     * @param array  $attr the element's attributes
      */
     public function configureId($target, $attr)
     {

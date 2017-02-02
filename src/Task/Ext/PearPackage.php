@@ -100,24 +100,24 @@ class PearPackage extends AbstractMatching
     private $packageFile;
 
     /** @var array FileSet[] */
-    private $filesets = array();
+    private $filesets = [];
 
     /** @var PEAR_PackageFileManager */
     protected $pkg;
 
-    private $preparedOptions = array();
+    private $preparedOptions = [];
 
     /** @var array PearPkgOption[] */
-    protected $options = array();
+    protected $options = [];
 
     /** Nested <mapping> (complex options) types. */
-    protected $mappings = array();
+    protected $mappings = [];
 
     /**
      * Nested <role> elements
      * @var \Phing\Task\Ext\PearPackage\PearPkgRole[]
      */
-    protected $roles = array();
+    protected $roles = [];
 
     public function init()
     {
@@ -155,7 +155,7 @@ class PearPackage extends AbstractMatching
                 );
             }
             $this->preparedOptions['filelistgenerator'] = 'Fileset';
-            $this->preparedOptions['usergeneratordir'] = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'pearpackage';
+            $this->preparedOptions['usergeneratordir'] = __DIR__ . DIRECTORY_SEPARATOR . 'pearpackage';
             // Some PHING-specific options needed by our Fileset reader
             $this->preparedOptions['phing_project'] = $this->project;
             $this->preparedOptions['phing_filesets'] = $this->filesets;
@@ -171,7 +171,7 @@ class PearPackage extends AbstractMatching
         // validation & return errors
         $e = $this->pkg->setOptions($this->preparedOptions);
 
-        if (PEAR::isError($e)) {
+        if (@PEAR::isError($e)) {
             throw new BuildException("Unable to set options.", new Exception($e->getMessage()));
         }
 
@@ -244,7 +244,6 @@ class PearPackage extends AbstractMatching
      */
     public function main()
     {
-
         if ($this->dir === null) {
             throw new BuildException("You must specify the \"dir\" attribute for PEAR package task.");
         }
@@ -258,10 +257,9 @@ class PearPackage extends AbstractMatching
         $this->setOptions();
 
         $e = $this->pkg->writePackageFile();
-        if (PEAR::isError($e)) {
+        if (@PEAR::isError($e)) {
             throw new BuildException("Unable to write package file.", new Exception($e->getMessage()));
         }
-
     }
 
     /**

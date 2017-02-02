@@ -68,7 +68,6 @@ class DummyQuerySplitter extends AbstractQuerySplitter
             if (StringHelper::endsWith($delimiter, $line)) {
                 break;
             }
-
         }
 
         return $sql;

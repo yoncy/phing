@@ -78,7 +78,7 @@ class ForeachTask extends Task
     private $callee;
 
     /** Array of filesets */
-    private $filesets = array();
+    private $filesets = [];
 
     /** Instance of mapper **/
     private $mapperElement;
@@ -87,7 +87,7 @@ class ForeachTask extends Task
      * Array of filelists
      * @var array
      */
-    private $filelists = array();
+    private $filelists = [];
 
     /**
      * Target to execute.
@@ -175,7 +175,7 @@ class ForeachTask extends Task
         foreach ($this->filelists as $fl) {
             $srcFiles = $fl->getFiles($this->project);
 
-            $this->process($callee, $fl->getDir($this->project), $srcFiles, array());
+            $this->process($callee, $fl->getDir($this->project), $srcFiles, []);
         }
 
         // filesets
@@ -351,7 +351,7 @@ class ForeachTask extends Task
     public function createMapper()
     {
         if ($this->mapperElement !== null) {
-            throw new BuildException("Cannot define more than one mapper", $this->location);
+            throw new BuildException("Cannot define more than one mapper", $this->getLocation());
         }
         $this->mapperElement = new Mapper($this->project);
 
@@ -359,7 +359,7 @@ class ForeachTask extends Task
     }
 
     /**
-     * @return Property
+     * @return SonarProperty
      */
     public function createProperty()
     {

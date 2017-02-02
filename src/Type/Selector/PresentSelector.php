@@ -41,7 +41,7 @@ class PresentSelector extends AbstractSelector
     private $mapperElement = null;
     private $map = null;
     private $destmustexist = true;
-    private static $filePresence = array("srconly", "both");
+    private static $filePresence = ["srconly", "both"];
 
     /**
      * @return string
@@ -157,7 +157,6 @@ class PresentSelector extends AbstractSelector
      */
     public function isSelected(File $basedir, $filename, File $file)
     {
-
         $this->validate();
 
         // Determine file whose existence is to be checked

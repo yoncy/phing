@@ -37,15 +37,13 @@ use Phing\Type\FileSet;
  */
 class Chown extends Task
 {
-
     private $file;
 
     private $user;
     private $group;
 
-    private $filesets = array();
-
-    private $filesystem;
+    /** @var AbstractFileSet[] */
+    private $filesets = [];
 
     private $quiet = false;
     private $failonerror = true;
@@ -139,7 +137,6 @@ class Chown extends Task
      */
     private function checkParams()
     {
-
         if ($this->file === null && empty($this->filesets)) {
             throw new BuildException("Specify at least one source - a file or a fileset.");
         }
@@ -177,7 +174,6 @@ class Chown extends Task
 
         // filesets
         foreach ($this->filesets as $fs) {
-
             $ds = $fs->getDirectoryScanner($this->project);
             $fromDir = $fs->getDir($this->project);
 
@@ -201,7 +197,6 @@ class Chown extends Task
             $this->log('Total files changed to ' . $user . ($group ? "." . $group : "") . ': ' . $total_files);
             $this->log('Total directories changed to ' . $user . ($group ? "." . $group : "") . ': ' . $total_dirs);
         }
-
     }
 
     /**
@@ -240,5 +235,4 @@ class Chown extends Task
             }
         }
     }
-
 }

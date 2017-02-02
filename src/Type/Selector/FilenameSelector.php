@@ -33,7 +33,6 @@ use Phing\Util\StringHelper;
  */
 class FilenameSelector extends AbstractExtendSelector
 {
-
     private $pattern = null;
     private $casesensitive = true;
     private $negated = false;

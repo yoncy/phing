@@ -40,7 +40,6 @@ use Phing\Util\StringHelper;
  */
 class Input extends Task
 {
-
     private $validargs;
     private $message = ""; // required
     private $propertyName; // required
@@ -72,8 +71,7 @@ class Input extends Task
 
     /**
      * Sets the Message which gets displayed to the user during the build run.
-     * @param The $message
-     * @internal param The $message message to be displayed.
+     * @param string $message The message to be displayed.
      */
     public function setMessage($message)
     {
@@ -113,7 +111,6 @@ class Input extends Task
      */
     public function main()
     {
-
         if ($this->propertyName === null) {
             throw new BuildException("You must specify a value for propertyName attribute.");
         }
@@ -163,5 +160,4 @@ class Input extends Task
             $this->project->setUserProperty($this->propertyName, $value);
         }
     }
-
 }

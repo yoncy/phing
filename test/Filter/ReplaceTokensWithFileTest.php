@@ -22,6 +22,7 @@
 
 namespace Phing\Test\Filter;
 
+use Phing\Filter\ReplaceTokensWithFile;
 use Phing\Test\Helper\AbstractBuildFileTest;
 
 
@@ -44,7 +45,19 @@ class ReplaceTokensWithFileTest extends AbstractBuildFileTest
         $this->executeTarget(__FUNCTION__);
 
         $this->assertInLogs(
-            '[filter:Phing\\Filter\\ReplaceTokensWithFile] Replaced "#!testReplace##" with content from file "testReplace.tpl"'
+            '[filter:' . ReplaceTokensWithFile::class . '] Replaced "#!testReplace##" with content from file "testReplace.tpl"'
+        );
+    }
+
+    /**
+     * Inspired by ticket #1046 - http://www.phing.info/trac/ticket/1046
+     */
+    public function testSlashInToken()
+    {
+        $this->executeTarget(__FUNCTION__);
+
+        $this->assertInLogs(
+            '[filter:' . ReplaceTokensWithFile::class . '] Replaced "//#file:testReplace:endfile#" with content from file "testReplace.tpl"'
         );
     }
 }

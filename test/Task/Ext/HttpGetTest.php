@@ -56,12 +56,12 @@ class HttpGetTest extends AbstractHttpTest
             'recipient',
             $this->createRequest(
                 $this->createMockAdapter(
-                    array(
+                    [
                         "HTTP/1.1 404 Not Found\r\n" .
                         "Content-Type: text/plain; charset=iso-8859-1\r\n" .
                         "\r\n" .
                         "The file you seek is not here"
-                    )
+                    ]
                 )
             )
         );
@@ -77,7 +77,7 @@ class HttpGetTest extends AbstractHttpTest
             'recipient',
             $this->createRequest(
                 $this->createMockAdapter(
-                    array(
+                    [
                         "HTTP/1.1 200 OK\r\n" .
                         "Content-Type: text/plain; charset=iso-8859-1\r\n" .
                         "\r\n" .
@@ -91,7 +91,7 @@ class HttpGetTest extends AbstractHttpTest
                         "Content-Type: text/plain; charset=iso-8859-1\r\n" .
                         "\r\n" .
                         "This file is named according to an URL part"
-                    )
+                    ]
                 )
             )
         );
@@ -124,12 +124,11 @@ class HttpGetTest extends AbstractHttpTest
             // the request returns error 400, but we don't really care
         }
 
-        $request = new HTTP_Request2(
-            null, 'GET', array(
-                'proxy' => 'socks5://localhost:1080/',
-                'ssl_verify_peer' => false,
-                'follow_redirects' => true
-            )
+        $request = new HTTP_Request2(null, 'GET', [
+            'proxy' => 'socks5://localhost:1080/',
+            'ssl_verify_peer' => false,
+            'follow_redirects' => true
+        ]
         );
 
         $this->assertEquals($request->getConfig(), $trace->requests[0]['config']);
@@ -147,7 +146,7 @@ class HttpGetTest extends AbstractHttpTest
         }
 
         $this->assertEquals(
-            array('user' => 'luser', 'password' => 'secret', 'scheme' => 'basic'),
+            ['user' => 'luser', 'password' => 'secret', 'scheme' => 'basic'],
             $trace->requests[0]['auth']
         );
     }
@@ -178,12 +177,11 @@ class HttpGetTest extends AbstractHttpTest
             // the request returns error 400, but we don't really care
         }
 
-        $request = new HTTP_Request2(
-            null, 'GET', array(
-                'proxy' => 'http://localhost:8080/',
-                'timeout' => 20,
-                'max_redirects' => 9
-            )
+        $request = new HTTP_Request2(null, 'GET', [
+            'proxy' => 'http://localhost:8080/',
+            'timeout' => 20,
+            'max_redirects' => 9
+        ]
         );
 
         $this->assertEquals($request->getConfig(), $trace->requests[0]['config']);

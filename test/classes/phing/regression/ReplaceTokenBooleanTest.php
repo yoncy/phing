@@ -31,7 +31,6 @@ use Phing\Test\Helper\AbstractBuildFileTest;
  */
 class ReplaceTokenBooleanTest extends AbstractBuildFileTest
 {
-
     public function setUp()
     {
         $this->configureProject(PHING_TEST_BASE . "/etc/regression/376/build.xml");

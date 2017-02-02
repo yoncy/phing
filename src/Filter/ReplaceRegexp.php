@@ -50,7 +50,7 @@ class ReplaceRegexp extends BaseFilterReader implements ChainableReaderInterface
     /**
      * @var array RegularExpression[]
      */
-    private $regexps = array();
+    private $regexps = [];
 
     /**
      * Creator method handles nested <regexp> tags.
@@ -96,7 +96,6 @@ class ReplaceRegexp extends BaseFilterReader implements ChainableReaderInterface
      */
     public function read($len = null)
     {
-
         $buffer = $this->in->read($len);
 
         if ($buffer === -1) {
@@ -140,5 +139,4 @@ class ReplaceRegexp extends BaseFilterReader implements ChainableReaderInterface
 
         return $newFilter;
     }
-
 }

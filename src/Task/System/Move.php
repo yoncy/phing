@@ -42,16 +42,6 @@ use Phing\Task\System\Copy;
  */
 class Move extends Copy
 {
-
-    /**
-     *
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->forceOverwrite = true;
-    }
-
     /**
      * Validates attributes coming in from XML
      *
@@ -91,22 +81,23 @@ class Move extends Copy
                 $f = new File($from);
                 $d = new File($to);
 
-                $moved = false;
                 try { // try to rename
                     $this->log("Attempting to rename $from to $to", $this->verbosity);
-                    $this->fileUtils->copyFile(
-                        $f,
-                        $d,
-                        $this->forceOverwrite,
-                        $this->preserveLMT,
-                        $this->filterChains,
-                        $this->getProject(),
-                        $this->mode
-                    );
-                    $f->delete(true);
-                    $moved = true;
+                    if (!empty($this->filterChains)) {
+                        $this->fileUtils->copyFile(
+                            $f,
+                            $d,
+                            $this->getProject(),
+                            $this->overwrite,
+                            $this->preserveLMT,
+                            $this->filterChains,
+                            $this->mode
+                        );
+                        $f->delete(true);
+                    } else {
+                        $this->fileUtils->renameFile($f, $d, $this->overwrite);
+                    }
                 } catch (IOException $ioe) {
-                    $moved = false;
                     $this->logError("Failed to rename $from to $to: " . $ioe->getMessage());
                 }
             }
@@ -132,16 +123,16 @@ class Move extends Copy
                     $this->fileUtils->copyFile(
                         $f,
                         $d,
-                        $this->forceOverwrite,
+                        $this->getProject(),
+                        $this->overwrite,
                         $this->preserveLMT,
                         $this->filterChains,
-                        $this->getProject(),
                         $this->mode
                     );
 
                     $f->delete();
                 } catch (IOException $ioe) {
-                    $this->logError("Failed to move $from to $to: " . $ioe->getMessage(), $this->location);
+                    $this->logError("Failed to move $from to $to: " . $ioe->getMessage(), $this->getLocation());
                 }
             } // foreach fileCopyMap
         } // if copyMapSize
@@ -187,7 +178,7 @@ class Move extends Copy
      *
      * @return bool
      */
-    private function okToDelete($d)
+    private function okToDelete(File $d)
     {
         $list = $d->listDir();
         if ($list === null) {
@@ -217,9 +208,8 @@ class Move extends Copy
      * @throws BuildException
      * @throws IOException
      */
-    private function deleteDir($d)
+    private function deleteDir(File $d)
     {
-
         $list = $d->listDir();
         if ($list === null) {
             return; // on an io error list() can return null

@@ -30,7 +30,6 @@ use Phing\Test\Helper\AbstractBuildFileTest;
  */
 class SortFilterTest extends AbstractBuildFileTest
 {
-
     protected $fu;
 
     public function setUp()
@@ -52,5 +51,4 @@ class SortFilterTest extends AbstractBuildFileTest
         $result = $this->getProject()->resolveFile("result/sortfilter.test");
         $this->assertTrue($this->fu->contentEquals($expected, $result), "Files don't match!");
     }
-
 }

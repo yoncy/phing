@@ -108,5 +108,4 @@ abstract class AbstractFormatter
     {
         return $this->outfile;
     }
-
 }

@@ -42,5 +42,4 @@ class rSTMultipleMappersTest extends AbstractBuildFileTest
 
         $this->executeTarget(__FUNCTION__);
     }
-
 }

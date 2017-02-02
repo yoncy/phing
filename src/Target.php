@@ -47,13 +47,13 @@ class Target implements TaskContainerInterface
      * Dependencies
      * @var array
      */
-    private $dependencies = array();
+    private $dependencies = [];
 
     /**
      * Holds objects of children of this target
      * @var array
      */
-    private $children = array();
+    private $children = [];
 
     /**
      * The if condition from xml
@@ -236,7 +236,7 @@ class Target implements TaskContainerInterface
      */
     public function getTasks()
     {
-        $tasks = array();
+        $tasks = [];
         for ($i = 0, $size = count($this->children); $i < $size; $i++) {
             $tsk = $this->children[$i];
             if ($tsk instanceof Task) {
@@ -357,7 +357,7 @@ class Target implements TaskContainerInterface
                 if ($o instanceof Task) {
                     // child is a task
                     $o->perform();
-                } else {
+                } elseif ($o instanceof RuntimeConfigurable) {
                     // child is a RuntimeConfigurable
                     $o->maybeConfigure($this->project);
                 }
@@ -438,5 +438,4 @@ class Target implements TaskContainerInterface
 
         return true;
     }
-
 }

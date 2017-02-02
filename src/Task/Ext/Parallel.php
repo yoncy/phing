@@ -67,8 +67,8 @@ class Parallel extends Sequential
 
         foreach ($this->nestedTasks as $task) {
             $worker = new Worker(
-                array($task, 'perform'),
-                array($task)
+                [$task, 'perform'],
+                [$task]
             );
 
             $mgr->addWorker($worker);

@@ -37,7 +37,6 @@ use Phing\Type\Reference;
  */
 abstract class AbstractFileSetTest extends PHPUnit_Framework_TestCase
 {
-
     private $project;
 
     public function setUp()
@@ -255,7 +254,5 @@ abstract class AbstractFileSetTest extends PHPUnit_Framework_TestCase
                 $be->getMessage()
             );
         }
-
     }
-
 }

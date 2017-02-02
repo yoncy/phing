@@ -41,7 +41,7 @@ class CoverageMerger extends Task
      * the list of filesets containing the .php filename rules
      * @var Fileset[]
      */
-    private $filesets = array();
+    private $filesets = [];
 
     /**
      * Add a new fileset containing the .php files to process
@@ -60,7 +60,7 @@ class CoverageMerger extends Task
      */
     private function getFilenames()
     {
-        $files = array();
+        $files = [];
 
         foreach ($this->filesets as $fileset) {
             $ds = $fileset->getDirectoryScanner($this->project);
@@ -87,7 +87,7 @@ class CoverageMerger extends Task
         foreach ($files as $file) {
             $coverageInformation = unserialize(file_get_contents($file));
 
-            CoverageMergeHelper::merge($this->project, array($coverageInformation));
+            CoverageMergeHelper::merge($this->project, [$coverageInformation]);
         }
     }
 }

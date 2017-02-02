@@ -62,8 +62,8 @@ class Zip extends AbstractMatching
     /**
      * @var ZipFileSet[]
      */
-    private $filesets = array();
-
+    private $filesets = [];
+    
     private $ignoreLinks = false;
 
     /**
@@ -249,7 +249,7 @@ class Zip extends AbstractMatching
     }
 
     /**
-     * @return array
+     * @return bool
      * @throws \Phing\Exception\BuildException
      */
     public function areFilesetsUpToDate()
@@ -300,5 +300,4 @@ class Zip extends AbstractMatching
             }
         }
     }
-
 }

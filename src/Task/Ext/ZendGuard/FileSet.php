@@ -2,6 +2,7 @@
 
 namespace Phing\Task\Ext\ZendGuard;
 
+use Phing\Exception\BuildException;
 use Phing\Project;
 use Phing\Type\FileSet as BaseFileSet;
 
@@ -21,20 +22,17 @@ class FileSet extends BaseFileSet
      *  Get a list of files and directories specified in the fileset.
      * @param Project $p
      * @param bool $includeEmpty
-     * @throws \Phing\Exception\BuildException
+     * @throws BuildException
      * @return array a list of file and directory names, relative to
      *               the baseDir for the project.
      */
     public function getFiles(Project $p, $includeEmpty = true)
     {
-
         if ($this->files === null) {
-
             $ds = $this->getDirectoryScanner($p);
             $this->files = $ds->getIncludedFiles();
         } // if ($this->files===null)
 
         return $this->files;
     }
-
 }

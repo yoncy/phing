@@ -22,6 +22,7 @@ namespace Phing\Task\System;
 
 use Phing\Condition\AbstractCondition;
 use Phing\Exception\BuildException;
+use Phing\Project;
 
 
 /**
@@ -46,6 +47,9 @@ class Condition extends AbstractCondition
     /** @var string $value */
     private $value = "true";
 
+    /** @var string $alternative */
+    private $alternative;
+    
     /**
      * The name of the property to set. Required.
      * @param string $p
@@ -67,22 +71,45 @@ class Condition extends AbstractCondition
     }
 
     /**
+     * The value for the property to set, if condition evaluates to false.
+     * If this attribute is not specified, the property will not be set.
+     *
+     * @param string $v
+     */
+    public function setElse($v)
+    {
+        $this->alternative = $v;
+    }
+    
+    /**
      * See whether our nested condition holds and set the property.
      * @throws BuildException
      * @return void
      */
     public function main()
     {
-
         if ($this->countConditions() > 1) {
-            throw new BuildException("You must not nest more than one condition into <condition>");
+            throw new BuildException(
+                "You must not nest more than one condition into <condition>"
+            );
         }
         if ($this->countConditions() < 1) {
-            throw new BuildException("You must nest a condition into <condition>");
+            throw new BuildException(
+                "You must nest a condition into <condition>"
+            );
+        }
+        if ($this->property === null) {
+            throw new BuildException('The property attribute is required.');
         }
         $cs = $this->getIterator();
         if ($cs->current()->evaluate()) {
-            $this->project->setProperty($this->property, $this->value);
+            $this->log("Condition true; setting " . $this->property . " to " . $this->value, Project::MSG_DEBUG);
+            $this->project->setNewProperty($this->property, $this->value);
+        } elseif ($this->alternative !== null) {
+            $this->log("Condition false; setting " . $this->property . " to " . $this->alternative, Project::MSG_DEBUG);
+            $this->project->setNewProperty($this->property, $this->alternative);
+        } else {
+            $this->log('Condition false; not setting ' . $this->property, Project::MSG_DEBUG);
         }
     }
 }

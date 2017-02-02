@@ -96,12 +96,12 @@ class XmlLogger implements BuildLoggerInterface
     /**
      * @var array DOMElement[] The parent of the element being processed.
      */
-    private $elementStack = array();
+    private $elementStack = [];
 
     /**
      * @var array int[] Array of millisecond times for the various elements being processed.
      */
-    private $timesStack = array();
+    private $timesStack = [];
 
     /**
      * @var int
@@ -156,6 +156,15 @@ class XmlLogger implements BuildLoggerInterface
      */
     public function buildFinished(BuildEvent $event)
     {
+        $xslUri = $event->getProject()->getProperty("phing.XmlLogger.stylesheet.uri");
+        if ($xslUri === null) {
+            $xslUri = "";
+        }
+
+        if ($xslUri !== '') {
+            $xslt = $this->doc->createProcessingInstruction('xml-stylesheet', 'type="text/xsl" href="' . $xslUri . '"');
+            $this->doc->appendChild($xslt);
+        }
 
         $elapsedTime = Phing::currentTimeMillis() - $this->buildTimerStart;
 

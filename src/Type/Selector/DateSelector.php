@@ -36,7 +36,6 @@ use Phing\Io\File;
  */
 class DateSelector extends AbstractExtendSelector
 {
-
     private $seconds = -1; // millis in Ant, but PHP doesn't support that level of precision
     private $dateTime = null;
     private $includeDirs = false;
@@ -47,7 +46,7 @@ class DateSelector extends AbstractExtendSelector
     const CHECKDIRS_KEY = "checkdirs";
     const GRANULARITY_KEY = "granularity";
     const WHEN_KEY = "when";
-    private static $timeComparisons = array("before", "after", "equal");
+    private static $timeComparisons = ["before", "after", "equal"];
 
     /**
      *
@@ -85,7 +84,7 @@ class DateSelector extends AbstractExtendSelector
      * For users that prefer to express time in seconds since 1970
      *
      * @param int $seconds the time to compare file's last modified date to,
-     *                     expressed in milliseconds
+     *                     expressed in seconds
      */
     public function setSeconds($seconds)
     {
@@ -98,6 +97,14 @@ class DateSelector extends AbstractExtendSelector
     public function getSeconds()
     {
         return $this->seconds;
+    }
+
+    /**
+     * @param int $millis the time to compare file's last modified date to, expressed in milliseconds
+     */
+    private function setMillis($millis)
+    {
+        $this->setSeconds((int) $millis * 1000);
     }
 
     /**
@@ -236,5 +243,4 @@ class DateSelector extends AbstractExtendSelector
             return (abs($file->lastModified() - $this->seconds) <= $this->granularity);
         }
     }
-
 }

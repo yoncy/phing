@@ -105,7 +105,6 @@ use Phing\Util\Properties\Properties;
  */
 class AnsiColorLogger extends DefaultLogger
 {
-
     const ATTR_NORMAL = 0;
     const ATTR_BRIGHT = 1;
     const ATTR_DIM = 2;
@@ -165,7 +164,6 @@ class AnsiColorLogger extends DefaultLogger
      */
     final private function setColors()
     {
-
         $userColorFile = Phing::getProperty("phing.logger.defaults");
         $systemColorFile = new File(Phing::getResourcePath("etc/loggers.properties"));
 
@@ -214,7 +212,6 @@ class AnsiColorLogger extends DefaultLogger
     final protected function printMessage($message, OutputStream $stream, $priority)
     {
         if ($message !== null) {
-
             if (!$this->colorsSet) {
                 $this->setColors();
                 $this->colorsSet = true;

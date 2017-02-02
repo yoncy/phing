@@ -35,7 +35,7 @@ use Phing\Io\File;
  */
 class DataStore
 {
-    private $data = array();
+    private $data = [];
     private $file = null;
 
     /**
@@ -84,7 +84,7 @@ class DataStore
      * @param boolean $autocommit whether to auto-commit (write)
      *                            the data store to disk
      *
-     * @return none
+     * @return void
      */
     public function put($key, $value, $autocommit = false)
     {
@@ -114,7 +114,7 @@ class DataStore
     /**
      * Commits data store to disk
      *
-     * @return none
+     * @return void
      */
     public function commit()
     {
@@ -124,8 +124,8 @@ class DataStore
     /**
      * Internal function to read data store from file
      *
-     * @throws \Phing\Exception\BuildException
-     * @return none
+     * @throws BuildException
+     * @return void
      */
     private function read()
     {
@@ -142,8 +142,8 @@ class DataStore
     /**
      * Internal function to write data store to file
      *
-     * @throws \Phing\Exception\BuildException
-     * @return none
+     * @throws BuildException
+     * @return void
      */
     private function write()
     {
@@ -159,5 +159,3 @@ class DataStore
         }
     }
 }
-
-;

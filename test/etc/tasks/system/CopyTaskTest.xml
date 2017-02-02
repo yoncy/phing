@@ -47,15 +47,18 @@
 	<target name="testCopyShouldAcceptFileList">
 		<touch file="${tmp.dir}/Test1"/>
 		<touch file="${tmp.dir}/Test2"/>
-		<mkdir dir="${tmp.dir}/copies"/>
-		<copy todir="${tmp.dir}/copies">
-			<filelist dir="." files="${tmp.dir}/Test1"/>
-			<fileset dir=".">
-				<include name="${tmp.dir}/Test2"/>
-			</fileset>
+		<mkdir dir="copies"/>
+		<copy todir="copies">
+			<filelist dir="${tmp.dir}" files="Test1,Test2"/>
 		</copy>
-		<delete dir="${tmp.dir}/copies"/>
+		<delete dir="copies"/>
 	</target>
 	
+	<target name="testOverwriteExistingSymlink">
+		<symlink target="${tmp.dir}/target-a" link="${tmp.dir}/link-a"/>
+		<symlink target="${tmp.dir}/target-b" link="${tmp.dir}/link-b"/>
+		<copy file="${tmp.dir}/link-a" tofile="${tmp.dir}/link-b" overwrite="true"/>
+	</target>
+
 	<target name="main"/>
 </project>

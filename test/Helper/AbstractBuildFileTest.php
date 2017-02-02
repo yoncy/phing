@@ -1,5 +1,25 @@
 <?php
 
+/*
+ *  $Id$
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * This software consists of voluntary contributions made by many individuals
+ * and is licensed under the LGPL. For more information please see
+ * <http://phing.info>.
+ */
+
 namespace Phing\Test\Helper;
 
 use Phing\Exception\BuildException;
@@ -30,7 +50,7 @@ abstract class AbstractBuildFileTest extends PHPUnit_Framework_TestCase
     /**
      * @var array Array of log BuildEvent objects.
      */
-    public $logBuffer = array();
+    public $logBuffer = [];
 
     private $outBuffer;
     private $errBuffer;
@@ -101,8 +121,8 @@ abstract class AbstractBuildFileTest extends PHPUnit_Framework_TestCase
     /**
      *  run a target, expect for any build exception
      *
-     * @param  string $target target to run
-     * @param  string $cause  information string to reader of report
+     * @param string $target target to run
+     * @param string $cause  information string to reader of report
      */
     protected function expectBuildException($target, $cause)
     {
@@ -142,10 +162,9 @@ abstract class AbstractBuildFileTest extends PHPUnit_Framework_TestCase
     /**
      *  execute the target, verify output matches expectations
      *
-     * @param  string $target  target to execute
-     * @param  string $output  output to look for
+     * @param string $target  target to execute
+     * @param string $output  output to look for
      */
-
     protected function expectOutput($target, $output)
     {
         $this->executeTarget($target);
@@ -156,11 +175,10 @@ abstract class AbstractBuildFileTest extends PHPUnit_Framework_TestCase
     /**
      *  execute the target, verify output matches expectations
      *  and that we got the named error at the end
-     * @param  string $target  target to execute
-     * @param  string $output  output to look for
-     * @param  string $error   Description of Parameter
+     * @param string $target  target to execute
+     * @param string $output  output to look for
+     * @param string $error   Description of Parameter
      */
-
     protected function expectOutputAndError($target, $output, $error)
     {
         $this->executeTarget($target);
@@ -213,12 +231,12 @@ abstract class AbstractBuildFileTest extends PHPUnit_Framework_TestCase
     /**
      *  set up to run the named project
      *
-     * @param  string $filename name of project file to run
+     * @param string $filename name of project file to run
      * @throws BuildException
      */
     protected function configureProject($filename)
     {
-        $this->logBuffer = "";
+        $this->logBuffer = [];
         $this->fullLogBuffer = "";
         $this->project = new Project();
         $this->project->init();
@@ -236,14 +254,16 @@ abstract class AbstractBuildFileTest extends PHPUnit_Framework_TestCase
      */
     protected function executeTarget($targetName)
     {
+        if (empty($this->project)) {
+            return;
+        }
 
         $this->outBuffer = "";
         $this->errBuffer = "";
-        $this->logBuffer = "";
+        $this->logBuffer = [];
         $this->fullLogBuffer = "";
         $this->buildException = null;
         $this->project->executeTarget($targetName);
-
     }
 
     /**
@@ -262,15 +282,15 @@ abstract class AbstractBuildFileTest extends PHPUnit_Framework_TestCase
      */
     protected function getProjectDir()
     {
-        return $this->project->getBaseDir();
+        return $this->project->getBasedir();
     }
 
     /**
      *  run a target, wait for a build exception
      *
-     * @param  string $target target to run
-     * @param  string $cause  information string to reader of report
-     * @param  string $msg    the message value of the build exception we are waiting for
+     * @param string $target target to run
+     * @param string $cause  information string to reader of report
+     * @param string $msg    the message value of the build exception we are waiting for
      * set to null for any build exception to be valid
      */
     protected function expectSpecificBuildException($target, $cause, $msg)
@@ -297,10 +317,10 @@ abstract class AbstractBuildFileTest extends PHPUnit_Framework_TestCase
      *  run a target, expect an exception string
      *  containing the substring we look for (case sensitive match)
      *
-     * @param  string $target target to run
-     * @param  string $cause  information string to reader of report
-     * @param  string $msg    the message value of the build exception we are waiting for
-     * @param  string $contains  substring of the build exception to look for
+     * @param string $target target to run
+     * @param string $cause  information string to reader of report
+     * @param string $msg    the message value of the build exception we are waiting for
+     * @param string $contains  substring of the build exception to look for
      */
     protected function expectBuildExceptionContaining($target, $cause, $contains)
     {
@@ -387,5 +407,4 @@ abstract class AbstractBuildFileTest extends PHPUnit_Framework_TestCase
         //assertNotNull("Could not find resource :" + resource, url);
         //return url;
     }
-
 }

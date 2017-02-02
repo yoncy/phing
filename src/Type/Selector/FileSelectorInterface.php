@@ -43,9 +43,8 @@ interface FileSelectorInterface
      * @param File $basedir A File object for the base directory
      * @param string $filename The name of the file to check
      * @param File $file A File object for this filename
-     * @return boolean whether the file should be selected or not
+     * @return bool whether the file should be selected or not
      * @throws BuildException if the selector was not configured correctly
      */
     public function isSelected(File $basedir, $filename, File $file);
-
 }

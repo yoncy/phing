@@ -79,5 +79,4 @@ class GitTestsHelper
 
         return $returndate;
     }
-
 }

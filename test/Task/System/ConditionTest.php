@@ -14,7 +14,6 @@ use Phing\Test\Helper\AbstractBuildFileTest;
  */
 class ConditionTest extends AbstractBuildFileTest
 {
-
     public function setUp()
     {
         $this->configureProject(
@@ -49,6 +48,12 @@ class ConditionTest extends AbstractBuildFileTest
     public function testSocketCondition()
     {
         $this->executeTarget(__FUNCTION__);
-        $this->assertPropertyUnset('socket  ');
+        $this->assertPropertyUnset('socket');
+    }
+
+    public function testMatches()
+    {
+        $this->executeTarget(__FUNCTION__);
+        $this->assertPropertyEquals('matches', 'true');
     }
 }

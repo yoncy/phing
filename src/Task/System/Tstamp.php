@@ -38,7 +38,7 @@ use Phing\Task;
  */
 class Tstamp extends Task
 {
-    private $customFormats = array();
+    private $customFormats = [];
 
     private $prefix = "";
 

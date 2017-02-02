@@ -13,7 +13,7 @@
     </target>
     
     <target name="testCustomCondition">
-    	<typedef name="testcondition" classname="TestCondition"/>
+    	<typedef name="testcondition" classname="Phing\Test\Helper\TestCondition"/>
    	<condition property="isCustom">
 	    <testcondition foo="bar"/>
     	</condition>
@@ -32,6 +32,12 @@
     <target name="testSocketCondition">
         <condition property="socket">
             <socket server="localhost" port="1337" />
+        </condition>
+    </target>
+
+    <target name="testMatches">
+        <condition property="matches">
+            <matches string="package.ABC.name" pattern="package\.([^.]*)\.name" casesensitive="false" />
         </condition>
     </target>
 </project>

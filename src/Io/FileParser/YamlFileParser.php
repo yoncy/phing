@@ -44,8 +44,17 @@ class YamlFileParser implements FileParserInterface
         }
 
         try {
-            $parser = new Parser();
-            $yamlProperties = $parser->parse(file_get_contents($file->getAbsolutePath()));
+            if (!class_exists('\Symfony\Component\Yaml\Parser')) {
+                throw new BuildException(
+                    get_class($this)
+                    . ' depends on \Symfony\Component\Yaml\Parser '
+                    . 'being installed and on include_path.'
+                );
+            }
+
+            $parser = new \Symfony\Component\Yaml\Parser;
+            // Cast properties to array in case parse() returns null.
+            $properties = (array) $parser->parse(file_get_contents($file->getAbsolutePath()));
         } catch (Exception $e) {
             if (is_a($e, '\Symfony\Component\Yaml\Exception\ParseException')) {
                 throw new IOException("Unable to parse contents of " . $file . ": " . $e->getMessage());
@@ -53,7 +62,7 @@ class YamlFileParser implements FileParserInterface
             throw $e;
         }
 
-        $flattenedProperties = $this->flattenArray($yamlProperties);
+        $flattenedProperties = $this->flattenArray($properties);
         foreach ($flattenedProperties as $key => $flattenedProperty) {
             if (is_array($flattenedProperty)) {
                 $flattenedProperties[$key] = implode(',', $flattenedProperty);
@@ -72,7 +81,7 @@ class YamlFileParser implements FileParserInterface
      */
     private function flattenArray(array $arrayToFlatten, $separator = '.', $flattenedKey = '')
     {
-        $flattenedArray = array();
+        $flattenedArray = [];
         foreach ($arrayToFlatten as $key => $value) {
             $tmpFlattendKey = (!empty($flattenedKey) ? $flattenedKey . $separator : '') . $key;
             // only append next value if is array and is an associative array

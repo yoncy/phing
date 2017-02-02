@@ -111,4 +111,29 @@
     <property name="test" override="true">bar</property>
     <echo>assert bar2 == ${test2}</echo>
   </target>
+
+    <target name="testFilterChain">
+        <property name="filterchain.test" value="Hello">
+            <filterchain>
+                <replaceregexp>
+                    <regexp pattern="Hello" replace="World" ignoreCase="true"/>
+                </replaceregexp>
+            </filterchain>
+        </property>
+    </target>
+
+    <target name="testCircularDefinition1">
+        <property name="testprop2" value="${testprop1}"  />
+        <property file="property2.properties"/>
+        <echo>${testprop2}</echo>
+    </target>
+
+    <target name="testCircularDefinition2">
+        <property file="property_hang.properties"/>
+        <echo>${testprop2}</echo>
+    </target>
+
+    <target name="testUsingPropertyTwiceInPropertyValueShouldNotThrowException">
+        <property file="property_notcircular.properties"/>
+    </target>
 </project>

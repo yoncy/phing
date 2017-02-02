@@ -47,8 +47,10 @@ use Phing\Type\Selector\TypeSelector;
  */
 abstract class AbstractSelectorContainer extends AbstractSelector implements SelectorContainerInterface
 {
-
-    private $selectorsList = array();
+    /**
+     * @var AbstractSelectorContainer[]
+     */
+    private $selectorsList = [];
 
     /**
      * Indicates whether there are any selectors here.
@@ -69,11 +71,11 @@ abstract class AbstractSelectorContainer extends AbstractSelector implements Sel
     /**
      * Returns a copy of the selectors as an array.
      * @param Project $p
-     * @return array
+     * @return AbstractSelector[]
      */
     public function getSelectors(Project $p)
     {
-        $result = array();
+        $result = [];
         for ($i = 0, $size = count($this->selectorsList); $i < $size; $i++) {
             $result[] = clone $this->selectorsList[$i];
         }
@@ -317,6 +319,17 @@ abstract class AbstractSelectorContainer extends AbstractSelector implements Sel
     }
 
     /**
+     * add a different selector entry on the selector list
+     */
+    public function createDifferent()
+    {
+        $o = new DifferentSelector();
+        $this->appendSelector($o);
+
+        return $o;
+    }
+
+    /**
      * add a type selector entry on the selector list
      */
     public function createType()
@@ -327,4 +340,25 @@ abstract class AbstractSelectorContainer extends AbstractSelector implements Sel
         return $o;
     }
 
+    /**
+     * add a readable selector entry on the selector list
+     */
+    public function createReadable()
+    {
+        $o = new ReadableSelector();
+        $this->appendSelector($o);
+
+        return $o;
+    }
+
+    /**
+     * add a writable selector entry on the selector list
+     */
+    public function createWritable()
+    {
+        $o = new WritableSelector();
+        $this->appendSelector($o);
+
+        return $o;
+    }
 }

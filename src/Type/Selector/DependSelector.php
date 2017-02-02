@@ -40,7 +40,6 @@ use Phing\Type\Mapper;
  */
 class DependSelector extends AbstractSelector
 {
-
     private $targetdir = null;
     private $mapperElement = null;
     private $map = null;

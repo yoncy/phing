@@ -51,4 +51,11 @@ class DirSet extends AbstractFileSet
         }
     }
 
+    /**
+     * @return array
+     */
+    public function getIterator()
+    {
+        return $this->getDirectoryScanner($this->getProject())->getIncludedDirectories();
+    }
 }

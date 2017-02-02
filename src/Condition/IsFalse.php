@@ -60,5 +60,4 @@ class IsFalse extends AbstractProjectComponent implements ConditionInterface
 
         return !$this->value;
     }
-
 }

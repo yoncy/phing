@@ -12,7 +12,6 @@ use Phing\Test\Helper\AbstractBuildFileTest;
  */
 class XorConditionTest extends AbstractBuildFileTest
 {
-
     public function setUp()
     {
         $this->configureProject(

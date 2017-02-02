@@ -37,4 +37,3 @@ class SocketTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($condition->evaluate());
     }
 }
- 

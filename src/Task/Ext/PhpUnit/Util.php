@@ -36,7 +36,7 @@ use the;
  */
 class Util
 {
-    protected static $definedClasses = array();
+    protected static $definedClasses = [];
 
     /**
      * Returns the package of a class as defined in the docblock of the class using @package
@@ -143,7 +143,7 @@ class Util
         if (isset(self::$definedClasses[$filename])) {
             return self::$definedClasses[$filename];
         } else {
-            return array();
+            return [];
         }
     }
 }

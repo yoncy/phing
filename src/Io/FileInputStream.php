@@ -42,11 +42,10 @@ class FileInputStream extends InputStream
      * Construct a new FileInputStream.
      *
      * @param  File|string $file Path to the file
-     * @param  boolean $append Whether to append (ignored)
      * @throws Exception        - if invalid argument specified.
      * @throws IOException      - if unable to open file.
      */
-    public function __construct($file, $append = false)
+    public function __construct($file)
     {
         if ($file instanceof File) {
             $this->file = $file;
@@ -56,9 +55,15 @@ class FileInputStream extends InputStream
             throw new Exception("Invalid argument type for \$file.");
         }
 
+        if (!$this->file->exists()) {
+            throw new IOException("Unable to open " . $this->file->__toString() . " for reading. File does not exists.");
+        }
+        if (!$this->file->canRead()) {
+            throw new IOException("Unable to open " . $this->file->__toString() . " for reading. File not readable.");
+        }
         $stream = @fopen($this->file->getAbsolutePath(), "rb");
         if ($stream === false) {
-            throw new IOException("Unable to open " . $this->file->__toString() . " for reading: " . $php_errormsg);
+            throw new IOException("Unable to open " . $this->file->__toString() . " for reading: " . print_r(error_get_last(), true));
         }
 
         parent::__construct($stream);

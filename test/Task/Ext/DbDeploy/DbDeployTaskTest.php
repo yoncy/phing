@@ -31,7 +31,6 @@ use Phing\Test\Helper\AbstractBuildFileTest;
  */
 class DbDeployTaskTest extends AbstractBuildFileTest
 {
-
     public function setUp()
     {
         $this->configureProject(PHING_TEST_BASE . "/etc/tasks/ext/dbdeploy/build.xml");

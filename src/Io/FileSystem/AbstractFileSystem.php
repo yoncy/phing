@@ -230,7 +230,6 @@ abstract class AbstractFileSystem
      */
     public function getLastModifiedTime(File $f)
     {
-
         if (!$f->exists()) {
             return 0;
         }
@@ -312,15 +311,15 @@ abstract class AbstractFileSystem
      * returning true if and only if the operation succeeds.
      *
      * @param  File $f
-     * @param  boolean $recursive
-     * @return void
+     * @param  boolean   $recursive
+     * @throws IOException
      */
     public function delete(File $f, $recursive = false)
     {
         if ($f->isDirectory()) {
-            return $this->rmdir($f->getPath(), $recursive);
+            $this->rmdir($f->getPath(), $recursive);
         } else {
-            return $this->unlink($f->getPath());
+            $this->unlink($f->getPath());
         }
     }
 
@@ -352,7 +351,7 @@ abstract class AbstractFileSystem
         if (!$d) {
             return null;
         }
-        $list = array();
+        $list = [];
         while ($entry = $d->read()) {
             if ($entry != "." && $entry != "..") {
                 array_push($list, $entry);
@@ -441,6 +440,7 @@ abstract class AbstractFileSystem
     /**
      * List the available filesystem roots, return array of File objects
      * @throws IOException
+     * @return File[]
      */
     public function listRoots()
     {
@@ -455,6 +455,7 @@ abstract class AbstractFileSystem
      * @param File $f1
      * @param File $f2
      * @throws \Phing\Io\IOException
+     * @return int
      */
     public function compare(File $f1, File $f2)
     {
@@ -477,7 +478,7 @@ abstract class AbstractFileSystem
 
         // Recursively copy a directory
         if ($src->isDirectory()) {
-            return $this->copyr($src->getAbsolutePath(), $dest->getAbsolutePath());
+            $this->copyr($src->getAbsolutePath(), $dest->getAbsolutePath());
         }
 
         $srcPath = $src->getAbsolutePath();
@@ -668,7 +669,6 @@ abstract class AbstractFileSystem
             $msg = "FileSystem::Symlink() FAILED. Cannot symlink '$target' to '$link'. $php_errormsg";
             throw new IOException($msg);
         }
-
     }
 
     /**
@@ -713,13 +713,11 @@ abstract class AbstractFileSystem
 
         // If children=FALSE only delete dir if empty.
         if (false === $children) {
-
             if (false === @rmdir($dir)) { // FAILED.
                 // Add error from php to end of log message. $php_errormsg.
                 $msg = "FileSystem::rmdir() FAILED. Cannot rmdir $dir. $php_errormsg";
                 throw new Exception($msg);
             }
-
         } else { // delete contents and dir.
 
             $handle = @opendir($dir);
@@ -728,12 +726,10 @@ abstract class AbstractFileSystem
 
                 $msg = "FileSystem::rmdir() FAILED. Cannot opendir() $dir. $php_errormsg";
                 throw new Exception($msg);
-
             } else { // Read from handle.
 
                 // Don't error on readdir().
                 while (false !== ($entry = @readdir($handle))) {
-
                     if ($entry != '.' && $entry != '..') {
 
                         // Only add / if it isn't already the last char.
@@ -759,7 +755,6 @@ abstract class AbstractFileSystem
                                     );
                                 throw new Exception($msg);
                             }
-
                         } else { // Is directory.
 
                             try {
@@ -769,7 +764,6 @@ abstract class AbstractFileSystem
                                     );
                                 throw new Exception($msg);
                             }
-
                         } // end is_dir else
                     } // end .. if
                 } // end while
@@ -783,9 +777,7 @@ abstract class AbstractFileSystem
                 $msg = "FileSystem::rmdir() FAILED. Cannot rmdir $dir. $php_errormsg";
                 throw new Exception($msg);
             }
-
         }
-
     }
 
     /**
@@ -830,7 +822,6 @@ abstract class AbstractFileSystem
      */
     public function compareMTimes($file1, $file2)
     {
-
         $mtime1 = filemtime($file1);
         $mtime2 = filemtime($file2);
 
@@ -850,5 +841,16 @@ abstract class AbstractFileSystem
                 return ($mtime1 < $mtime2) ? -1 : 1;
             } // end compare
         }
+    }
+
+    /**
+     * returns the contents of a directory in an array
+     * @param File $f
+     * @throws Exception
+     * @return string[]
+     */
+    public function listContents(File $f)
+    {
+        throw new IOException("listContents() not implemented by local fs driver");
     }
 }

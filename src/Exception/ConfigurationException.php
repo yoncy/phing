@@ -57,7 +57,6 @@ class ConfigurationException extends Exception
      */
     public function __construct($p1, $p2 = null)
     {
-
         $cause = null;
         $msg = "";
 
@@ -89,5 +88,4 @@ class ConfigurationException extends Exception
     {
         return $this->cause;
     }
-
 }

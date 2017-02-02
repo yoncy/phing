@@ -37,7 +37,7 @@ class Wrapper
      *
      * @var array
      */
-    protected $lines = array();
+    protected $lines = [];
 
     /**
      * Read ini file
@@ -48,35 +48,35 @@ class Wrapper
      */
     public function read($file)
     {
-        $this->lines = array();
+        $this->lines = [];
 
         $section = '';
 
         foreach (file($file) as $line) {
             if (preg_match('/^\s*(;.*)?$/', $line)) {
                 // comment or whitespace
-                $this->lines[] = array(
+                $this->lines[] = [
                     'type' => 'comment',
                     'data' => $line,
                     'section' => $section
-                );
+                ];
             } elseif (preg_match('/^\s?\[(.*)\]/', $line, $match)) {
                 // section
                 $section = $match[1];
-                $this->lines[] = array(
+                $this->lines[] = [
                     'type' => 'section',
                     'data' => $line,
                     'section' => $section
-                );
+                ];
             } elseif (preg_match('/^\s*(.*?)\s*=\s*(.*?)\s*$/', $line, $match)) {
                 // entry
-                $this->lines[] = array(
+                $this->lines[] = [
                     'type' => 'entry',
                     'data' => $line,
                     'section' => $section,
                     'key' => $match[1],
                     'value' => $match[2]
-                );
+                ];
             }
         }
     }

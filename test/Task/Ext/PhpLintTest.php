@@ -32,7 +32,6 @@ use Phing\Test\Helper\AbstractBuildFileTest;
  */
 class PhpLintTest extends AbstractBuildFileTest
 {
-
     public function setUp()
     {
         $this->configureProject(PHING_TEST_BASE . "/etc/tasks/ext/PhpLintTest.xml");
@@ -64,8 +63,8 @@ class PhpLintTest extends AbstractBuildFileTest
      */
     public function testDeprecated()
     {
-        if (defined('HHVM_VERSION')) {
-            $this->markTestSkipped("HHVM lint does not support testing for deprecated statements");
+        if (defined('HHVM_VERSION') || PHP_MAJOR_VERSION > 5) {
+            $this->markTestSkipped("Testing for deprecated statements only works on PHP 5.x");
         }
 
         file_put_contents(

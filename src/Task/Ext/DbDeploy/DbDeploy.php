@@ -23,6 +23,7 @@ namespace Phing\Task\Ext\DbDeploy;
 use Exception;
 use PDO;
 use Phing\Exception\BuildException;
+use Phing\Project;
 use Phing\Task;
 use Phing\Type\FileSet;
 
@@ -118,7 +119,7 @@ class DbDeploy extends Task
      *
      * @var array
      */
-    protected $appliedChangeNumbers = array();
+    protected $appliedChangeNumbers = [];
 
     /**
      * Checkall attribute
@@ -159,7 +160,6 @@ class DbDeploy extends Task
             $this->log('Checkall: ' . ($this->checkall ? 'On' : 'Off'));
 
             $this->deploy();
-
         } catch (Exception $e) {
             throw new BuildException($e);
         }
@@ -175,7 +175,7 @@ class DbDeploy extends Task
     {
         if (count($this->appliedChangeNumbers) == 0) {
             $this->log('Getting applied changed numbers from DB: ' . $this->url);
-            $appliedChangeNumbers = array();
+            $appliedChangeNumbers = [];
             $dbh = new PDO($this->url, $this->userid, $this->password);
             $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->dbmsSyntax->applyAttributes($dbh);
@@ -260,6 +260,12 @@ class DbDeploy extends Task
                 $fullFileName = $this->dir . '/' . $fileName;
                 $fh = fopen($fullFileName, 'r');
                 $contents = fread($fh, filesize($fullFileName));
+                $count_bad_comments = substr_count($contents, '--//');
+                if ($count_bad_comments > 0) {
+                    $this->log('Your SQL delta includes "--//" which, if a comment, should be replaced with "-- //"
+                    to avoid the delta failing.  You may need to manually undo part of this delta.\n\n'
+                        . $contents, Project::MSG_WARN);
+                }
                 // allow construct with and without space added
                 $split = strpos($contents, '-- //@UNDO');
                 if ($split === false) {
@@ -298,7 +304,7 @@ class DbDeploy extends Task
      */
     protected function getDeltasFilesArray()
     {
-        $files = array();
+        $files = [];
 
         $baseDir = realpath($this->dir);
         $dh = opendir($baseDir);

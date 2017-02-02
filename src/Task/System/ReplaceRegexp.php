@@ -61,7 +61,7 @@ class ReplaceRegexp extends Task
      *
      * @var array $filesets
      */
-    private $filesets = array();
+    private $filesets = [];
 
     /**
      * Regular expression
@@ -180,14 +180,14 @@ class ReplaceRegexp extends Task
 
         // compile a list of all files to modify, both file attrib and fileset elements
         // can be used.
-        $files = array();
+        $files = [];
 
         if ($this->file !== null) {
             $files[] = $this->file;
         }
 
         if (!empty($this->filesets)) {
-            $filenames = array();
+            $filenames = [];
             foreach ($this->filesets as $fs) {
                 try {
                     $ds = $fs->getDirectoryScanner($this->project);
@@ -211,10 +211,10 @@ class ReplaceRegexp extends Task
         $filter = new FilterChain($this->project);
 
         $r = new ReplaceRegexpFilter();
-        $r->setRegexps(array($this->_regexp));
+        $r->setRegexps([$this->_regexp]);
 
         $filter->addReplaceRegexp($r);
-        $filters = array($filter);
+        $filters = [$filter];
 
         foreach ($files as $file) {
             // set the register slots
@@ -250,8 +250,6 @@ class ReplaceRegexp extends Task
                 }
                 $this->log("Error writing file back: " . $e->getMessage(), Project::MSG_WARN);
             }
-
         }
-
     }
 }

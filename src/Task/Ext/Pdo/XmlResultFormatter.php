@@ -107,12 +107,10 @@ class XmlResultFormatter extends AbstractResultFormatter
      */
     public function processRow($row)
     {
-
         $rowNode = $this->doc->createElement('row');
         $this->rootNode->appendChild($rowNode);
 
         foreach ($row as $columnName => $columnValue) {
-
             $colNode = $this->doc->createElement('column');
             $colNode->setAttribute('name', $columnName);
 
@@ -122,7 +120,6 @@ class XmlResultFormatter extends AbstractResultFormatter
             }
             $rowNode->appendChild($colNode);
         }
-
     }
 
     /**

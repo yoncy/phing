@@ -55,8 +55,7 @@ use Phing\Filter\XsltFilter;
  */
 class FilterChain extends DataType
 {
-
-    private $filterReaders = array();
+    private $filterReaders = [];
 
     /**
      * @param null $project
@@ -317,7 +316,6 @@ class FilterChain extends DataType
      */
     public function setRefid(Reference $r)
     {
-
         if (count($this->filterReaders) !== 0) {
             throw $this->tooManyAttributes();
         }

@@ -31,7 +31,6 @@ use Phing\Test\Helper\GitTestsHelper;
  */
 class GcTest extends AbstractBuildFileTest
 {
-
     public function setUp()
     {
         // the pear git package hardcodes the path to git to /usr/bin/git and will therefore

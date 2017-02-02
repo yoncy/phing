@@ -39,7 +39,6 @@ use SimpleXMLElement;
  */
 class XmlProperty extends Property
 {
-
     private $_keepRoot = true;
     private $_collapseAttr = false;
     private $_delimiter = ',';
@@ -135,17 +134,15 @@ class XmlProperty extends Property
      * Parses an XML file and returns properties
      *
      * @param File $file The file to parse
+     * @param PropertySetInterface $properties Properties will be added as they are found (by reference here)
      *
      * @throws IOException
-     * @return PropertySetInterface
      */
     protected function fetchPropertiesFromFile(File $file, PropertySetInterface $properties)
     {
         if (($xml = simplexml_load_file($file)) === false) {
             throw new IOException("Unable to parse XML file $file");
         }
-
-        $path = array();
 
         if ($this->_keepRoot) {
             $this->addNode($xml, $this->prefix, $properties);
@@ -192,7 +189,7 @@ class XmlProperty extends Property
             $val = (string)$node;
             if (isset($prop[$pre])) {
                 if (!is_array($prop[$pre])) {
-                    $a = array($prop[$pre]);
+                    $a = [$prop[$pre]];
                 } else {
                     $a = $prop[$pre];
                 }
@@ -206,7 +203,7 @@ class XmlProperty extends Property
                 $prop[$pre] = $a;
             } else {
                 if ($index) {
-                    $prop[$pre] = array($index => $val);
+                    $prop[$pre] = [$index => $val];
                 } else {
                     $prop[$pre] = $val;
                 }

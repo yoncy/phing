@@ -84,12 +84,12 @@ class Branch extends AbstractGitTask
      * delete, forceDelete, move, forceMove
      * @var array
      */
-    private $extraOptions = array(
+    private $extraOptions = [
         'd' => false,
         'D' => false,
         'm' => false,
         'M' => false,
-    );
+    ];
 
     /**
      * The main entry point for the task
@@ -105,7 +105,7 @@ class Branch extends AbstractGitTask
 
         // if we are moving branch, we need to know new name
         if ($this->isMove() || $this->isForceMove()) {
-            if (null === $this->getNewbranch()) {
+            if (null === $this->getNewBranch()) {
                 throw new BuildException('"newbranch" is required parameter');
             }
         }
@@ -133,8 +133,8 @@ class Branch extends AbstractGitTask
             $command->addArgument($this->getStartPoint());
         }
 
-        if (null !== $this->getNewbranch()) {
-            $command->addArgument($this->getNewbranch());
+        if (null !== $this->getNewBranch()) {
+            $command->addArgument($this->getNewBranch());
         }
 
         $this->log('git-branch command: ' . $command->createCommandString(), Project::MSG_INFO);
@@ -362,5 +362,4 @@ class Branch extends AbstractGitTask
     {
         return $this->newbranch;
     }
-
 }

@@ -33,7 +33,7 @@ class Worker
     protected $task = null;
 
     /** @var mixed[] A list of argument to pass to the task */
-    protected $arguments = array();
+    protected $arguments = [];
 
     /** @var int The return code to tell the parent process how it went */
     protected $return_code = -1;
@@ -51,7 +51,7 @@ class Worker
      * @param callback $task The task to invoke upon execution.
      * @param mixed[] $arguments The arguments to provide to the task.
      */
-    public function __construct($task, array $arguments = array())
+    public function __construct($task, array $arguments = [])
     {
         $this->setTask($task);
         $this->arguments = $arguments;

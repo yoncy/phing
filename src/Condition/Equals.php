@@ -33,7 +33,6 @@ use Phing\Exception\BuildException;
  */
 class Equals implements ConditionInterface
 {
-
     private $arg1;
     private $arg2;
     private $trim = false;

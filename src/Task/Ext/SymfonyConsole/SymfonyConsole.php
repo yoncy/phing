@@ -25,7 +25,7 @@ use Phing\Task\Ext\SymfonyConsole\Arg;
 use Phing\Exception\BuildException;
 use Phing\Project;
 use Phing\Task;
-
+use Phing\Type\CommandLine;
 
 /**
  * Symfony Console Task
@@ -39,9 +39,9 @@ class SymfonyConsole extends Task
 
     /**
      *
-     * @var Array of Arg a collection of Arg objects
+     * @var Arg[] a collection of Arg objects
      */
-    private $args = array();
+    private $args = [];
 
     /**
      *
@@ -53,7 +53,7 @@ class SymfonyConsole extends Task
      *
      * @var string path to symfony console application
      */
-    private $console = 'php app/console';
+    private $console = 'app/console';
 
     /**
      *
@@ -110,7 +110,7 @@ class SymfonyConsole extends Task
     }
 
     /**
-     * Set the name of the property to store the hash value in
+     * Set the name of the property to store the application output in
      * @param $property
      * @return void
      */
@@ -200,11 +200,11 @@ class SymfonyConsole extends Task
         if (!$this->debug && !$this->isNoDebugArgPresent()) {
             $this->createArg()->setName("no-debug");
         }
-        $cmd = array(
-            $this->console,
+        $cmd = [
+            CommandLine::quoteArgument($this->console),
             $this->command,
             implode(' ', $this->args)
-        );
+        ];
         $cmd = implode(' ', $cmd);
 
         return $cmd;
@@ -219,7 +219,7 @@ class SymfonyConsole extends Task
 
         $this->log("executing $cmd");
         $return = null;
-        $output = array();
+        $output = [];
         exec($cmd, $output, $return);
 
         $lines = implode("\r\n", $output);

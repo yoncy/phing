@@ -45,13 +45,7 @@ class LineContains extends BaseParamFilterReader implements ChainableReaderInter
      * Array of Contains objects.
      * @var array
      */
-    private $_contains = array();
-
-    /**
-     * [Deprecated]
-     * @var string
-     */
-    private $_line = null;
+    private $_contains = [];
 
     /**
      * Returns all lines in a buffer that contain specified strings.
@@ -72,7 +66,7 @@ class LineContains extends BaseParamFilterReader implements ChainableReaderInter
         }
 
         $lines = explode("\n", $buffer);
-        $matched = array();
+        $matched = [];
         $containsSize = count($this->_contains);
 
         foreach ($lines as $line) {
@@ -90,54 +84,6 @@ class LineContains extends BaseParamFilterReader implements ChainableReaderInter
         $filtered_buffer = implode("\n", $matched);
 
         return $filtered_buffer;
-    }
-
-    /**
-     * [Deprecated. For reference only, used to be read() method.]
-     * Returns the next character in the filtered stream, only including
-     * lines from the original stream which contain all of the specified words.
-     *
-     * @return the next character in the resulting stream, or -1
-     *             if the end of the resulting stream has been reached
-     *
-     * @exception IOException if the underlying stream throws an IOException
-     * during reading
-     */
-    public function readChar()
-    {
-        if (!$this->getInitialized()) {
-            $this->_initialize();
-            $this->setInitialized(true);
-        }
-
-        $ch = -1;
-
-        if ($this->_line !== null) {
-            $ch = substr($this->_line, 0, 1);
-            if (strlen($this->_line) === 1) {
-                $this->_line = null;
-            } else {
-                $this->_line = substr($this->_line, 1);
-            }
-        } else {
-            $this->_line = $this->readLine();
-            if ($this->_line === null) {
-                $ch = -1;
-            } else {
-                $containsSize = count($this->_contains);
-                for ($i = 0; $i < $containsSize; $i++) {
-                    $containsStr = $this->_contains[$i]->getValue();
-                    if (strstr($this->_line, $containsStr) === false) {
-                        $this->_line = null;
-                        break;
-                    }
-                }
-
-                return $this->readChar();
-            }
-        }
-
-        return $ch;
     }
 
     /**

@@ -42,7 +42,6 @@ use Phing\Task;
  */
 abstract class AbstractPdoTask extends Task
 {
-
     private $caching = true;
 
     /**
@@ -91,7 +90,7 @@ abstract class AbstractPdoTask extends Task
 
     /**
      * Sets the database connection URL; required.
-     * @param string $url
+     * @param string $url The url to set
      */
     public function setUrl($url)
     {
@@ -100,7 +99,7 @@ abstract class AbstractPdoTask extends Task
 
     /**
      * Sets the password; required.
-     * @param string $password
+     * @param string $password The password to set
      */
     public function setPassword($password)
     {
@@ -110,7 +109,7 @@ abstract class AbstractPdoTask extends Task
     /**
      * Auto commit flag for database connection;
      * optional, default false.
-     * @param string $autocommit The autocommit to set
+     * @param bool $autocommit The autocommit to set
      */
     public function setAutocommit($autocommit)
     {
@@ -131,17 +130,15 @@ abstract class AbstractPdoTask extends Task
      * Creates a new Connection as using the driver, url, userid and password specified.
      * The calling method is responsible for closing the connection.
      * @return PDO     the newly created connection.
-     * @throws \Phing\Exception\BuildException if the UserId/Password/Url is not set or there is no suitable driver or the driver fails to load.
+     * @throws BuildException if the UserId/Password/Url is not set or there is no suitable driver or the driver fails to load.
      */
     protected function getConnection()
     {
-
         if ($this->url === null) {
-            throw new BuildException("Url attribute must be set!", $this->location);
+            throw new BuildException("Url attribute must be set!", $this->getLocation());
         }
 
         try {
-
             $this->log("Connecting to " . $this->getUrl(), Project::MSG_VERBOSE);
 
             $user = null;
@@ -168,11 +165,9 @@ abstract class AbstractPdoTask extends Task
             }
 
             return $conn;
-
         } catch (PDOException $e) {
-            throw new BuildException($e->getMessage(), $this->location);
+            throw new BuildException($e->getMessage(), $this->getLocation());
         }
-
     }
 
     /**
@@ -185,7 +180,7 @@ abstract class AbstractPdoTask extends Task
 
     /**
      * Gets the autocommit.
-     * @return boolean
+     * @return bool
      */
     public function isAutocommit()
     {

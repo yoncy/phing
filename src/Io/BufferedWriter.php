@@ -86,5 +86,4 @@ class BufferedWriter extends AbstractWriter
     {
         return $this->out->close();
     }
-
 }

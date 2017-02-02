@@ -11,7 +11,6 @@ use Phing\Test\Helper\AbstractBuildFileTest;
  */
 class RetryTest extends AbstractBuildFileTest
 {
-
     public function setUp()
     {
         $this->configureProject(

@@ -11,7 +11,6 @@ use Phing\Test\Helper\AbstractBuildFileTest;
  */
 class RegexTest extends AbstractBuildFileTest
 {
-
     public function setUp()
     {
         $this->configureProject(

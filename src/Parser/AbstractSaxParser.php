@@ -37,15 +37,10 @@ use Exception;
 abstract class AbstractSaxParser
 {
 
-    /** The AbstractHandler object. */
-    protected $handler;
-
     /**
-     * Constructs a SAX parser
+     * @var AbstractHandler
      */
-    public function __construct()
-    {
-    }
+    protected $handler;
 
     /**
      * Sets options for PHP interal parser. Must be implemented by the parser
@@ -62,7 +57,7 @@ abstract class AbstractSaxParser
      *
      * @param AbstractHandler $obj The handler object.
      */
-    public function setHandler($obj)
+    public function setHandler(AbstractHandler $obj)
     {
         $this->handler = $obj;
     }
@@ -75,9 +70,9 @@ abstract class AbstractSaxParser
      * It gives control to the current active handler object by calling the
      * <code>startElement()</code> method.
      *
-     * @param  object  the php's internal parser handle
-     * @param  string  the open tag name
-     * @param  array   the tag's attributes if any
+     * @param  object $parser the php's internal parser handle
+     * @param  string $name the open tag name
+     * @param  array  $attribs the tag's attributes if any
      * @throws Exception - Exceptions may be thrown by the Handler
      */
     public function startElement($parser, $name, $attribs)
@@ -94,8 +89,8 @@ abstract class AbstractSaxParser
      * It gives control to the current active handler object by calling the
      * <code>endElement()</code> method.
      *
-     * @param   object  the php's internal parser handle
-     * @param   string  the closing tag name
+     * @param   object $parser the php's internal parser handle
+     * @param   string $name the closing tag name
      * @throws Exception - Exceptions may be thrown by the Handler
      */
     public function endElement($parser, $name)

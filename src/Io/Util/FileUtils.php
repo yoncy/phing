@@ -51,11 +51,10 @@ class FileUtils
      * (The mask value is prepared w.r.t the current user's file-creation mask value)
      *
      * @param  boolean $dirmode Directory creation mask to select
-     * @param  boolean $returnoctal Whether the return value is in octal representation
      *
-     * @return string  Creation Mask
+     * @return int  Creation Mask in octal representation
      */
-    public static function getDefaultFileCreationMask($dirmode = false, $returnoctal = false)
+    public static function getDefaultFileCreationMask($dirmode = false)
     {
 
         // Preparing the creation mask base permission
@@ -64,7 +63,7 @@ class FileUtils
         // Default mask information
         $defaultmask = sprintf('%03o', ($permission & ($permission - (int)sprintf('%04o', umask()))));
 
-        return ($returnoctal ? octdec($defaultmask) : $defaultmask);
+        return octdec($defaultmask);
     }
 
     /**
@@ -97,10 +96,10 @@ class FileUtils
      *
      * @param  File $sourceFile
      * @param  File $destFile
+     * @param  Project $project
      * @param  boolean $overwrite
      * @param  boolean $preserveLastModified
      * @param  array $filterChains
-     * @param  Project $project
      * @param  integer $mode
      * @param bool $preservePermissions
      * @throws Exception
@@ -110,16 +109,15 @@ class FileUtils
     public function copyFile(
         File $sourceFile,
         File $destFile,
+        Project $project,
         $overwrite = false,
         $preserveLastModified = true,
         &$filterChains = null,
-        Project $project,
         $mode = 0755,
         $preservePermissions = true
     ) {
-
         if ($overwrite || !$destFile->exists() || $destFile->lastModified() < $sourceFile->lastModified()) {
-            if ($destFile->exists() && $destFile->isFile()) {
+            if ($destFile->exists() && ($destFile->isFile() || $destFile->isLink())) {
                 $destFile->delete();
             }
 
@@ -137,7 +135,6 @@ class FileUtils
             }
 
             if ((is_array($filterChains)) && (!empty($filterChains))) {
-
                 $in = self::getChainedReader(new BufferedReader(new FileReader($sourceFile)), $filterChains, $project);
                 $out = new BufferedWriter(new FileWriter($destFile));
 
@@ -157,7 +154,6 @@ class FileUtils
                 if ($preservePermissions === true) {
                     $destFile->setMode($sourceFile->getMode());
                 }
-
             } else {
                 // simple copy (no filtering)
                 $sourceFile->copyTo($destFile);
@@ -165,15 +161,49 @@ class FileUtils
                 // By default, PHP::Copy also copies the file permissions. Therefore,
                 // re-setting the mode with the "user file-creation mask" information.
                 if ($preservePermissions === false) {
-                    $destFile->setMode(FileUtils::getDefaultFileCreationMask(false, true));
+                    $destFile->setMode(FileUtils::getDefaultFileCreationMask(false));
                 }
             }
 
             if ($preserveLastModified && !$destFile->isLink()) {
                 $destFile->setLastModified($sourceFile->lastModified());
             }
-
         }
+    }
+
+
+    /**
+     * Attempts to rename a file from a source to a destination.
+     * If overwrite is set to true, this method overwrites existing file even if the destination file is newer.
+     * Otherwise, the source file is renamed only if the destination file is older than it.
+     *
+     * @param File $sourceFile
+     * @param File $destFile
+     * @return boolean
+     */
+    public function renameFile(File $sourceFile, File $destFile, $overwrite = false)
+    {
+        // ensure that parent dir of dest file exists!
+        $parent = $destFile->getParentFile();
+        if ($parent !== null) {
+            if (!$parent->exists()) {
+                $parent->mkdirs();
+            }
+        }
+
+        if ($overwrite || !$destFile->exists() || $destFile->lastModified() < $sourceFile->lastModified()) {
+            if ($destFile->exists()) {
+                try {
+                    $destFile->delete();
+                } catch (Exception $e) {
+                    throw new BuildException(
+                        "Unable to remove existing file " . $destFile->__toString() . ": " . $e->getMessage()
+                    );
+                }
+            }
+        }
+
+        $sourceFile->renameTo($destFile);
     }
 
     /**
@@ -252,8 +282,7 @@ class FileUtils
      */
     public function normalize($path)
     {
-
-        $path = (string)$path;
+        $path = (string) $path;
         $orig = $path;
 
         $path = str_replace('/', DIRECTORY_SEPARATOR, str_replace('\\', DIRECTORY_SEPARATOR, $path));
@@ -274,11 +303,10 @@ class FileUtils
             $dosWithDrive = true;
 
             $ca = str_replace('/', '\\', $path);
-            $ca = StringHelper::toCharArray($ca);
 
             $path = strtoupper($ca[0]) . ':';
 
-            for ($i = 2, $_i = count($ca); $i < $_i; $i++) {
+            for ($i = 2, $_i = strlen($ca); $i < $_i; $i++) {
                 if (($ca[$i] !== '\\') ||
                     ($ca[$i] === '\\' && $ca[$i - 1] !== '\\')
                 ) {
@@ -295,7 +323,6 @@ class FileUtils
                 $root = substr($path, 0, 3);
                 $path = substr($path, 3);
             }
-
         } else {
             if (strlen($path) == 1) {
                 $root = DIRECTORY_SEPARATOR;
@@ -312,7 +339,7 @@ class FileUtils
             }
         }
 
-        $s = array();
+        $s = [];
         array_push($s, $root);
         $tok = strtok($path, DIRECTORY_SEPARATOR);
         while ($tok !== false) {
@@ -385,7 +412,7 @@ class FileUtils
             }
         } else {
             do {
-                $result = new File($parent, $prefix . substr(md5(time()), 0, 8) . $suffix);
+                $result = new File($parent, $prefix . substr(md5((string) time()), 0, 8) . $suffix);
             } while ($result->exists());
         }
 
@@ -404,7 +431,6 @@ class FileUtils
      */
     public function contentEquals(File $file1, File $file2)
     {
-
         if (!($file1->exists() || $file2->exists())) {
             return false;
         }

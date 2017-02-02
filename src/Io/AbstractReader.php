@@ -99,5 +99,4 @@ abstract class AbstractReader
     {
         return true;
     }
-
 }

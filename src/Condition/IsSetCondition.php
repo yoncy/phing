@@ -33,7 +33,6 @@ use Phing\AbstractProjectComponent;
  */
 class IsSetCondition extends AbstractProjectComponent implements ConditionInterface
 {
-
     private $property;
 
     /**
@@ -59,5 +58,4 @@ class IsSetCondition extends AbstractProjectComponent implements ConditionInterf
 
         return $this->project->getProperty($this->property) !== null;
     }
-
 }

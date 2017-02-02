@@ -39,6 +39,6 @@ class LastRevisionTest extends AbstractSvnTest
     {
         $repository = PHING_TEST_BASE . '/tmp/svn';
         $this->executeTarget('getLastRevision');
-        $this->assertPropertyEquals('svn.lastrevision', '1560');
+        $this->assertPropertyEquals('svn.lastrevision', '3537');
     }
 }

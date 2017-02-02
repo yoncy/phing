@@ -40,53 +40,52 @@ class IniFileParser implements FileParserInterface
      */
     public function parseFile(File $file, PropertySetInterface $propertySet, $section = null)
     {
-        if (($lines = @file($file)) === false) {
+        if (($lines = @\file($file, FILE_IGNORE_NEW_LINES)) === false) {
             throw new IOException("Unable to parse contents of $file");
         }
 
         // concatenate lines ending with backslash
         $linesCount = count($lines);
         for ($i = 0; $i < $linesCount; $i++) {
-            if (substr($lines[$i], -2, 1) === '\\') {
-                $lines[$i + 1] = substr($lines[$i], 0, -2) . ltrim($lines[$i + 1]);
+            if (substr($lines[$i], -1, 1) === '\\') {
+                $lines[$i + 1] = substr($lines[$i], 0, -1) . ltrim($lines[$i + 1]);
                 $lines[$i] = '';
             }
         }
 
         $currentSection = '';
-        $sect = array($currentSection => array(), $section => array());
-        $depends = array();
+        $sect = [$currentSection => [], $section => []];
+        $depends = [];
 
-        foreach ($lines as $l) {
+        foreach ($lines as $line) {
+            $line = trim(preg_replace("/(?:^|\s+)[;#].*$/", "", $line));
 
-            $l = trim(preg_replace("/(?:^|\s+)[;#].*$/", "", $l));
-
-            if (!$l) {
+            if (!$line) {
                 continue;
             }
 
-            if (preg_match('/^\[(\w+)(?:\s*:\s*(\w+))?\]$/', $l, $matches)) {
+            if (preg_match('/^\[(\w+)(?:\s*:\s*(\w+))?\]$/', $line, $matches)) {
                 $currentSection = $matches[1];
-                $sect[$currentSection] = array();
+                $sect[$currentSection] = [];
                 if (isset($matches[2])) {
                     $depends[$currentSection] = $matches[2];
                 }
                 continue;
             }
 
-            $pos = strpos($l, '=');
-            $name = trim(substr($l, 0, $pos));
-            $value = $this->inVal(trim(substr($l, $pos + 1)));
+            $pos = strpos($line, '=');
+            $name = trim(substr($line, 0, $pos));
+            $value = $this->inVal(trim(substr($line, $pos + 1)));
 
             /*
              * Take care: Property file may contain identical keys like
              * a[] = first
              * a[] = second
              */
-            $sect[$currentSection][] = array($name, $value);
+            $sect[$currentSection][] = [$name, $value];
         }
 
-        $dependencyOrder = array();
+        $dependencyOrder = [];
         while ($section) {
             array_unshift($dependencyOrder, $section);
             $section = isset($depends[$section]) ? $depends[$section] : '';

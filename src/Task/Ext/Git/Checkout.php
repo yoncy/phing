@@ -79,11 +79,11 @@ class Checkout extends AbstractGitTask
      * create, forceCreate, merge
      * @var array
      */
-    private $extraOptions = array(
+    private $extraOptions = [
         'b' => false,
         'B' => false,
         'm' => false,
-    );
+    ];
 
     /**
      * The main entry point for the task

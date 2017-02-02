@@ -82,12 +82,10 @@ class FileSize extends Task
 
         if ($size === false) {
             throw new BuildException(sprintf('[FileSize] Cannot determine size of file: %s', $this->file));
-
         }
 
         // publish hash value
         $this->project->setProperty($this->propertyName, $size);
-
     }
 
     /**
@@ -112,7 +110,6 @@ class FileSize extends Task
                 )
             );
         }
-
     }
 
     /**

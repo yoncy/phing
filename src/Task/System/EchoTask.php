@@ -22,6 +22,7 @@ namespace Phing\Task\System;
 
 use Phing\Project;
 use Phing\Task;
+use Phing\Type\AbstractFileSet;
 use Phing\Type\FileSet;
 
 
@@ -35,7 +36,6 @@ use Phing\Type\FileSet;
  */
 class EchoTask extends Task
 {
-
     protected $msg = "";
 
     protected $file = "";
@@ -44,7 +44,8 @@ class EchoTask extends Task
 
     protected $level = "info";
 
-    protected $filesets = array();
+    /** @var AbstractFileSet[] */
+    protected $filesets = [];
 
     public function main()
     {
@@ -55,14 +56,15 @@ class EchoTask extends Task
             case "warning":
                 $loglevel = Project::MSG_WARN;
                 break;
-            case "info":
-                $loglevel = Project::MSG_INFO;
-                break;
             case "verbose":
                 $loglevel = Project::MSG_VERBOSE;
                 break;
             case "debug":
                 $loglevel = Project::MSG_DEBUG;
+                break;
+            case "info":
+            default:
+                $loglevel = Project::MSG_INFO;
                 break;
         }
 

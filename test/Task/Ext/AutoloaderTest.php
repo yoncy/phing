@@ -32,7 +32,6 @@ use Phing\Test\Helper\AbstractBuildFileTest;
  */
 class AutoloaderTest extends AbstractBuildFileTest
 {
-
     public function setUp()
     {
         $this->configureProject(PHING_TEST_BASE . "/etc/tasks/ext/autoloader/autoloader.xml");

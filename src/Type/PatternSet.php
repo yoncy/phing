@@ -41,10 +41,9 @@ use Phing\Type\Reference;
  */
 class PatternSet extends DataType
 {
-
-    private $includeList = array();
-    private $excludeList = array();
-    private $creators = array();
+    private $includeList = [];
+    private $excludeList = [];
+    private $creators = [];
 
     /**
      * Makes this instance in effect a reference to another PatternSet
@@ -237,7 +236,6 @@ class PatternSet extends DataType
                 }
                 $line = $patternReader->readLine();
             }
-
         } catch (IOException $ioe) {
             $msg = "An error occurred while reading from pattern file: " . $patternfile->__toString();
             if ($patternReader) {
@@ -348,7 +346,7 @@ class PatternSet extends DataType
     public function getRef(Project $p)
     {
         if (!$this->checked) {
-            $stk = array();
+            $stk = [];
             array_push($stk, $this);
             $this->dieOnCircularReference($stk, $p);
         }
@@ -371,12 +369,11 @@ class PatternSet extends DataType
      */
     private function makeArray(&$list, Project $p)
     {
-
         if (count($list) === 0) {
             return null;
         }
 
-        $tmpNames = array();
+        $tmpNames = [];
         foreach ($list as $ne) {
             $pattern = (string)$ne->evalName($p);
             if ($pattern !== null && strlen($pattern) > 0) {

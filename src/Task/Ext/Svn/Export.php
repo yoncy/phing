@@ -57,13 +57,13 @@ class Export extends AbstractSvnTask
 
         $this->log("Exporting SVN repository to '" . $this->getToDir() . "'");
 
-        $switches = array();
+        $switches = [];
 
         if (!empty($this->revision)) {
             $switches['r'] = $this->revision;
         }
 
-        $this->run(array($this->getToDir()), $switches);
+        $this->run([$this->getToDir()], $switches);
     }
 
     /**

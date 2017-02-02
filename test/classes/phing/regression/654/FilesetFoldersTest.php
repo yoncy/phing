@@ -32,7 +32,6 @@ use Phing\Test\Helper\AbstractBuildFileTest;
  */
 class FilesetFoldersTest extends AbstractBuildFileTest
 {
-
     public function setUp()
     {
         $this->configureProject(PHING_TEST_BASE . "/etc/regression/654/build.xml");

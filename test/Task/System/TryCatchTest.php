@@ -14,7 +14,6 @@ use Phing\Test\Helper\AbstractBuildFileTest;
  */
 class TryCatchTest extends AbstractBuildFileTest
 {
-
     public function setUp()
     {
         $this->configureProject(

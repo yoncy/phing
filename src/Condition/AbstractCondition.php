@@ -20,6 +20,7 @@
  */
 namespace Phing\Condition;
 
+use Phing\Exception\BuildException;
 use Phing\Task\System\Available;
 use IteratorAggregate;
 use Phing\AbstractProjectComponent;
@@ -42,8 +43,36 @@ use Phing\Task\System\PhingVersion;
 abstract class AbstractCondition extends AbstractProjectComponent
     implements IteratorAggregate, CustomChildCreatorInterface
 {
+    public $conditions = []; // needs to be public for "inner" class access
 
-    public $conditions = array(); // needs to be public for "inner" class access
+    /** @var string $taskName */
+    private $taskName = 'condition';
+
+    public function __construct($taskName = 'component')
+    {
+        $this->taskName = $taskName;
+    }
+
+    /**
+     * Sets the name to use in logging messages.
+     *
+     * @param string $name The name to use in logging messages.
+     *                     Should not be <code>null</code>.
+     */
+    public function setTaskName($name)
+    {
+        $this->taskName = $name;
+    }
+
+    /**
+     * Returns the name to use in logging messages.
+     *
+     * @return string the name to use in logging messages.
+     */
+    public function getTaskName()
+    {
+        return $this->taskName;
+    }
 
     /**
      * @return int
@@ -159,6 +188,26 @@ abstract class AbstractCondition extends AbstractProjectComponent
     }
 
     /**
+     * @return IsPropertyFalse
+     */
+    public function createIsPropertyFalse()
+    {
+        $num = array_push($this->conditions, new IsPropertyFalse());
+
+        return $this->conditions[$num - 1];
+    }
+
+    /**
+     * @return IsPropertyTrue
+     */
+    public function createIsPropertyTrue()
+    {
+        $num = array_push($this->conditions, new IsPropertyTrue());
+
+        return $this->conditions[$num - 1];
+    }
+
+    /**
      * @return Contains
      */
     public function createContains()
@@ -237,10 +286,24 @@ abstract class AbstractCondition extends AbstractProjectComponent
         return $this->conditions[$num - 1];
     }
 
+    public function createIsFileSelected()
+    {
+        $num = array_push($this->conditions, new IsFileSelected());
+
+        return $this->conditions[$num - 1];
+    }
+
+    public function createMatches()
+    {
+        $num = array_push($this->conditions, new Matches());
+
+        return $this->conditions[$num - 1];
+    }
+
     /**
-     * @param  string $elementName
-     * @param  Project $project
-     * @throws \Phing\Exception\BuildException
+     * @param  string         $elementName
+     * @param  Project        $project
+     * @throws BuildException
      * @return ConditionInterface
      */
     public function customChildCreator($elementName, Project $project)
@@ -250,5 +313,4 @@ abstract class AbstractCondition extends AbstractProjectComponent
 
         return $this->conditions[$num - 1];
     }
-
 }

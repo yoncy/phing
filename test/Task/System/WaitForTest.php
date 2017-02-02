@@ -33,7 +33,6 @@ use Phing\Test\Helper\AbstractBuildFileTest;
  */
 class WaitForTest extends AbstractBuildFileTest
 {
-
     public function setUp()
     {
         $this->configureProject(

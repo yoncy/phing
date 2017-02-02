@@ -33,7 +33,6 @@ use PHPUnit_Framework_TestCase;
  */
 class PhingTest extends PHPUnit_Framework_TestCase
 {
-
     const NAMESPACED_CLASS = 'Vendor\\Package\\Sub_Package\\Separated\\FullSeparatedClass';
     const SEPARATED_CLASS = 'Vendor_Package_SeparatedClass';
     const DOTTED_CLASS = 'Vendor.Package.DottedClass';
@@ -79,6 +78,6 @@ class PhingTest extends PHPUnit_Framework_TestCase
      */
     protected static function getClassPath()
     {
-        return dirname(__FILE__) . '/etc/importclasses';
+        return __DIR__ . '/etc/importclasses';
     }
 }

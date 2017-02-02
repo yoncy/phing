@@ -171,19 +171,16 @@ class Report extends Task
 
         $proc = new XSLTProcessor();
         if (defined('XSL_SECPREF_WRITE_FILE')) {
-            if (version_compare(PHP_VERSION, '5.4', "<")) {
-                ini_set("xsl.security_prefs", XSL_SECPREF_WRITE_FILE | XSL_SECPREF_CREATE_DIRECTORY);
-            } else {
-                $proc->setSecurityPrefs(XSL_SECPREF_WRITE_FILE | XSL_SECPREF_CREATE_DIRECTORY);
-            }
+            $proc->setSecurityPrefs(XSL_SECPREF_WRITE_FILE | XSL_SECPREF_CREATE_DIRECTORY);
         }
 
-        $proc->importStyleSheet($xsl);
-        $proc->setParameter('', 'output.sorttable', (string)$this->useSortTable);
+        $proc->registerPHPFunctions('nl2br');
+        $proc->importStylesheet($xsl);
+        $proc->setParameter('', 'output.sorttable', (string) $this->useSortTable);
 
         if ($this->format == "noframes") {
             $writer = new FileWriter(new File($this->toDir, "phpunit-noframes.html"));
-            $writer->write($proc->transformToXML($document));
+            $writer->write($proc->transformToXml($document));
             $writer->close();
         } else {
             ExtendedFileStream::registerStream();
@@ -198,7 +195,7 @@ class Report extends Task
             // no output for the framed report
             // it's all done by extension...
             $proc->setParameter('', 'output.dir', $toDir);
-            $proc->transformToXML($document);
+            $proc->transformToXml($document);
 
             ExtendedFileStream::unregisterStream();
         }
@@ -223,6 +220,7 @@ class Report extends Task
             $children = $xp->query("./testsuite", $node);
 
             if ($children->length) {
+                /** @var $child DOMElement */
                 foreach ($children as $child) {
                     $rootElement->appendChild($child);
 

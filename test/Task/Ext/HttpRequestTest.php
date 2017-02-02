@@ -39,12 +39,12 @@ class HttpRequestTest extends AbstractHttpTest
     {
         return $this->createRequest(
             $this->createMockAdapter(
-                array(
+                [
                     "HTTP/1.1 200 OK\r\n" .
                     "Content-Type: text/plain; charset=iso-8859-1\r\n" .
                     "\r\n" .
                     "The response containing a 'foo' string"
-                )
+                ]
             )
         );
     }
@@ -86,7 +86,7 @@ class HttpRequestTest extends AbstractHttpTest
         $this->executeTarget('recipient');
 
         $this->assertEquals(
-            array('user' => 'luser', 'password' => 'secret', 'scheme' => 'digest'),
+            ['user' => 'luser', 'password' => 'secret', 'scheme' => 'digest'],
             $trace->requests[0]['auth']
         );
     }
@@ -109,11 +109,10 @@ class HttpRequestTest extends AbstractHttpTest
         $this->copyTasksAddingCustomRequest('config-properties', 'recipient', $this->createRequest($trace));
         $this->executeTarget('recipient');
 
-        $request = new HTTP_Request2(
-            null, 'GET', array(
-                'proxy' => 'http://localhost:8080/',
-                'max_redirects' => 9
-            )
+        $request = new HTTP_Request2(null, 'GET', [
+            'proxy' => 'http://localhost:8080/',
+            'max_redirects' => 9
+        ]
         );
 
         $this->assertEquals($request->getConfig(), $trace->requests[0]['config']);

@@ -23,6 +23,7 @@
 namespace Phing\Test\Task\System;
 
 use Phing;
+use Phing\Exception\BuildException;
 use Phing\Task\System\Property;
 use Phing\Test\Helper\AbstractBuildFileTest;
 
@@ -172,4 +173,45 @@ class PropertyTest extends AbstractBuildFileTest
         $this->scanAssertionsInLogs("late-expansion");
     }
 
+    public function testFilterChain()
+    {
+        $this->executeTarget(__FUNCTION__);
+        $this->assertEquals("World", $this->project->getProperty("filterchain.test"));
+    }
+
+    public function circularDefinitionTargets()
+    {
+        return [
+            ['test3'],
+            ['testCircularDefinition1'],
+            ['testCircularDefinition2'],
+        ];
+    }
+
+    /**
+     * @dataProvider circularDefinitionTargets
+     */
+    public function testCircularDefinitionDetection($target)
+    {
+        try {
+            $this->executeTarget($target);
+        } catch (BuildException $e) {
+            $this->assertTrue(
+                strpos($e->getMessage(), "was circularly defined") !== false,
+                "Circular definition not detected - "
+            );
+
+            return;
+        }
+        $this->fail("Did not throw exception on circular exception");
+    }
+
+    /**
+     * Inspired by @link http://www.phing.info/trac/ticket/1118
+     * This test should not throw exceptions
+     */
+    public function testUsingPropertyTwiceInPropertyValueShouldNotThrowException()
+    {
+        $this->executeTarget(__FUNCTION__);
+    }
 }

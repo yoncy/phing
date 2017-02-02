@@ -12,7 +12,6 @@ use Phing\Test\Helper\AbstractBuildFileTest;
  */
 class EchoPropertiesTest extends AbstractBuildFileTest
 {
-
     public function setUp()
     {
         $this->configureProject(

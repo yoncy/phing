@@ -23,7 +23,6 @@ namespace Phing\Task\Ext\Amazon;
 use Phing\Exception\BuildException;
 use Phing\Type\FileSet;
 
-
 /**
  * Stores an object on S3
  *
@@ -62,7 +61,7 @@ class S3Put extends AbstractS3Task
      *
      * @var array
      */
-    protected $_filesets = array();
+    protected $_filesets = [];
 
     /**
      * Whether to try to create buckets or not
@@ -113,7 +112,7 @@ class S3Put extends AbstractS3Task
      *
      * @var array
      */
-    protected $_extensionContentTypeMapper = array(
+    protected $_extensionContentTypeMapper = [
         'js' => 'application/x-javascript',
         'css' => 'text/css',
         'html' => 'text/html',
@@ -122,7 +121,7 @@ class S3Put extends AbstractS3Task
         'jpg' => 'image/jpeg',
         'jpeg' => 'image/jpeg',
         'txt' => 'text/plain'
-    );
+    ];
 
     /**
      * Whether filenames contain paths
@@ -213,7 +212,7 @@ class S3Put extends AbstractS3Task
      */
     public function setAcl($permission)
     {
-        $valid_acl = array('private', 'public-read', 'public-read-write', 'authenticated-read');
+        $valid_acl = ['private', 'public-read', 'public-read-write', 'authenticated-read'];
         if (empty($permission) || !is_string($permission) || !in_array($permission, $valid_acl)) {
             throw new BuildException('Object must be one of the following values: ' . implode('|', $valid_acl));
         }
@@ -320,7 +319,7 @@ class S3Put extends AbstractS3Task
      */
     protected function getHttpHeaders()
     {
-        $headers = array();
+        $headers = [];
         if (!is_null($this->_maxage)) {
             $headers['Cache-Control'] = 'max-age=' . $this->_maxage;
         }
@@ -407,7 +406,7 @@ class S3Put extends AbstractS3Task
 
         // Filesets take precedence
         if (!empty($this->_filesets)) {
-            $objects = array();
+            $objects = [];
 
             foreach ($this->_filesets as $fs) {
                 if (!($fs instanceof FileSet)) {

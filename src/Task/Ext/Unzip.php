@@ -75,11 +75,11 @@ class Unzip extends AbstractExtract
         $zip = new ZipArchive();
         $zip->open($zipfile->getAbsolutePath());
 
-        $content = array();
+        $content = [];
         for ($i = 0; $i < $zip->numFiles; $i++) {
-            $content[] = array(
+            $content[] = [
                 'filename' => $zip->getNameIndex($i)
-            );
+            ];
         }
 
         return $content;

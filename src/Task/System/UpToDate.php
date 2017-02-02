@@ -45,13 +45,35 @@ use Phing\Type\Mapper;
  */
 class UpToDate extends Task implements ConditionInterface
 {
-
+    /**
+     * @var string
+     */
     private $_property;
+
+    /**
+     * @var string
+     */
     private $_value;
+
+    /**
+     * @var PhingFile
+     */
     private $_sourceFile;
+
+    /**
+     * @var PhingFile
+     */
     private $_targetFile;
-    private $sourceFileSets = array();
-    private $_filelists = array();
+
+    /**
+     * @var FileSet[]
+     */
+    private $sourceFileSets = [];
+
+    /**
+     * @var FileList[]
+     */
+    private $_filelists = [];
 
     protected $mapperElement = null;
 
@@ -79,8 +101,7 @@ class UpToDate extends Task implements ConditionInterface
      * The value to set the named property to if the target file is more
      * up-to-date than (each of) the source file(s). Defaults to 'true'.
      *
-     * @param the $value
-     * @internal param the $value value to set the property to if Target is up-to-date
+     * @param mixed $value the value to set the property to if Target is up-to-date
      */
     public function setValue($value)
     {
@@ -99,8 +120,7 @@ class UpToDate extends Task implements ConditionInterface
      * The file which must be more up-to-date than (each of) the source file(s)
      * if the property is to be set.
      *
-     * @param the $file
-     * @internal param the $file file we are checking against.
+     * @param string|PhingFile $file the file we are checking against.
      */
     public function setTargetFile($file)
     {
@@ -114,8 +134,7 @@ class UpToDate extends Task implements ConditionInterface
      * The file that must be older than the target file
      * if the property is to be set.
      *
-     * @param the $file
-     * @internal param the $file file we are checking against the target file.
+     * @param string|PhingFile $file the file we are checking against the target file.
      */
     public function setSrcfile($file)
     {
@@ -151,10 +170,8 @@ class UpToDate extends Task implements ConditionInterface
     public function createMapper()
     {
         if ($this->mapperElement !== null) {
-            throw new BuildException(
-                "Cannot define more than one mapper",
-                $this->location
-            );
+            throw new BuildException("Cannot define more than one mapper",
+                $this->getLocation());
         }
         $this->mapperElement = new Mapper($this->getProject());
 
@@ -218,7 +235,7 @@ class UpToDate extends Task implements ConditionInterface
             $fl = $this->_filelists[$i];
             $srcFiles = $fl->getFiles($this->project);
             $upToDate = $upToDate && $this->scanDir(
-                    $fs->getDir($this->project),
+                    $fl->getDir($this->project),
                     $srcFiles
                 );
         }
@@ -253,10 +270,8 @@ class UpToDate extends Task implements ConditionInterface
     public function main()
     {
         if ($this->_property === null) {
-            throw new BuildException(
-                "property attribute is required.",
-                $this->location
-            );
+            throw new BuildException("property attribute is required.",
+                $this->getLocation());
         }
         $upToDate = $this->evaluate();
         if ($upToDate) {

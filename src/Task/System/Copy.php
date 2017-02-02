@@ -6,6 +6,7 @@ use Phing\Io\File;
 use Phing\Io\IOException;
 use Phing\Io\Scanner\SourceFileScanner;
 use Phing\Io\Util\FileUtils;
+use Phing\Mapper\FileNameMapperInterface;
 use Phing\Mapper\FlattenMapper;
 use Phing\Mapper\IdentityMapper;
 use Phing\Project;
@@ -14,7 +15,7 @@ use Phing\Type\FileList;
 use Phing\Type\FileSet;
 use Phing\Type\FilterChain;
 use Phing\Type\Mapper;
-use Preserve;
+use Phing\Util\RegisterSlot;
 
 /**
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
@@ -47,23 +48,39 @@ use Preserve;
  */
 class Copy extends Task
 {
+    /** @var File */
     protected $file = null; // the source file (from xml attribute)
+
+    /** @var File */
     protected $destFile = null; // the destiantion file (from xml attribute)
+
+    /** @var File */
     protected $destDir = null; // the destination dir (from xml attribute)
+
     protected $overwrite = false; // overwrite destination (from xml attribute)
     protected $preserveLMT = false; // sync timestamps (from xml attribute)
     protected $preservePermissions = true; // sync permissions (from xml attribute)
     protected $includeEmpty = true; // include empty dirs? (from XML)
     protected $flatten = false; // apply the FlattenMapper right way (from XML)
+
+    /** @var Mapper */
     protected $mapperElement = null;
 
-    protected $fileCopyMap = array(); // asoc array containing mapped file names
-    protected $dirCopyMap = array(); // asoc array containing mapped file names
-    protected $completeDirMap = array(); // asoc array containing complete dir names
+    protected $fileCopyMap = []; // asoc array containing mapped file names
+    protected $dirCopyMap = []; // asoc array containing mapped file names
+    protected $completeDirMap = []; // asoc array containing complete dir names
+
+    /** @var FileUtils */
     protected $fileUtils = null; // a instance of fileutils
-    protected $filesets = array(); // all fileset objects assigned to this task
-    protected $filelists = array(); // all filelist objects assigned to this task
-    protected $filterChains = array(); // all filterchains objects assigned to this task
+
+    /** @var AbstractFileSet[] */
+    protected $filesets = []; // all fileset objects assigned to this task
+
+    /** @var FileList[] */
+    protected $filelists = []; // all filelist objects assigned to this task
+
+    /** @var FilterChain[] */
+    protected $filterChains = []; // all filterchains objects assigned to this task
 
     protected $verbosity = Project::MSG_VERBOSE;
 
@@ -126,7 +143,7 @@ class Copy extends Task
      * booleans in set* methods so we can assume that the right
      * value (boolean primitive) is coming in here.
      *
-     * @param  boolean  Preserve the timestamp on the destination file
+     * @param  boolean $bool Preserve the timestamp on the destination file
      * @return void
      */
     public function setPreserveLastModified($bool)
@@ -291,7 +308,7 @@ class Copy extends Task
     public function createMapper()
     {
         if ($this->mapperElement !== null) {
-            throw new BuildException("Cannot define more than one mapper", $this->location);
+            throw new BuildException("Cannot define more than one mapper", $this->getLocation());
         }
         $this->mapperElement = new Mapper($this->project);
 
@@ -306,7 +323,6 @@ class Copy extends Task
      */
     public function main()
     {
-
         $this->validateAttributes();
 
         if ($this->file !== null) {
@@ -317,7 +333,7 @@ class Copy extends Task
                 if ($this->overwrite === true || ($this->file->lastModified() > $this->destFile->lastModified())) {
                     $this->fileCopyMap[$this->file->getAbsolutePath()] = $this->destFile->getAbsolutePath();
                 } else {
-                    $this->log($this->file->getName() . " omitted, is up to date");
+                    $this->log($this->file->getName() . " omitted, " . $this->destFile->getName() . " is up to date");
                 }
             } else {
                 // terminate build
@@ -332,7 +348,7 @@ class Copy extends Task
         foreach ($this->filelists as $fl) {
             $fromDir = $fl->getDir($project);
             $srcFiles = $fl->getFiles($project);
-            $srcDirs = array($fl->getDir($project));
+            $srcDirs = [$fl->getDir($project)];
 
             if (!$this->flatten && $this->mapperElement === null) {
                 $this->completeDirMap[$fromDir->getAbsolutePath()] = $this->destDir->getAbsolutePath();
@@ -381,7 +397,6 @@ class Copy extends Task
      */
     protected function validateAttributes()
     {
-
         if ($this->file === null && count($this->filesets) === 0 && count($this->filelists) === 0) {
             throw new BuildException("CopyTask. Specify at least one source - a file, fileset or filelist.");
         }
@@ -450,7 +465,7 @@ class Copy extends Task
      * @param $fromDir
      * @param $toDir
      * @param $names
-     * @param $mapper
+     * @param FileNameMapperInterface $mapper
      * @param $map
      *
      * @return void
@@ -459,7 +474,7 @@ class Copy extends Task
     {
         $toCopy = null;
         if ($this->overwrite) {
-            $v = array();
+            $v = [];
             foreach ($names as $name) {
                 $result = $mapper->main($name);
                 if ($result !== null) {
@@ -479,6 +494,8 @@ class Copy extends Task
                 $dest = new File($toDir, $mapped[0]);
                 $map[$src->getAbsolutePath()] = $dest->getAbsolutePath();
             } else {
+                $mappedFiles = [];
+
                 foreach ($mapped as $mappedFile) {
                     if ($mappedFile === null) {
                         continue;
@@ -582,6 +599,16 @@ class Copy extends Task
         }
     }
 
+    /**
+     * @param $from
+     * @param $to
+     * @param RegisterSlot $fromSlot
+     * @param RegisterSlot $fromBasenameSlot
+     * @param RegisterSlot $toSlot
+     * @param RegisterSlot $toBasenameSlot
+     * @param $count
+     * @param $total
+     */
     private function copyToSingleDestination(
         $from,
         $to,
@@ -612,10 +639,10 @@ class Copy extends Task
             $this->fileUtils->copyFile(
                 $fromFile,
                 $toFile,
+                $this->getProject(),
                 $this->overwrite,
                 $this->preserveLMT,
                 $this->filterChains,
-                $this->getProject(),
                 $this->mode,
                 $this->preservePermissions
             );

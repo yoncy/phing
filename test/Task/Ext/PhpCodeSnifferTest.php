@@ -33,7 +33,6 @@ use Phing\Test\Helper\AbstractBuildFileTest;
  */
 class PhpCodeSnifferTest extends AbstractBuildFileTest
 {
-
     public function setUp()
     {
         if (defined('HHVM_VERSION')) {
@@ -75,7 +74,7 @@ class PhpCodeSnifferTest extends AbstractBuildFileTest
     {
         ob_start();
         $this->executeTarget(__FUNCTION__);
-        $output = ob_get_clean();        
+        $output = ob_get_clean();
         $this->assertPropertyEquals(
             "PhpCodeSnifferTaskTest.testPropertyOutput",
             "- Generic_Sniffs_PHP_DisallowShortOpenTagSniff" . PHP_EOL

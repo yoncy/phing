@@ -44,7 +44,7 @@ class JslLint extends Task
     protected $file; // the source file (from xml attribute)
 
     /** @var FileSet[] */
-    protected $filesets = array(); // all fileset objects assigned to this task
+    protected $filesets = []; // all fileset objects assigned to this task
 
     /** @var bool $showWarnings */
     protected $showWarnings = true;
@@ -68,7 +68,7 @@ class JslLint extends Task
     protected $hasWarnings = false;
 
     /** @var array $badFiles */
-    private $badFiles = array();
+    private $badFiles = [];
 
     /** @var DataStore */
     private $cache = null;
@@ -277,7 +277,7 @@ class JslLint extends Task
                     }
                 }
 
-                $messages = array();
+                $messages = [];
                 exec($command . '"' . $file . '"', $messages, $return);
 
                 if ($return > 100) {
@@ -292,12 +292,12 @@ class JslLint extends Task
                 preg_match('/(\d+)\swarning/', $summary, $matches);
                 $warningCount = (count($matches) > 1 ? $matches[1] : 0);
 
-                $errors = array();
-                $warnings = array();
+                $errors = [];
+                $warnings = [];
                 if ($errorCount > 0 || $warningCount > 0) {
                     $last = false;
                     foreach ($messages as $message) {
-                        $matches = array();
+                        $matches = [];
                         if (preg_match('/^(\.*)\^$/', $message)) {
                             $column = strlen($message);
                             if ($last == 'error') {
@@ -313,7 +313,7 @@ class JslLint extends Task
                             continue;
                         }
                         $msg = $matches[3];
-                        $data = array('filename' => $matches[1], 'line' => $matches[2], 'message' => $msg);
+                        $data = ['filename' => $matches[1], 'line' => $matches[2], 'message' => $msg];
                         if (preg_match('/^.*error:.+$/i', $msg)) {
                             $errors[] = $data;
                             $last = 'error';
@@ -340,7 +340,7 @@ class JslLint extends Task
                 if ($errorCount > 0) {
                     $this->log($file . ': ' . $errorCount . ' errors detected', Project::MSG_ERR);
                     if (!isset($this->badFiles[$file])) {
-                        $this->badFiles[$file] = array();
+                        $this->badFiles[$file] = [];
                     }
 
                     foreach ($errors as $error) {

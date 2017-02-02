@@ -40,7 +40,7 @@ class Sequential extends Task implements TaskContainerInterface
 {
 
     /** Optional Vector holding the nested tasks */
-    protected $nestedTasks = array();
+    protected $nestedTasks = [];
 
     /**
      * Add a nested task to Sequential.

@@ -30,7 +30,7 @@ class WebAccess
     /**
      * @var array
      */
-    private $paths = array();
+    private $paths = [];
 
     /**
      * @return WebAccessPath
@@ -48,7 +48,7 @@ class WebAccess
         /*
          * Get real paths...
          */
-        $paths = array();
+        $paths = [];
 
         foreach ($this->paths as $path) {
             $paths[] = $path->getPath();

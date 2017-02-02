@@ -91,7 +91,6 @@ class InputStream
      */
     public function read($len = null)
     {
-
         if ($this->eof()) {
             return -1;
         }
@@ -156,7 +155,7 @@ class InputStream
         }
         if (false === @fclose($this->stream)) {
             // FAILED.
-            $msg = "Cannot fclose " . $this->file->__toString() . " $php_errormsg";
+            $msg = "Cannot fclose " . $this->__toString() . " $php_errormsg";
             throw new IOException($msg);
         }
         $this->stream = null;
@@ -169,21 +168,6 @@ class InputStream
     public function eof()
     {
         return feof($this->stream);
-    }
-
-    /**
-     * Reads a entire until EOF and places contents in passed-in variable.  Stream is closed after read.
-     *
-     * @param  string &$rBuffer String variable where read contents will be put.
-     * @return TRUE        on success.
-     * @author  Charlie Killian, charlie@tizac.com
-     * @throws IOException - if there is an error reading from stream.
-     * @deprecated - Instead, use the read() method or a BufferedReader.
-     */
-    public function readInto(&$rBuffer)
-    {
-        $rBuffer = $this->read();
-        $this->close();
     }
 
     /**

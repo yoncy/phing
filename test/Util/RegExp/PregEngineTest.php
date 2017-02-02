@@ -197,7 +197,7 @@ class PregEngineTest extends PHPUnit_Framework_TestCase
         $source = '1234';
         $pregEngine->match($pattern, $source, $matches);
 
-        $this->assertEquals(array('12'), $matches);
+        $this->assertEquals(['12'], $matches);
     }
 
     /**
@@ -221,11 +221,7 @@ class PregEngineTest extends PHPUnit_Framework_TestCase
         $source = '\\\\' . PregEngine::DELIMITER . 'abc\\' . PregEngine::DELIMITER . '123\\' . PregEngine::DELIMITER . 'efg' . PregEngine::DELIMITER . '456' . PregEngine::DELIMITER;
         $pregEngine->match($pattern, $source, $matches);
 
-        $this->assertEquals(
-            array($source),
-            $matches,
-            'The match method did not properly escape uses of the delimiter in the regular expression.'
-        );
+        $this->assertEquals([$source], $matches, 'The match method did not properly escape uses of the delimiter in the regular expression.');
     }
 
     /**
@@ -267,4 +263,3 @@ class PregEngineTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('<12>', $result);
     }
 }
- 

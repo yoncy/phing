@@ -24,5 +24,4 @@ use Phing\Type\DataType;
 
 class TypedefTestType extends DataType
 {
-
 }

@@ -31,7 +31,6 @@ use Phing\Task;
  */
 class Autoloader extends Task
 {
-
     const DEFAULT_AUTOLOAD_PATH = 'vendor/autoload.php';
 
     private $autoloaderPath = self::DEFAULT_AUTOLOAD_PATH;
@@ -75,5 +74,4 @@ class Autoloader extends Task
         $this->log('Loading autoloader from ' . $this->autoloaderPath);
         require_once $this->autoloaderPath;
     }
-
 }

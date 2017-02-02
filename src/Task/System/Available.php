@@ -21,6 +21,7 @@
 
 namespace Phing\Task\System;
 
+use Phing\Condition\ConditionInterface;
 use Phing\Exception\BuildException;
 use Phing\Io\File;
 use Phing\Io\FileSystem\FileSystemFactory;
@@ -29,7 +30,6 @@ use Phing\Phing;
 use Phing\Project;
 use Phing\Task;
 use Phing\Type\Path;
-
 
 /**
  * <available> task.
@@ -41,7 +41,7 @@ use Phing\Type\Path;
  * @version   $Id$
  * @package   phing.tasks.system
  */
-class Available extends Task
+class Available extends Task implements ConditionInterface
 {
 
     /** Property to check for. */
@@ -151,7 +151,7 @@ class Available extends Task
     public function main()
     {
         if ($this->property === null) {
-            throw new BuildException("property attribute is required", $this->location);
+            throw new BuildException("property attribute is required", $this->getLocation());
         }
         if ($this->evaluate()) {
             $this->project->setProperty($this->property, $this->value);
@@ -165,11 +165,11 @@ class Available extends Task
     public function evaluate()
     {
         if ($this->file === null && $this->resource === null && $this->extension === null) {
-            throw new BuildException("At least one of (file|resource|extension) is required", $this->location);
+            throw new BuildException("At least one of (file|resource|extension) is required", $this->getLocation());
         }
 
         if ($this->type !== null && ($this->type !== "file" && $this->type !== "dir")) {
-            throw new BuildException("Type must be one of either dir or file", $this->location);
+            throw new BuildException("Type must be one of either dir or file", $this->getLocation());
         }
 
         if (($this->file !== null) && !$this->_checkFile()) {

@@ -59,11 +59,11 @@ class Checkout extends AbstractSvnTask
         );
 
         // revision
-        $switches = array(
+        $switches = [
             'r' => $this->revision,
-        );
+        ];
 
-        $this->run(array($this->getToDir()), $switches);
+        $this->run([$this->getToDir()], $switches);
     }
 
     /**

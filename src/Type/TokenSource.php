@@ -67,7 +67,7 @@ class TokenSource extends DataType
      * Array holding parameters for the wrapped TokenReader.
      * @var array
      */
-    protected $parameters = array();
+    protected $parameters = [];
 
     /**
      * Reference to the TokenReader used by this TokenSource
@@ -78,7 +78,7 @@ class TokenSource extends DataType
     /**
      * Array with key/value pairs of tokens
      */
-    protected $tokens = array();
+    protected $tokens = [];
 
     /**
      * This method is called to load the sources from the reader
@@ -117,7 +117,7 @@ class TokenSource extends DataType
     public function getTokens()
     {
         if (count($this->tokens) == 0) {
-            $this->Load();
+            $this->load();
         }
 
         return $this->tokens;

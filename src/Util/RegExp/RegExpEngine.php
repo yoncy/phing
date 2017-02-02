@@ -95,5 +95,4 @@ interface RegExpEngine
      * @return string The replaced source string.
      */
     public function replace($pattern, $replace, $source);
-
 }

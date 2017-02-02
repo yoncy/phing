@@ -280,7 +280,7 @@ class Exec extends Task
         if ($this->output === null && $this->error === null && $this->passthru === false) {
             $this->realCommand .= ' 2>&1';
         }
-
+        
         // we ignore the spawn boolean for windows
         if ($this->spawn) {
             $this->realCommand .= ' &';
@@ -296,7 +296,7 @@ class Exec extends Task
     {
         $this->log("Executing command: " . $this->realCommand, $this->logLevel);
 
-        $output = array();
+        $output = [];
         $return = null;
 
         if ($this->passthru) {
@@ -305,7 +305,7 @@ class Exec extends Task
             exec($this->realCommand, $output, $return);
         }
 
-        return array($return, $output);
+        return [$return, $output];
     }
 
     /**
@@ -368,28 +368,6 @@ class Exec extends Task
     public function getExitValue()
     {
         return $this->exitValue;
-    }
-
-    /**
-     * Checks whether exitValue signals a failure on the current system.
-     *
-     * @param int $code
-     *
-     * @return bool
-     */
-    public static function isFailureCode($code)
-    {
-        return $code !== 0;
-    }
-
-    /**
-     * Did this execute return in a failure.
-     *
-     * @return boolean true if and only if the exit code is interpreted as a failure
-     */
-    public function isFailure()
-    {
-        return self::isFailureCode($this->getExitValue());
     }
 
     /**

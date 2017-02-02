@@ -49,14 +49,14 @@ interface SelectorContainerInterface
      *
      * @param Project $p
      *
-     * @return array an array of selectors in this container
+     * @return AbstractSelector[] an array of selectors in this container
      */
     public function getSelectors(Project $p);
 
     /**
      * Returns an array for accessing the set of selectors.
      *
-     * @return array an enumerator that goes through each of the selectors
+     * @return AbstractSelector[] an enumerator that goes through each of the selectors
      */
     public function selectorElements();
 
@@ -141,4 +141,8 @@ interface SelectorContainerInterface
      */
     public function createDepend();
 
+    /**
+     * add a different selector entry on the selector list
+     */
+    public function createDifferent();
 }

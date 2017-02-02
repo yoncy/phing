@@ -14,7 +14,6 @@ use Phing\Test\Helper\AbstractBuildFileTest;
  */
 class ElseIfTaskTest extends AbstractBuildFileTest
 {
-
     public function setUp()
     {
         $this->configureProject(
@@ -82,5 +81,4 @@ class ElseIfTaskTest extends AbstractBuildFileTest
 
         $this->expectBuildExceptionContaining($target, $cause, $msg);
     }
-
 }

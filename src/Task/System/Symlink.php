@@ -82,7 +82,7 @@ class Symlink extends Task
      *
      * @var array
      */
-    private $_filesets = array();
+    private $_filesets = [];
 
     /**
      * Whether to override the symlink if it exists but points
@@ -93,6 +93,13 @@ class Symlink extends Task
      * @var boolean
      */
     private $_overwrite = false;
+
+    /**
+     * Whether to create relative symlinks
+     *
+     * @var boolean
+     */
+    private $relative = false;
 
     /**
      * setter for _target
@@ -137,6 +144,14 @@ class Symlink extends Task
     public function setOverwrite($overwrite)
     {
         $this->_overwrite = $overwrite;
+    }
+
+    /**
+     * @param boolean $relative
+     */
+    public function setRelative($relative)
+    {
+        $this->relative = $relative;
     }
 
     /**
@@ -190,6 +205,14 @@ class Symlink extends Task
     }
 
     /**
+     * @return boolean
+     */
+    public function isRelative()
+    {
+        return $this->relative;
+    }
+
+    /**
      * Generates an array of directories / files to be linked
      * If _filesets is empty, returns getTarget()
      *
@@ -206,7 +229,7 @@ class Symlink extends Task
             return $this->getTarget();
         }
 
-        $targets = array();
+        $targets = [];
 
         foreach ($fileSets as $fs) {
             if (!($fs instanceof FileSet)) {
@@ -218,14 +241,18 @@ class Symlink extends Task
                 throw new BuildException('Link must be an existing directory when using fileset');
             }
 
-            $fromDir = $fs->getDir($this->getProject())->getAbsolutePath();
+            if ($this->isRelative()) {
+                $fromDir = $fs->getDir($this->getProject())->getPath();
+            } else {
+                $fromDir = $fs->getDir($this->getProject())->getAbsolutePath();
+            }
 
             if (!is_dir($fromDir)) {
                 $this->log('Directory doesn\'t exist: ' . $fromDir, Project::MSG_WARN);
                 continue;
             }
 
-            $fsTargets = array();
+            $fsTargets = [];
 
             $ds = $fs->getDirectoryScanner($this->getProject());
 

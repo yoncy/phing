@@ -32,7 +32,6 @@ use PHPUnit_Framework_Error;
  */
 class TaskdefTest extends AbstractBuildFileTest
 {
-
     public function setUp()
     {
         $this->configureProject(PHING_TEST_BASE . "/etc/tasks/taskdef.xml");

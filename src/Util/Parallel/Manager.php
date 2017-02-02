@@ -47,7 +47,7 @@ class Manager extends ArrayObject
      * @param string $iterator_class Iterator class for this array object.
      */
     public function __construct(
-        $input = array(),
+        $input = [],
         $flags = 0,
         $iterator_class = "ArrayIterator"
     ) {
@@ -219,7 +219,7 @@ class Manager extends ArrayObject
             );
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -240,7 +240,9 @@ class Manager extends ArrayObject
 
         /** @var Worker $worker */
         foreach ($this as $worker) {
-            $worker->pipe->push();
+            if (isset($worker->pipe)) {
+                $worker->pipe->push();
+            }
         }
 
         $this->is_running = false;

@@ -31,7 +31,6 @@ use Phing\Test\Helper\AbstractBuildFileTest;
  */
 class BranchTest extends AbstractBuildFileTest
 {
-
     public function setUp()
     {
         // the pear git package hardcodes the path to git to /usr/bin/git and will therefore
@@ -175,5 +174,4 @@ class BranchTest extends AbstractBuildFileTest
             '"newbranch" is required parameter'
         );
     }
-
 }

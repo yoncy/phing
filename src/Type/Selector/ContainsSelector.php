@@ -38,11 +38,12 @@ use Phing\Io\IOException;
  */
 class ContainsSelector extends AbstractExtendSelector
 {
-
     private $contains = null;
     private $casesensitive = true;
     const CONTAINS_KEY = "text";
     const CASE_KEY = "casesensitive";
+    const WHITESPACE_KEY = "ignorewhitespace";
+    private $ignorewhitespace = false;
 
     /**
      * @return string
@@ -53,6 +54,12 @@ class ContainsSelector extends AbstractExtendSelector
         $buf .= $this->contains;
         $buf .= " casesensitive: ";
         if ($this->casesensitive) {
+            $buf .= "true";
+        } else {
+            $buf .= "false";
+        }
+        $buf .= " ignorewhitespace: ";
+        if ($this->ignorewhitespace) {
             $buf .= "true";
         } else {
             $buf .= "false";
@@ -83,6 +90,14 @@ class ContainsSelector extends AbstractExtendSelector
     }
 
     /**
+     * @param boolean $ignoreWhitespace
+     */
+    public function setIgnoreWhitespace($ignoreWhitespace)
+    {
+        $this->ignorewhitespace = $ignoreWhitespace;
+    }
+
+    /**
      * When using this as a custom selector, this method will be called.
      * It translates each parameter into the appropriate setXXX() call.
      *
@@ -101,6 +116,9 @@ class ContainsSelector extends AbstractExtendSelector
                         break;
                     case self::CASE_KEY:
                         $this->setCasesensitive($parameters[$i]->getValue());
+                        break;
+                    case self::WHITESPACE_KEY:
+                        $this->setIgnoreWhitespace($parameters[$i]->getValue());
                         break;
                     default:
                         $this->setError("Invalid parameter " . $paramname);
@@ -139,7 +157,6 @@ class ContainsSelector extends AbstractExtendSelector
      */
     public function isSelected(File $basedir, $filename, File $file)
     {
-
         $this->validate();
 
         if ($file->isDirectory()) {
@@ -150,6 +167,9 @@ class ContainsSelector extends AbstractExtendSelector
         if (!$this->casesensitive) {
             $userstr = strtolower($this->contains);
         }
+        if ($this->ignorewhitespace) {
+            $userstr = SelectorUtils::removeWhitespace($userstr);
+        }
 
         $in = null;
         try {
@@ -158,6 +178,9 @@ class ContainsSelector extends AbstractExtendSelector
             while ($teststr !== null) {
                 if (!$this->casesensitive) {
                     $teststr = strtolower($teststr);
+                }
+                if ($this->ignorewhitespace) {
+                    $teststr = SelectorUtils::removeWhitespace($teststr);
                 }
                 if (strpos($teststr, $userstr) !== false) {
                     return true;

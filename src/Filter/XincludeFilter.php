@@ -41,7 +41,6 @@ use Phing\Project;
  */
 class XincludeFilter extends BaseParamFilterReader implements ChainableReaderInterface
 {
-
     private $basedir = null;
 
     /**
@@ -104,7 +103,6 @@ class XincludeFilter extends BaseParamFilterReader implements ChainableReaderInt
      */
     public function read($len = null)
     {
-
         if (!class_exists('DomDocument')) {
             throw new BuildException("Could not find the DomDocument class. Make sure PHP has been compiled/configured to support DOM XML.");
         }
@@ -153,7 +151,6 @@ class XincludeFilter extends BaseParamFilterReader implements ChainableReaderInt
      */
     protected function process($xml)
     {
-
         if ($this->basedir) {
             $cwd = getcwd();
             chdir($this->basedir);
@@ -192,5 +189,4 @@ class XincludeFilter extends BaseParamFilterReader implements ChainableReaderInt
 
         return $newFilter;
     }
-
 }

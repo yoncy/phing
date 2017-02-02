@@ -30,7 +30,6 @@ use Phing\Test\Helper\GitTestsHelper;
  */
 class PullTest extends AbstractBuildFileTest
 {
-
     public function setUp()
     {
         // the pear git package hardcodes the path to git to /usr/bin/git and will therefore
@@ -106,17 +105,6 @@ class PullTest extends AbstractBuildFileTest
         $this->executeTarget('appendSet');
         $this->assertInLogs('git-pull: fetching from all remotes');
         $this->assertInLogs('git-pull: complete');
-
-        /*        $lastLogLine = array_pop($this->logBuffer);
-
-                if (strpos($lastLogLine, 'up-to-date') !== false ||
-                    strpos($lastLogLine, 'up to date') !== false
-                ) {
-                    $this->assertTrue(true);
-                } else {
-                    $this->assertTrue(false, 'Last log line: ' . $lastLogLine);
-                }*/
-        $this->assertInLogs('Already up-to-date.');
     }
 
     public function testNoTagsSet()

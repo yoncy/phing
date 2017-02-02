@@ -33,7 +33,6 @@ use Phing\Test\Helper\AbstractBuildFileTest;
  */
 class PharPackageTest extends AbstractBuildFileTest
 {
-
     public function setUp()
     {
         if (defined('HHVM_VERSION')) {
@@ -45,7 +44,6 @@ class PharPackageTest extends AbstractBuildFileTest
 
     /**
      * @requires extension openssl
-     * @requires PHP 5.3.10
      */
     public function testOpenSSLSignature()
     {
@@ -69,7 +67,6 @@ class PharPackageTest extends AbstractBuildFileTest
         $phar = new Phar($dest);
         $signature = $phar->getSignature();
         $this->assertEquals('OpenSSL', $signature['hash_type']);
-
     }
 
     public function tearDown()

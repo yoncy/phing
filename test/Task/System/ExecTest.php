@@ -116,7 +116,7 @@ class ExecTest extends AbstractBuildFileTest
         $this->assertAttributeIsSetTo(
             'dir',
             new File(
-                realpath(dirname(__FILE__) . '/../../etc/tasks/system')
+                realpath(__DIR__ . '/../../etc/tasks/system')
             )
         );
     }
@@ -166,7 +166,7 @@ class ExecTest extends AbstractBuildFileTest
         $this->assertAttributeIsSetTo(
             'output',
             new File(
-                realpath(dirname(__FILE__) . '/../../etc/tasks/system')
+                realpath(__DIR__ . '/../../etc/tasks/system')
                 . '/outputfilename'
             )
         );
@@ -177,7 +177,7 @@ class ExecTest extends AbstractBuildFileTest
         $this->assertAttributeIsSetTo(
             'error',
             new File(
-                realpath(dirname(__FILE__) . '/../../etc/tasks/system')
+                realpath(__DIR__ . '/../../etc/tasks/system')
                 . '/errorfilename'
             )
         );

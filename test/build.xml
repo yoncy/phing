@@ -54,6 +54,7 @@
 		<fileset dir="${tests.dir.resolved}" id="relevant-tests">
 			<include name="**/*${test.class}.php"/>
             <exclude name="etc/**"/>
+			<exclude name="**/Svn/*Test.php"/>
 		</fileset>
 	</target>
 

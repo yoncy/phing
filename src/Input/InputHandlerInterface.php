@@ -44,5 +44,4 @@ interface InputHandlerInterface
      * @return void
      */
     public function handleInput(InputRequest $request);
-
 }

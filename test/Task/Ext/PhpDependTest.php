@@ -33,7 +33,6 @@ use Phing\Test\Helper\AbstractBuildFileTest;
  */
 class PhpDependTest extends AbstractBuildFileTest
 {
-
     public function setUp()
     {
         $this->configureProject(PHING_TEST_BASE . "/etc/tasks/ext/pdepend/build.xml");

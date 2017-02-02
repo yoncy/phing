@@ -124,7 +124,6 @@ class DefaultQuerySplitter extends AbstractQuerySplitter
 
             // DELIM_ROW doesn't need this (as far as i can tell)
             if ($this->delimiterType == SqlExec::DELIM_NORMAL) {
-
                 $reg = "#((?:\"(?:\\\\.|[^\"])*\"?)+|'(?:\\\\.|[^'])*'?|" . preg_quote($delimiter) . ")#";
 
                 $sqlParts = preg_split($reg, $sql, 0, PREG_SPLIT_DELIM_CAPTURE);

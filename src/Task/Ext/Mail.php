@@ -42,10 +42,10 @@ class Mail extends Task
     protected $msg = null;
     protected $from = null;
 
-    protected $filesets = array();
+    protected $filesets = [];
 
     protected $backend = 'mail';
-    protected $backendParams = array();
+    protected $backendParams = [];
 
     public function main()
     {
@@ -74,10 +74,10 @@ class Mail extends Task
         }
 
         $mime = new \Mail_mime(array('text_charset' => 'UTF-8'));
-        $hdrs = array(
+        $hdrs = [
             'From' => $this->from,
             'Subject' => $this->subject
-        );
+        ];
         $mime->setTXTBody($this->msg);
 
         foreach ($this->filesets as $fs) {

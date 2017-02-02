@@ -31,23 +31,23 @@ namespace Phing\Io;
  */
 class BufferedReader extends AbstractReader
 {
-
     private $bufferSize = 0;
     private $buffer = null;
     private $bufferPos = 0;
 
     /**
      * The Reader we are buffering for.
+     * @var InputStreamReader
      */
     private $in;
 
     /**
      *
-     * @param \Phing\Io\AbstractReader $reader The reader (e.g. FileReader).
+     * @param InputStreamReader  $reader   The reader (e.g. FileReader).
      * @param integer $buffsize The size of the buffer we should use for reading files.
      *                          A large buffer ensures that most files (all scripts?) are parsed in 1 buffer.
      */
-    public function __construct(AbstractReader $reader, $buffsize = 65536)
+    public function __construct(InputStreamReader $reader, $buffsize = 65536)
     {
         $this->in = $reader;
         $this->bufferSize = $buffsize;
@@ -70,7 +70,6 @@ class BufferedReader extends AbstractReader
 
             // not all files end with a newline character, so we also need to check EOF
             if (!$this->in->eof()) {
-
                 $notValidPart = strrchr($data, "\n");
                 $notValidPartSize = strlen($notValidPart);
 
@@ -85,7 +84,6 @@ class BufferedReader extends AbstractReader
                     // Rewind to the beginning of the forgotten stuff.
                     $this->in->skip(-$notValidPartSize + 1);
                 }
-
             } // if !EOF
         }
 
@@ -94,6 +92,7 @@ class BufferedReader extends AbstractReader
 
     /**
      * @param int $n
+     * @return int
      */
     public function skip($n)
     {
@@ -102,23 +101,12 @@ class BufferedReader extends AbstractReader
 
     public function reset()
     {
-        return $this->in->reset();
+        $this->in->reset();
     }
 
-    /**
-     * @return mixed
-     */
     public function close()
     {
-        return $this->in->close();
-    }
-
-    /**
-     * @return mixed
-     */
-    public function open()
-    {
-        return $this->in->open();
+        $this->in->close();
     }
 
     /**
@@ -148,7 +136,6 @@ class BufferedReader extends AbstractReader
      */
     public function readChar()
     {
-
         if ($this->buffer === null) {
             // Buffer is empty, fill it ...
             $read = $this->in->read($this->bufferSize);

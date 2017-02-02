@@ -38,7 +38,6 @@ use Phing\Io\File;
  */
 class MajoritySelector extends AbstractSelectorContainer
 {
-
     private $allowtie = true;
 
     /**
@@ -73,11 +72,10 @@ class MajoritySelector extends AbstractSelectorContainer
      * @param string $filename is the name of the file to check
      * @param File $file is a File object for the filename that the selector
      * can use
-     * @return boolean whether the file should be selected or not
+     * @return bool whether the file should be selected or not
      */
     public function isSelected(File $basedir, $filename, File $file)
     {
-
         $this->validate();
 
         $yesvotes = 0;

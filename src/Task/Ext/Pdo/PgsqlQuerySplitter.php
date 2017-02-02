@@ -130,22 +130,18 @@ class PgsqlQuerySplitter extends AbstractQuerySplitter
         if ('$' == $ch) {
             // empty tag
             return '';
-
         } elseif (!ctype_alpha($ch) && '_' != $ch) {
             // not a delimiter
             $this->ungetc();
 
             return false;
-
         } else {
             $tag = $ch;
             while (false !== ($ch = $this->getc())) {
                 if ('$' == $ch) {
                     return $tag;
-
                 } elseif (ctype_alnum($ch) || '_' == $ch) {
                     $tag .= $ch;
-
                 } else {
                     for ($i = 0; $i < strlen($tag); $i++) {
                         $this->ungetc();

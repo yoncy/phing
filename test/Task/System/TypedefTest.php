@@ -34,7 +34,6 @@ use PHPUnit_Framework_Error;
  */
 class TypedefTest extends AbstractBuildFileTest
 {
-
     public function setUp()
     {
         $this->configureProject(PHING_TEST_BASE . "/etc/tasks/typedef.xml");
@@ -87,5 +86,4 @@ class TypedefTest extends AbstractBuildFileTest
         $this->assertNotNull("ref is not null", $ref);
         $this->assertEquals("TypedefTestType", get_class($ref));
     }
-
 }

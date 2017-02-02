@@ -63,19 +63,19 @@ class Recorder extends Task implements SubBuildListenerInterface
     /** Strip task banners if true.  */
     private $emacsMode = false;
 
-    private $logLevelChoices = array(
-        'error' => 0,
-        'warn' => 1,
-        'info' => 2,
+    private $logLevelChoices = [
+        'error'   => 0,
+        'warn'    => 1,
+        'info'    => 2,
         'verbose' => 3,
-        'debug' => 4
-    );
+        'debug'   => 4
+    ];
 
     /**
      * The list of recorder entries.
      * @var RecorderEntry[]
      */
-    private static $recorderEntries = array();
+    private static $recorderEntries = [];
 
     /**
      * Overridden so we can add the task as build listener.

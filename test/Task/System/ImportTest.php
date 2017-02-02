@@ -32,7 +32,6 @@ use Phing\Test\Helper\AbstractBuildFileTest;
  */
 class ImportTest extends AbstractBuildFileTest
 {
-
     public function setUp()
     {
         $this->configureProject(PHING_TEST_BASE . "/etc/tasks/importing.xml");
@@ -93,7 +92,6 @@ class ImportTest extends AbstractBuildFileTest
         $this->assertInLogs("This is " . $f1->getAbsolutePath() . " flop target.");
         $this->assertInLogs("This is " . $f2->getAbsolutePath() . " flip target.");
         $this->assertInLogs("This is " . $f1->getAbsolutePath() . " flipflop target.");
-
     }
 
     public function testOnlyTopLevel()

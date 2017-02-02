@@ -32,7 +32,7 @@ class Metadata
     /**
      * @var MetadataElement[]
      */
-    protected $elements = array();
+    protected $elements = [];
 
     /**
      * @return MetadataElement
@@ -47,7 +47,7 @@ class Metadata
      */
     public function toArray()
     {
-        $metadata = array();
+        $metadata = [];
 
         foreach ($this->elements as $element) {
             $metadata[$element->getName()] = $element->toArray();

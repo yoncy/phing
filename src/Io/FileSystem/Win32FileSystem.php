@@ -22,8 +22,10 @@
 namespace Phing\Io\FileSystem;
 
 use Exception;
+use FilesystemIterator;
 use InvalidArgumentException;
 use Phing\Io\File;
+use Phing\Io\IOException;
 use Phing\Phing;
 use Phing\Util\StringHelper;
 
@@ -33,12 +35,11 @@ use Phing\Util\StringHelper;
  */
 class Win32FileSystem extends AbstractFileSystem
 {
-
     protected $slash;
     protected $altSlash;
     protected $semicolon;
 
-    private static $driveDirCache = array();
+    private static $driveDirCache = [];
 
     /**
      *
@@ -505,17 +506,14 @@ class Win32FileSystem extends AbstractFileSystem
             $drive = (string)$path{0};
             $dir = (string)$this->_getDriveDirectory($drive);
 
-            $np = (string)"";
             if ($dir !== null) {
                 /* When resolving a directory-relative path that refers to a
                 drive other than the current drive, insist that the caller
                 have read permission on the result */
                 $p = (string)$drive . (':' . $dir . $this->slashify(substr($path, 2)));
 
-                if (!$this->checkAccess($p, false)) {
-                    // FIXME
-                    // throw security error
-                    die("Can't resolve path $p");
+                if (!$this->checkAccess(new File($p), false)) {
+                    throw new IOException("Can't resolve path $p");
                 }
 
                 return $p;
@@ -578,7 +576,7 @@ class Win32FileSystem extends AbstractFileSystem
                 }
             }
         }
-        $fs = array();
+        $fs = [];
         $j = (int) 0;
 
         for ($i = 0; $i < 26; $i++) {
@@ -607,7 +605,7 @@ class Win32FileSystem extends AbstractFileSystem
 
     /**
      * returns the contents of a directory in an array
-     * @param $f
+     * @param File $f
      * @throws Exception
      * @return array
      */
@@ -617,7 +615,7 @@ class Win32FileSystem extends AbstractFileSystem
         if (!$dir) {
             throw new Exception("Can't open directory " . $f->__toString());
         }
-        $vv = array();
+        $vv = [];
         while (($file = @readdir($dir)) !== false) {
             if ($file == "." || $file == "..") {
                 continue;
@@ -637,7 +635,7 @@ class Win32FileSystem extends AbstractFileSystem
      */
     private function fixEncoding($strPath)
     {
-        $codepage = 'Windows-' . trim(strstr(setlocale(LC_CTYPE, 0), '.'), '.');
+        $codepage = 'CP' . trim(strstr(setlocale(LC_CTYPE, ''), '.'), '.');
         if (function_exists('iconv')) {
             $strPath = iconv('UTF-8', $codepage . '//IGNORE', $strPath);
         } elseif (function_exists('mb_convert_encoding')) {
@@ -646,4 +644,19 @@ class Win32FileSystem extends AbstractFileSystem
         return $strPath;
     }
 
+    /**
+     * @param File $f
+     * @return array
+     * @throws Exception
+     */
+    public function listContents(File $f)
+    {
+        $iterator = new FilesystemIterator($f->getAbsolutePath());
+        $filelist = array();
+        foreach($iterator as $entry) {
+            $filelist[] = $entry->getFilename();
+        }
+
+        return $filelist;
+    }
 }

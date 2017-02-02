@@ -52,7 +52,7 @@ class CommandLine
     /**
      * @var CommandLineArgument[]
      */
-    public $arguments = array(); // public so "inner" class can access
+    public $arguments = []; // public so "inner" class can access
 
     /**
      * Full path (if not on %PATH% env var) to executable program.
@@ -69,7 +69,7 @@ class CommandLine
     public function __construct($to_process = null)
     {
         if ($to_process !== null) {
-            $tmp = $this->translateCommandline($to_process);
+            $tmp = static::translateCommandline($to_process);
             if ($tmp) {
                 $this->setExecutable(array_shift($tmp)); // removes first el
                 foreach ($tmp as $arg) { // iterate through remaining elements
@@ -144,7 +144,7 @@ class CommandLine
             return $args;
         }
 
-        return array_merge(array($this->executable), $args);
+        return array_merge([$this->executable], $args);
     }
 
     /**
@@ -153,12 +153,12 @@ class CommandLine
      */
     public function getArguments()
     {
-        $result = array();
+        $result = [];
         foreach ($this->arguments as $arg) {
             $parts = $arg->getParts();
             if ($parts !== null) {
                 foreach ($parts as $part) {
-                    $result[] = $part;
+                    $result[] = $arg->escape ? self::quoteArgument($part, true) : $part;
                 }
             }
         }
@@ -241,9 +241,8 @@ class CommandLine
      */
     public static function translateCommandline($to_process)
     {
-
         if (!$to_process) {
-            return array();
+            return [];
         }
 
         // parse with a simple finite state machine
@@ -253,7 +252,7 @@ class CommandLine
         $inDoubleQuote = 2;
 
         $state = $normal;
-        $args = array();
+        $args = [];
         $current = "";
         $lastTokenHasBeenQuoted = false;
 
@@ -351,7 +350,6 @@ class CommandLine
      */
     public function describeCommand($args = null)
     {
-
         if ($args === null) {
             $args = $this->getCommandline();
         }

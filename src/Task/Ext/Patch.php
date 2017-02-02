@@ -67,7 +67,7 @@ class Patch extends Task
      * Command line arguments for patch binary
      * @var array
      */
-    private $cmdArgs = array();
+    private $cmdArgs = [];
 
     /**
      * Halt on error return value from patch invocation.
@@ -288,6 +288,5 @@ class Patch extends Task
         if ($exitCode != 0 && $this->haltOnFailure) {
             throw new BuildException("Task exited with code $exitCode");
         }
-
     }
 }

@@ -72,7 +72,7 @@ class EscapeUnicode extends BaseFilterReader implements ChainableReaderInterface
 
         $textArray = preg_split("~\R~", $text);
 
-        $lines = array();
+        $lines = [];
         foreach ($textArray as $offset => $line) {
             $lines[] = trim(json_encode($line), '"');
             if (strlen($line) !== strlen($lines[$offset])) {
@@ -96,7 +96,7 @@ class EscapeUnicode extends BaseFilterReader implements ChainableReaderInterface
      * @param AbstractReader $rdr A Reader object providing the underlying stream.
      *            Must not be <code>null</code>.
      *
-     * @return a new filter based on this configuration, but filtering
+     * @return EscapeUnicode a new filter based on this configuration, but filtering
      *         the specified reader
      */
     public function chain(AbstractReader $rdr)

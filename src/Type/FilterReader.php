@@ -43,7 +43,7 @@ class FilterReader extends DataType
     /**
      * @var array
      */
-    private $parameters = array();
+    private $parameters = [];
 
     /**
      * @var Path
@@ -138,7 +138,7 @@ class FilterReader extends DataType
     public function getParams()
     {
         // We return a COPY
-        $ret = array();
+        $ret = [];
         for ($i = 0, $size = count($this->parameters); $i < $size; $i++) {
             $ret[] = clone $this->parameters[$i];
         }

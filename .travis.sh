@@ -14,11 +14,9 @@
         echo "... OK"
     fi
     
-    sudo apt-get install python-docutils
-
     echo -e "\nInstalling composer packages ... "
     composer selfupdate --quiet
-    composer install -o --no-progress
+    composer install -o --no-progress --prefer-dist
 
     if [[ $TRAVIS_PHP_VERSION != 'hhvm-nightly' && $TRAVIS_PHP_VERSION != 'hhvm' ]]; then
         phpenv config-add .travis.php.ini

@@ -39,13 +39,12 @@ use Phing\Type\Reference;
  */
 class MapperTest extends PHPUnit_Framework_TestCase
 {
-
     private $project;
 
     public function setUp()
     {
         $this->project = new Project();
-        $this->project->setBasedir(dirname(__FILE__));
+        $this->project->setBasedir(__DIR__);
     }
 
     public function testEmptyElementIfIsReference()
@@ -149,5 +148,4 @@ class MapperTest extends PHPUnit_Framework_TestCase
             throw $e;
         }
     }
-
 }

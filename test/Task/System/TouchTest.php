@@ -21,6 +21,7 @@
 
 namespace Phing\Test\Task\System;
 
+use Phing\Exception\BuildException;
 use Phing\Test\Helper\AbstractBuildFileTest;
 
 
@@ -53,6 +54,26 @@ class TouchTest extends AbstractBuildFileTest
         $this->assertFileExists(
             PHING_TEST_BASE
             . "/etc/tasks/system/tmp/simple-file"
+        );
+    }
+
+    public function testMkdirs()
+    {
+        $this->executeTarget(__FUNCTION__);
+        $this->assertFileExists(
+            PHING_TEST_BASE
+            . "/etc/tasks/system/tmp/this/is/a/test/file"
+        );
+    }
+
+    public function testMkdirsFails()
+    {
+        $this->expectException(BuildException::class);
+
+        $this->executeTarget(__FUNCTION__);
+        $this->assertFileNotExists(
+            PHING_TEST_BASE
+            . "/etc/tasks/system/tmp/this/is/a/test/file"
         );
     }
 }

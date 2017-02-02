@@ -63,7 +63,7 @@ class Timer
      */
     public function start()
     {
-        $this->stime = $this->getMicrotime();
+        $this->stime = microtime(true);
     }
 
     /**
@@ -74,7 +74,7 @@ class Timer
      */
     public function stop()
     {
-        $this->etime = $this->getMicrotime();
+        $this->etime = microtime(true);
     }
 
     /**
@@ -94,19 +94,5 @@ class Timer
         $format = "%0." . $places . "f";
 
         return (sprintf($format, $etime));
-    }
-
-    /**
-     * This function returns the current time in microseconds.
-     *
-     * @author Everett Michaud, Zend.com
-     *
-     * @return float current time in microseconds
-     */
-    private function getMicrotime()
-    {
-        list($usec, $sec) = explode(" ", microtime());
-
-        return ((float)$usec + (float)$sec);
     }
 }

@@ -113,9 +113,8 @@ use Phing\Task\System\Sequential;
  */
 class IfTask extends AbstractCondition
 {
-
     private $thenTasks = null;
-    private $elseIfTasks = array();
+    private $elseIfTasks = [];
     private $elseTasks = null;
 
     /***
@@ -161,7 +160,6 @@ class IfTask extends AbstractCondition
 
     public function main()
     {
-
         if ($this->countConditions() > 1) {
             throw new BuildException("You must not nest more than one condition into <if>");
         }

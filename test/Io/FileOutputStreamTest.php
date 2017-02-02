@@ -68,7 +68,6 @@ class FileOutputStreamTest extends PHPUnit_Framework_TestCase
 
     public function testWrite()
     {
-
         $string = "0123456789";
         $this->outStream->write($string);
 
@@ -87,12 +86,10 @@ class FileOutputStreamTest extends PHPUnit_Framework_TestCase
         $this->outStream->flush();
         $newstring .= '012';
         $this->assertFileContents($newstring);
-
     }
 
     public function testFlush()
     {
-
         $this->outStream->write("Some data");
         $this->outStream->flush();
         $this->outStream->close();
