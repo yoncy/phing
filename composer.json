@@ -31,7 +31,6 @@
         "pear/versioncontrol_git": "@dev",
         "pear/versioncontrol_svn": "~0.5",
         "pdepend/pdepend": "2.x",
-        "phpdocumentor/phpdocumentor": "2.x",
         "phploc/phploc": "~2.0.6",
         "phpmd/phpmd": "~2.2",
         "phpunit/phpunit": ">=3.7",
